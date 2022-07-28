@@ -1,0 +1,47 @@
+{
+  "name": "discord-handlers",
+  "version": "1.0.0",
+  "description": "A typescript library for better discord bots",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf lib/*",
+    "lint": "eslint ./src --ext .ts --fix",
+    "tsc": "tsc",
+    "build": "npm-run-all clean lint tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scorixear/discord.ts.git"
+  },
+  "keywords": [
+    "discord.js",
+    "typescript"
+  ],
+  "author": "Paul Keller",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scorixear/discord.ts/issues"
+  },
+  "homepage": "https://github.com/scorixear/discord.ts#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "eslint": "^8.20.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.7.4"
+  },
+  "files": [
+    "lib/**/*"
+  ],
+  "dependencies": {
+    "@discordjs/rest": "^1.0.1",
+    "discord-api-types": "^0.36.3",
+    "discord.js": "^14.0.3"
+  }
+}
