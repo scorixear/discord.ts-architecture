@@ -11,7 +11,7 @@ export class LanguageHandler {
    * @param args
    * @return the filled string
    */
-  public static replaceArgs(input: string, args: string[]) {
+  public static replaceArgs(input: string, ...args: string[]) {
     // console.log(input);
     // console.log(args);
     for (let i = 0; i < args.length; i++) {

@@ -22,7 +22,7 @@ export class TwoWayMap<K, V> {
   revGet(key: V) {
     return this.reverseMap.get(key);
   }
-  typeGet(type: new (id: string) => V) {
+  typeGet(type: new (id: string, deferReply: number | undefined, deferReplyEphemeral: boolean) => V) {
     for (const key of this.reverseMap.keys()) {
       if (key instanceof type) {
         return this.revGet(key);

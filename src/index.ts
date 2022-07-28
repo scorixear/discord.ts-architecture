@@ -1,6 +1,5 @@
 import { DiscordHandler } from './handlers/discordHandler';
 import { InteractionHandler } from './handlers/interactionHandler';
-import { IntervalHandler } from './handlers/intervalHandler';
 import { LanguageHandler } from './handlers/languageHandler';
 import { MessageHandler } from './handlers/messageHandler';
 import { Logger, WARNINGLEVEL } from './helpers/logging';
@@ -12,7 +11,6 @@ import { TwoWayMap } from './model/TwoWayMap';
 export {
   DiscordHandler,
   InteractionHandler,
-  IntervalHandler,
   LanguageHandler,
   MessageHandler,
   Logger,

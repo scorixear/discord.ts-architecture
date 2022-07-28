@@ -28,7 +28,7 @@ export class InteractionHandler {
     afterInit(this.commandInteractions);
   }
 
-  public async Init(
+  public async init(
     discordToken: string,
     clientId: string,
     discordHandler: DiscordHandler,

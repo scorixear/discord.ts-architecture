@@ -1,7 +1,7 @@
-import { Client, Guild, GatewayIntentBits, Partials, Awaitable } from 'discord.js';
+import { Client, Guild, GatewayIntentBits, Partials, Awaitable, GuildResolvable, UserResolvable } from 'discord.js';
 
 export class DiscordHandler {
-  private client: Client;
+  public client: Client;
   constructor(partials: Partials[], intents: GatewayIntentBits[]) {
     this.client = new Client({
       partials: partials,
@@ -14,14 +14,14 @@ export class DiscordHandler {
   public async getRolesOfGuild(guild: Guild) {
     return await guild.roles.fetch();
   }
-  public async fetchGuild(guildId: string) {
-    return await this.client.guilds.fetch(guildId);
+  public async fetchGuild(guild: GuildResolvable) {
+    return await this.client.guilds.fetch({ guild });
   }
   public getGuilds() {
     return this.client.guilds.cache;
   }
-  public async fetchMember(userId: string, guild: Guild) {
-    return await guild.members.fetch(userId);
+  public async fetchMember(user: UserResolvable, guild: Guild) {
+    return await guild.members.fetch(user);
   }
   public on(event: string, callback: (...args: any[]) => Awaitable<void>) {
     return this.client.on(event, callback);
