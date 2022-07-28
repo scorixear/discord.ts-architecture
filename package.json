@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/scorixear/discord.ts.git"
+    "url": "git+https://github.com/scorixear/discord.ts-architecture.git"
   },
   "keywords": [
     "discord.js",
@@ -25,9 +25,9 @@
   "author": "Paul Keller",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/scorixear/discord.ts/issues"
+    "url": "https://github.com/scorixear/discord.ts-architecture/issues"
   },
-  "homepage": "https://github.com/scorixear/discord.ts#readme",
+  "homepage": "https://github.com/scorixear/discord.ts-architecture#readme",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.31.0",
