@@ -186,8 +186,8 @@ export class MessageHandler {
     if (guild && author) {
       const guildMember = await guild.members.fetch(author);
       richText.setFooter({
-        text: guildMember.nickname ? guildMember.nickname.toString() : guildMember.user.username.toString(),
-        iconURL: author.avatarURL() ?? undefined
+        text: guildMember.displayName,
+        iconURL: guildMember.displayAvatarURL()
       });
     }
 
@@ -328,8 +328,8 @@ export class MessageHandler {
     if (guild && author) {
       const guildMember = await guild.members.fetch(author);
       richText.setFooter({
-        text: guildMember.nickname ? guildMember.nickname.toString() : guildMember.user.username.toString() ?? '',
-        iconURL: author.avatarURL() ?? ''
+        text: guildMember.displayName,
+        iconURL: guildMember.displayAvatarURL()
       });
     }
 
