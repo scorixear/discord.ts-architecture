@@ -9,7 +9,10 @@
     "clean": "rimraf lib/*",
     "lint": "eslint ./src --ext .ts --fix",
     "tsc": "tsc",
-    "build": "npm-run-all clean lint tsc"
+    "build": "npm-run-all clean lint tsc",
+    "publish-patch": "npm version patch && g ps",
+    "publish-minor": "npm version minor && g ps",
+    "publish-major": "npm version major && g ps"
   },
   "repository": {
     "type": "git",
