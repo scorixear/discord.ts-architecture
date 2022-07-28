@@ -16,9 +16,6 @@ A Typescript Library for better Discord Bots.
 * [ButtonInteractionModel](#buttoninteractionmodel)
 * [TwoWayMap](#twowaymap)
 
-## Installation
-`npm install discord-handlers`
-
 ## DiscordHandler
 Provides classes for interaction with the discord.js Client and exposes client for custom usage.
 
