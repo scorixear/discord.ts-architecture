@@ -32,7 +32,8 @@ export class InteractionHandler {
     discordToken: string,
     clientId: string,
     discordHandler: DiscordHandler,
-    commandGuildIds?: string[]
+    commandGuildIds?: string[],
+    notCommandGuildIds?: string[]
   ) {
     for (const interaction of this.commandInteractions) {
       if (interaction.Ready) {
@@ -44,6 +45,8 @@ export class InteractionHandler {
 
     discordHandler.getGuilds().forEach(async (guild: Guild) => {
       if (commandGuildIds && commandGuildIds.indexOf(guild.id) === -1) {
+        return;
+      } else if (notCommandGuildIds && notCommandGuildIds.indexOf(guild.id) !== -1) {
         return;
       }
       await rest.put(Routes.applicationGuildCommands(clientId, guild.id), { body: commands });
@@ -67,6 +70,16 @@ export class InteractionHandler {
           });
         }
       })*/
+    });
+
+    discordHandler.on('guildCreate', async (guild) => {
+      if (commandGuildIds && commandGuildIds.indexOf(guild.id) === -1) {
+        return;
+      } else if (notCommandGuildIds && notCommandGuildIds.indexOf(guild.id) !== -1) {
+        return;
+      }
+      await rest.put(Routes.applicationGuildCommands(clientId, guild.id), { body: commands });
+      Logger.info('Successfully registered application commands for guild', guild.name);
     });
   }
 
