@@ -59,7 +59,7 @@ Initializes InteractionModels, pushes them to specified guilds and handles the '
 ### Methods
 | Method | Arguments | Returns | Description |
 | ------ | --------- | ------- | ----------- |
-| init | discordToken: string, clientId: string, discordHandler: DiscordHandler, commandGuildIds: string[] \| undefined | Promise\<void> | Waits for all CommandInteraction Ready and then pushes all Commands to the specified guilds or all if undefined |
+| init | discordToken: string, clientId: string, discordHandler: DiscordHandler, commandGuildIds: string[] \| undefined, notCommandGuildIds: string[] \| undefined | Promise\<void> | Waits for all CommandInteraction Ready and then pushes all Commands to the specified guilds or all if undefined excluding all Guilds defined in notCommandGuildIds. |
 | handle | interaction: Discord.Interaction | Promise\<void> | Handles Button/ChatInput and AutocompleteInteractions |
 
 ## LanguageHandler
