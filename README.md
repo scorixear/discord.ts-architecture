@@ -1,5 +1,123 @@
 # discord.ts
 A Typescript Library for better Discord Bots.
+This library provides an OOP approach on top of the Discord.js library
+for Typescript projects. It does not "simplify" the approach advertised
+by the Discord.js Framework, but transform the crude approach to a stable
+architecture ready for bigger projects.
+
+This is however not a complete architecture and only covers handling Interactions, responding to Interactions and Discord Login, but provides in return extended abstract
+classes for all interaction types with built-in features such as automatic defer.
+
+## Examples
+### Inital Setup
+Your Index.ts could look like this
+```ts
+import { DiscordHandler, InteractionHandler, TwoWayMap} from 'discord.ts-architecture'
+import { Partials, GatewayIntentBits } from 'discord.js'
+import { PingCommand, PingButton, PingSelectionMenu } from './model'
+
+const discordHandler = new DiscordHandler(
+  [Partials.Message],
+  [GatewayIntentBits.GuildMembers]
+);
+const interactionHandler = new InteractionHandler(
+  [new PingCommand()],
+  new TwoWayMap(new Map([
+    ['ping-button', new PingButton()]
+  ])),
+  new TwoWayMap(new Map([
+    ['ping-menu', new PingSelectionMenu()]
+  ]))
+);
+
+discordhandler.on('interactionCreate', (i) => interactionHandler.handle(i));
+
+discordHandler.login(process.env.TOKEN).then(() => {
+  interactionHandler.init(
+    process.env.TOKEN,
+    process.env.CLIENTID,
+    discordHandler
+  );
+})
+```
+**Yes this is a lot**. But this is everything done. There is no more configuration needed. 
+- Your commands are already pushed to the Guilds
+- Your Interactions are already handled
+- exceptions are catched and logged 
+- You have automatic reply deferring if the interaction takes too long
+
+### Creating custom commands
+A custom command is represented asa derrived class from CommandInteractionModel and could look like this (for a ping command).
+
+```ts
+import { CommandInteractionModel, MessageHandler} from 'discord.ts-architecture'
+import { SlashCommandStringOption, CommandInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+
+export class PingCommand extends CommandInteractionModel {
+  constructor() {
+    super(
+      'ping' // this is the command
+      'Returns the ping of the bot', // the description shown in discord
+      'ping test:figure', // example usage, not used but accessible
+      'Moderation', // Group of Command, not used but accessible
+      'ping <test>', // usage definition, not used but accessible
+      [
+        new SlashCommandStringOption()
+          .setName('test')
+          .setDescription('A test option')
+          .setRequired(false)
+      ] // this represents the options a command has
+    )
+  }
+
+  override async handle(interaction: CommandInteraction) {
+    try {
+      super.handle(interaction); // this handles automatic deferring
+    } catch {
+      return;
+    }
+
+    // direct accesst to discord.js interaction allows you
+    // to use every discord.js feature
+    const testoption = interaction.options.getString('test', false);
+
+    // this uses the MessageHandler to automatically reply an Embedded Message to a command.
+    // The Message Handler supports all options for Embedded Blocks
+    await MessageHandler.reply({
+      interaction,
+      title: 'Ping',
+      descripiton: `You pressed ping with option ${testoption}`,
+      ephemeral:true,
+      categories: [
+        {
+          title: 'Category',
+          text: 'Undefined text blocks are automatically converted to \u200b',
+          inline: false
+        }
+      ],
+      components: [
+        new ActionRowBuilder<ButtonBuilder>() {
+          new ButtonBuilder()
+            .setCustomId('ping-button')
+            .setLabel('Ping')
+            .setStyle(ButtonStyle.Primary)
+        }
+      ]
+    });
+  }
+}
+```
+
+Again, this is a lot for a simple Ping command.
+But you get a lot of additional features with this.
+- You have custom usage and groups that could be used in a help command
+- Your Options are registered with the command as you specified
+- If you command is taking longer then 3 Seconds, the interaction is deferred and then properly picked up by the MessageHandler
+- You InteractionHandle is exception catched preventing bot shutdown
+- We didn't respond in this example with a text message, we responded with an Embed message that contains Categories and Buttons
+
+### Final Usage Advice
+The inital setup for this is higher for very simple projects. I suggest creating a template for discord bot project.
 
 ## Included Classes
 ### Handlers
@@ -17,7 +135,7 @@ A Typescript Library for better Discord Bots.
 * [TwoWayMap](#twowaymap)
 
 ## DiscordHandler
-Provides classes for interaction with the discord.js Client and exposes client for custom usage.
+Provides methods for interaction with the discord.js Client and exposes client for custom usage.
 
 ### Properties
 | Properties | Type | Description |
@@ -36,7 +154,7 @@ Provides classes for interaction with the discord.js Client and exposes client f
 | getFirstGuild | none | Discord.Guild | Returns the first guild the client is in |
 | getRolesOfGuild | Discord.Guild | Promise<Discord.Collection<string, Discord.Role>> | Returns a collection of roles of the guild |
 | fetchGuild | Discord.GuildResolvable | Promise<Discord.Guild> | Returns a guild |
-| getGuilds | none | Promise<Discord.Collection<string, Discord.Guild>> | Returns the currently cached of guilds |
+| getGuilds | none | Promise<Discord.Collection<string, Discord.Guild>> | Returns the currently cache of guilds |
 | fetchMember | user: Discord.UserResolvable, guild: Discord.GuildResolvable | Promise<Discord.GuildMember> | Returns a guild member |
 | on | event: string, callback: (...args: any[]) => Discord.Awaitable<void> | Client<boolean> | Adds an event listener |
 | login | token: string | Promise<string> | Logs the client in |
@@ -48,13 +166,15 @@ Initializes InteractionModels, pushes them to specified guilds and handles the '
 | Properties | Type | Description |
 | ---------- | ---- | ----------- |
 | buttonInteractions | TwoWayMap<string, ButtonInteractionModel> | A map of ButtonInteractionModels and their respective IDs |
+| selectMenuInteraction | TwoWayMap<string, SelectMenuInteractionModel> | A map of SelectMenuInteractionModels and their respective IDs |
 
 ### Constructor
 | Argument | Type | Description |
 | -------- | ---- | ----------- |
-| buttonInteractions | TwoWayMap<string, ButtonInteractionModel> | The ButtonInteractionModels the InteractionHandler will listen for |
 | commandInteractions | CommandInteractionModel[] | The CommandInteractionModels the InteractionHandler will listen for |
-| afterInit | (models: CommandInteractionModel[]) => void | A callback that is called after the InteractionHandler has constructed all CommandInteractions |
+| buttonInteractions | TwoWayMap<string, ButtonInteractionModel> (default empty) | The ButtonInteractionModels the InteractionHandler will listen for |
+| selectMenuInteractions | TwoWayMap<string, SelectMenuInteractionModel> (default empty) | The SelectMenuInteractionModels the InteractionHandle will listen for |
+| afterConstruct | (models: CommandInteractionModel[]) => void (default NOP) | A callback that is called after the InteractionHandler has constructed all CommandInteractions |
 
 ### Methods
 | Method | Arguments | Returns | Description |
@@ -204,9 +324,31 @@ Extends the CommandInteractionModel with an AutocompleteInteraction handler.
 | ------ | --------- | ------- | ----------- |
 | handle | interaction: ButtonInteraction | Promise\<void> | Called when ButtonInteraction was received. |
 
+## SelectMenuInteractionModel
+
+### Properties
+| Properties | Type | Description |
+| ---------- | ---- | ----------- |
+| id | string | The id of the interaction |
+| deferReply | number \| undefined | The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply |
+| deferReplyEphemeral | boolean | If true, will defer reply as ephemeral, making the reply ephermeral aswell |
+
+### Constructor
+| Argument | Type | Description |
+| -------- | ---- | ----------- |
+| id | string | The id of the interaction |
+| deferReply | number \| undefined (default 2000) | The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply |
+| deferReplyEphemeral | boolean (default true) | If true, will defer reply as ephemeral, making the reply ephermeral aswell |
+
+### Methods
+| Method | Arguments | Returns | Description |
+| ------ | --------- | ------- | ----------- |
+| handle | interaction: SelectMenuInteraction | Promise\<void> | Called when SelectMenuInteraction was received. |
+
+
 ## TwoWayMap
 A JS.Map implementation that provides direct mapping between two pairs.
-Used inside the InteractionHandler to map ButtonInteraction IDs to buttonInteractions.
+Used inside the InteractionHandler to map ButtonInteraction IDs to buttonInteractions and SelectMenuInteraction IDs to selectMenuInteractions.
 
 ### Properties
 | Properties | Type | Description |

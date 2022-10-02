@@ -17,22 +17,46 @@ import { TwoWayMap } from '../model/TwoWayMap';
 import { DiscordHandler } from './discordHandler';
 import { SelectMenuInteractionModel } from '../model/SelectMenuInteractionModel';
 
+/**
+ * Initializes InteractionModels, pushs them to specified guilds
+ * and handles the 'interactionCreate' event [link to event callback needed]
+ * 
+ * {@link buttonInteractions} A map of @type {ButtonInteractionModel}s and their respective IDs
+ * {@link selectMenuInteractions} A map of @type {SelectMenuInteractionModel}s and their respective IDs
+ */
 export class InteractionHandler {
   public buttonInteractions: TwoWayMap<string, ButtonInteractionModel>;
   public selectMenuInteractions: TwoWayMap<string, SelectMenuInteractionModel>;
   private commandInteractions: CommandInteractionModel[];
+
+  /**
+   * 
+   * @param commandInteractions The CommandInteractionModels the Interactionhandler will listen for
+   * @param buttonInteractions The ButtoninteractionModels the InteractionHandler will listen for [default empty]
+   * @param selectMenuInteraction The SelectMenuInteractionModels the InteractionHandler will listen for [default empty]
+   * @param afterConstruct A callback that is called after the InteractionHandler has constructed all CommandInteractions
+   */
   constructor(
     commandInteractions: CommandInteractionModel[],
     buttonInteractions: TwoWayMap<string, ButtonInteractionModel> = new TwoWayMap(new Map()),
     selectMenuInteraction: TwoWayMap<string, SelectMenuInteractionModel> = new TwoWayMap(new Map()),
-    afterInit: (models: CommandInteractionModel[]) => void = () => {}
+    afterConstruct: (models: CommandInteractionModel[]) => void = () => {}
   ) {
     this.commandInteractions = commandInteractions;
     this.buttonInteractions = buttonInteractions;
     this.selectMenuInteractions = selectMenuInteraction;
-    afterInit(this.commandInteractions);
+    afterConstruct(this.commandInteractions);
   }
 
+  /**
+   * Waits for all CommandInteraction Read and the pushes all Commands to the specified
+   * guilds or all if undefined, excluding all guilds defined in {@link notCommandGuildIds}.
+   * @param discordToken The token to communicate with the REST api
+   * @param clientId the client id to communicate with the REST api
+   * @param discordHandler the discordHandler used to login and create the client
+   * @param commandGuildIds the guilds that are getting all commands pushed to [default undefined => all guilds]
+   * @param notCommandGuildIds the guilds that are excluded from all commands [default undefined => no exclude]
+   */
   public async init(
     discordToken: string,
     clientId: string,
@@ -88,6 +112,14 @@ export class InteractionHandler {
     });
   }
 
+  /**
+   * Handles all InteractionTypes.
+   * This method needs to be called from a custom Eventhandler
+   * for the 'interactionCreate' event.
+   * 
+   * Has an Exception try catch around the actual Interaction Handle.
+   * @param interaction the Interaction received
+   */
   public async handle(interaction: Interaction) {
     try {
       if (interaction.isButton()) {
