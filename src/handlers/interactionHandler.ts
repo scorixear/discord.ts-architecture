@@ -2,6 +2,7 @@ import {
   AutocompleteInteraction,
   ButtonInteraction,
   ChatInputCommandInteraction,
+  SelectMenuInteraction,
   Guild,
   Interaction
 } from 'discord.js';
@@ -14,17 +15,21 @@ import { Logger, WARNINGLEVEL } from '../helpers/logging';
 import { AutocompleteInteractionModel } from '../model/AutocompleteInteractionModel';
 import { TwoWayMap } from '../model/TwoWayMap';
 import { DiscordHandler } from './discordHandler';
+import { SelectMenuInteractionModel } from '../model/SelectMenuInteractionModel';
 
 export class InteractionHandler {
   public buttonInteractions: TwoWayMap<string, ButtonInteractionModel>;
+  public selectMenuInteractions: TwoWayMap<string, SelectMenuInteractionModel>;
   private commandInteractions: CommandInteractionModel[];
   constructor(
-    buttonInteractions: TwoWayMap<string, ButtonInteractionModel>,
     commandInteractions: CommandInteractionModel[],
-    afterInit: (models: CommandInteractionModel[]) => void
+    buttonInteractions: TwoWayMap<string, ButtonInteractionModel> = new TwoWayMap(new Map()),
+    selectMenuInteraction: TwoWayMap<string, SelectMenuInteractionModel> = new TwoWayMap(new Map()),
+    afterInit: (models: CommandInteractionModel[]) => void = () => {}
   ) {
-    this.buttonInteractions = buttonInteractions;
     this.commandInteractions = commandInteractions;
+    this.buttonInteractions = buttonInteractions;
+    this.selectMenuInteractions = selectMenuInteraction;
     afterInit(this.commandInteractions);
   }
 
@@ -87,9 +92,9 @@ export class InteractionHandler {
     try {
       if (interaction.isButton()) {
         const buttonInteraction = interaction as ButtonInteraction;
-        const interactionHandle = this.buttonInteractions.find((id) => buttonInteraction.customId.startsWith(id));
-        if (interactionHandle) {
-          await interactionHandle.handle(buttonInteraction);
+        const handler = this.buttonInteractions.find((id) => buttonInteraction.customId.startsWith(id));
+        if (handler) {
+          await handler.handle(buttonInteraction);
         }
       } else if (interaction.isChatInputCommand()) {
         const commandInteraction = interaction as ChatInputCommandInteraction;
@@ -109,8 +114,12 @@ export class InteractionHandler {
         if (handler) {
           await (handler as AutocompleteInteractionModel).handleAutocomplete(commandInteraction);
         }
-      } else {
-        return;
+      } else if (interaction.isSelectMenu()) {
+        const selectMenuInteraction = interaction as SelectMenuInteraction;
+        const handler = this.selectMenuInteractions.find((id)=>selectMenuInteraction.customId.startsWith(id));
+        if (handler) {
+          await handler.handle(selectMenuInteraction);
+        }
       }
     } catch (err) {
       Logger.exception('Error while handling interaction', err, WARNINGLEVEL.ERROR);
