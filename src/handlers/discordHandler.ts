@@ -1,8 +1,8 @@
-import { Client, Guild, GatewayIntentBits, Partials, Awaitable, GuildResolvable, UserResolvable, Collection, Role } from 'discord.js';
+import { Client, Guild, GatewayIntentBits, Partials, Awaitable, GuildResolvable, UserResolvable } from 'discord.js';
 
 /**
  * Provides methods for interaction with the discord.js @type {Client}
- * and exposes this {@link client} for custom usage. 
+ * and exposes this {@link client} for custom usage.
  */
 export class DiscordHandler {
   public client: Client;

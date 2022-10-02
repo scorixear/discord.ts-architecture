@@ -20,7 +20,7 @@ import { SelectMenuInteractionModel } from '../model/SelectMenuInteractionModel'
 /**
  * Initializes InteractionModels, pushs them to specified guilds
  * and handles the 'interactionCreate' event [link to event callback needed]
- * 
+ *
  * {@link buttonInteractions} A map of @type {ButtonInteractionModel}s and their respective IDs
  * {@link selectMenuInteractions} A map of @type {SelectMenuInteractionModel}s and their respective IDs
  */
@@ -30,7 +30,7 @@ export class InteractionHandler {
   private commandInteractions: CommandInteractionModel[];
 
   /**
-   * 
+   *
    * @param commandInteractions The CommandInteractionModels the Interactionhandler will listen for
    * @param buttonInteractions The ButtoninteractionModels the InteractionHandler will listen for [default empty]
    * @param selectMenuInteraction The SelectMenuInteractionModels the InteractionHandler will listen for [default empty]
@@ -40,6 +40,7 @@ export class InteractionHandler {
     commandInteractions: CommandInteractionModel[],
     buttonInteractions: TwoWayMap<string, ButtonInteractionModel> = new TwoWayMap(new Map()),
     selectMenuInteraction: TwoWayMap<string, SelectMenuInteractionModel> = new TwoWayMap(new Map()),
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     afterConstruct: (models: CommandInteractionModel[]) => void = () => {}
   ) {
     this.commandInteractions = commandInteractions;
@@ -116,7 +117,7 @@ export class InteractionHandler {
    * Handles all InteractionTypes.
    * This method needs to be called from a custom Eventhandler
    * for the 'interactionCreate' event.
-   * 
+   *
    * Has an Exception try catch around the actual Interaction Handle.
    * @param interaction the Interaction received
    */
@@ -148,7 +149,7 @@ export class InteractionHandler {
         }
       } else if (interaction.isSelectMenu()) {
         const selectMenuInteraction = interaction as SelectMenuInteraction;
-        const handler = this.selectMenuInteractions.find((id)=>selectMenuInteraction.customId.startsWith(id));
+        const handler = this.selectMenuInteractions.find((id) => selectMenuInteraction.customId.startsWith(id));
         if (handler) {
           await handler.handle(selectMenuInteraction);
         }

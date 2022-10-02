@@ -112,20 +112,21 @@ Again, this is a lot for a simple Ping command.
 But you get a lot of additional features with this.
 - You have custom usage and groups that could be used in a help command
 - Your Options are registered with the command as you specified
-- If you command is taking longer then 3 Seconds, the interaction is deferred and then properly picked up by the MessageHandler
+- If your command is taking longer then 3 seconds, the interaction is deferred and then properly picked up by the MessageHandler
 - You InteractionHandle is exception catched preventing bot shutdown
 - We didn't respond in this example with a text message, we responded with an Embed message that contains Categories and Buttons
 
 ### Final Usage Advice
-The inital setup for this is higher for very simple projects. I suggest creating a template for discord bot project.
+The inital setup for this is higher for very simple projects. I suggest creating a template for discord bot project. Besides the shown setup there is nothing needed besides this. Creating additional commands and button interactions all follow the same architectural structure.
+This creates better readability, maintainability and also a more robust behaviour.
+Additionally it is recommended to still catch any exception and missed rejection for an application.
 
 ## Included Classes
 ### Handlers
 * [DiscordHandler](#discordhandler)
 * [InteractionHandler](#interactionhandler)
-* [IntervalHandler](#intervalhandler)
 * [MessageHandler](#messagehandler)
-* [LanguageHandler](#Languagehandler)
+* [LanguageHandler](#languagehandler)
 ### Helpers
 * [Logging](#logging)
 ### Models

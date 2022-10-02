@@ -16,6 +16,19 @@ import {
   SlashCommandUserOption
 } from 'discord.js';
 
+/**
+ * Represents one SlashCommand and should be extended by custom implementation (overriding the handle method).
+ * {@link command} The command used in Discord
+ * {@link description} The description of the command (not more then 120 characters)
+ * {@link example} An example how to use the command
+ * {@link categoy} The category of the command
+ * {@link usage} The usage of the command
+ * {@link allowedRoles} The roles that are allowed to use the command
+ * {@link Ready} A Promise that should be resolved when the command is ready to be used
+ * {@link deferReply} The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply
+ * {@link deferReplyEphemeral} If true, will defer reply as ephemeral, making the reply ephemeral aswell
+ * {@link slashCommandBuilder} The builder for this command
+ */
 export abstract class CommandInteractionModel {
   public command: string;
   public description: string;
@@ -30,6 +43,18 @@ export abstract class CommandInteractionModel {
 
   public slashCommandBuilder: SlashCommandBuilder;
 
+  /**
+   * Constructs the command
+   * @param command The command used in Discord
+   * @param description The description of the command (not more then 120 characters)
+   * @param example An example how to use the command
+   * @param category The category of the command
+   * @param usage The usage of the command
+   * @param options The SlashComandOptions used in this command
+   * @param deferReply The amount of milliseconds to defer th reply if no reply was already made. If undefined, does not defer reply
+   * @param deferReplyEphemeral If true, will defer reply as ephemeral, maki9ng the reply ephemeral aswell
+   * @param allowedRoles the roles that are allowed to use the command
+   */
   constructor(
     command: string,
     description: string,
@@ -75,6 +100,13 @@ export abstract class CommandInteractionModel {
     }
   }
 
+  /**
+   * Called when Interaction was received. You might want to call super.handle()
+   * to activate defer reply and permission checking
+   * @param interaction the Interaction received
+   * @returns none
+   * @throws Error user is not allowed to execute the command
+   */
   public async handle(interaction: ChatInputCommandInteraction) {
     if (this.deferReply) {
       setTimeout(() => {

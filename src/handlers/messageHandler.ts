@@ -1,3 +1,4 @@
+import { ButtonBuilder, SelectMenuBuilder } from '@discordjs/builders';
 import {
   Guild,
   Message,
@@ -7,14 +8,18 @@ import {
   ButtonInteraction,
   ActionRowBuilder,
   EmbedBuilder,
-  ButtonBuilder,
-  AttachmentBuilder
+  AttachmentBuilder,
+  SelectMenuInteraction
 } from 'discord.js';
 
+/**
+ * Provides functions to create and send embed messages
+ */
 export class MessageHandler {
   /**
-   * Prints a MessageEmbed
-   * @param param0
+   * Sends an embed message to the channel from the provided msg
+   * @param param0 the parameters of the embed
+   * @return the returned message object after sending the message
    */
   public static async sendEmbedMsg(param0: {
     msg: Message;
@@ -25,7 +30,7 @@ export class MessageHandler {
     thumbnail?: string;
     image?: string;
     url?: string;
-    components?: ActionRowBuilder<ButtonBuilder>[];
+    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
   }) {
     return await this.sendEmbedMsgExplicit(
       param0.msg,
@@ -41,7 +46,9 @@ export class MessageHandler {
   }
 
   /**
-   * Prints a Message Embed
+   * Sends an embed message to the channel from the provided msg
+   * @param param0 The parameters of the embed
+   * @returns The sent message object
    */
   public static async sendEmbed(param0: {
     guild?: Guild;
@@ -54,7 +61,7 @@ export class MessageHandler {
     thumbnail?: string;
     image?: string;
     url?: string;
-    components?: ActionRowBuilder<ButtonBuilder>[];
+    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
   }) {
     return await this.sendEmbedExplicit(
       param0.guild,
@@ -71,8 +78,13 @@ export class MessageHandler {
     );
   }
 
+  /**
+   * Replies ephemeral to an interaction (works with defered interactions aswell)
+   * @param param0 the parameters of the embed
+   * @returns the sent message object
+   */
   public static async replyError(param0: {
-    interaction: CommandInteraction | ButtonInteraction;
+    interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction;
     title?: string;
     categories?: { title: string; text?: string; inline?: boolean }[];
     description?: string;
@@ -80,7 +92,7 @@ export class MessageHandler {
     image?: string;
     color?: number;
     url?: string;
-    components?: ActionRowBuilder<ButtonBuilder>[];
+    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
   }) {
     if (param0.interaction.deferred) {
       return await param0.interaction.editReply(await this.getErrorEmbedInteraction(param0));
@@ -89,8 +101,13 @@ export class MessageHandler {
     }
   }
 
+  /**
+   * Replies to an interaction (works with defered interactions aswell)
+   * @param param0 the parameters of the embed
+   * @returns the sent message object
+   */
   public static async reply(param0: {
-    interaction: CommandInteraction | ButtonInteraction;
+    interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction;
     title?: string;
     categories?: { title: string; text?: string; inline?: boolean }[];
     description?: string;
@@ -98,7 +115,7 @@ export class MessageHandler {
     image?: string;
     color?: number;
     url?: string;
-    components?: ActionRowBuilder<ButtonBuilder>[];
+    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
     ephemeral?: boolean;
   }) {
     if (param0.interaction.deferred) {
@@ -108,8 +125,13 @@ export class MessageHandler {
     }
   }
 
+  /**
+   * Follows up to an interaction (if not replied, it replies; works with defered replies aswell)
+   * @param param0 the parameters of the embed
+   * @returns the sent message object
+   */
   public static async followUp(param0: {
-    interaction: CommandInteraction | ButtonInteraction;
+    interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction;
     title?: string;
     categories?: { title: string; text?: string; inline?: boolean }[];
     description?: string;
@@ -117,7 +139,7 @@ export class MessageHandler {
     image?: string;
     color?: number;
     url?: string;
-    components?: ActionRowBuilder<ButtonBuilder>[];
+    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
     ephemeral?: boolean;
   }) {
     if (param0.interaction.replied) {
@@ -130,7 +152,7 @@ export class MessageHandler {
   }
 
   /**
-   * Prints a Message Embed
+   * Sends an embed message to the channel
    * @param guild the Guild to print to
    * @param channel the channel to print to
    * @param author the author of the message
@@ -140,7 +162,8 @@ export class MessageHandler {
    * @param description
    * @param thumbnail thumbnail url string
    * @param url an url
-   * @param buttons
+   * @param components the components added to the embed
+   * @return the sent message object
    */
   public static async sendEmbedExplicit(
     guild: Guild | undefined,
@@ -153,7 +176,7 @@ export class MessageHandler {
     thumbnail: string | undefined,
     image: string | undefined,
     url: string | undefined,
-    components: ActionRowBuilder<ButtonBuilder>[] | undefined
+    components: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[] | undefined
   ) {
     channel.sendTyping();
     const richText: EmbedBuilder = new EmbedBuilder();
@@ -201,8 +224,13 @@ export class MessageHandler {
     return channel.send({ embeds: [richText], files });
   }
 
+  /**
+   * Returns a {@link MessageOptions} object from the given interaction
+   * @param param0 the parameters of the embed
+   * @returns the MessageOptions object ready to be sent
+   */
   public static async getEmbedInteraction(param0: {
-    interaction: CommandInteraction | ButtonInteraction;
+    interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction;
     title?: string;
     categories?: { title: string; text?: string; inline?: boolean }[];
     description?: string;
@@ -210,7 +238,7 @@ export class MessageHandler {
     image?: string;
     color?: number;
     url?: string;
-    components?: ActionRowBuilder<ButtonBuilder>[];
+    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
     ephemeral?: boolean;
   }) {
     return this.getEmbed({
@@ -228,8 +256,13 @@ export class MessageHandler {
     });
   }
 
+  /**
+   * Returns a @see {MessageOptions} object from the given interaction ready to be send
+   * @param param0 the parameters for the embed
+   * @returns the MessageOptions object
+   */
   public static async getErrorEmbedInteraction(param0: {
-    interaction: CommandInteraction | ButtonInteraction;
+    interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction;
     title?: string;
     categories?: { title: string; text?: string; inline?: boolean }[];
     description?: string;
@@ -237,7 +270,7 @@ export class MessageHandler {
     image?: string;
     color?: number;
     url?: string;
-    components?: ActionRowBuilder<ButtonBuilder>[];
+    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
   }) {
     return this.getEmbed({
       guild: param0.interaction.guild ?? undefined,
@@ -255,7 +288,9 @@ export class MessageHandler {
   }
 
   /**
-   * Returns a Message Embed
+   * Returns a @see {MessageOptions} object ready to be send
+   * @param param0 the parameters for the embed
+   * @returns the MessageOptions object
    */
   public static async getEmbed(param0: {
     guild?: Guild;
@@ -267,7 +302,7 @@ export class MessageHandler {
     thumbnail?: string;
     image?: string;
     url?: string;
-    components?: ActionRowBuilder<ButtonBuilder>[];
+    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
     ephemeral?: boolean;
   }) {
     return this.getEmbedExplicit(
@@ -285,6 +320,21 @@ export class MessageHandler {
     );
   }
 
+  /**
+   * Returns a @see {MessageOptions} object ready to be send
+   * @param guild the guild to send to
+   * @param author the author set in the bottom of the message
+   * @param title the title of the message
+   * @param categories categories for this message
+   * @param color the HEX color for this message
+   * @param description the description for this message
+   * @param thumbnail the URL to the thumbnail
+   * @param image the path to the file under ./src/assets/
+   * @param url the URL of this embed
+   * @param components the Components of this embed
+   * @param ephemeral send as ephemeral or not
+   * @returns the messageoptions object ready to be send
+   */
   public static async getEmbedExplicit(
     guild?: Guild,
     author?: User,
@@ -295,7 +345,7 @@ export class MessageHandler {
     thumbnail?: string,
     image?: string,
     url?: string,
-    components?: ActionRowBuilder<ButtonBuilder>[],
+    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[],
     ephemeral?: boolean
   ) {
     const richText: EmbedBuilder = new EmbedBuilder();
@@ -342,7 +392,7 @@ export class MessageHandler {
     let returnValue: {
       embeds: EmbedBuilder[];
       ephemeral: boolean;
-      components?: ActionRowBuilder<ButtonBuilder>[];
+      components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
       files: AttachmentBuilder[];
     } = { embeds: [richText], ephemeral: eph, files };
 
@@ -353,16 +403,17 @@ export class MessageHandler {
   }
 
   /**
-   * Prints a MessageEmbed
+   * Sends an embed to the same channel of the provided message
    * @param msg the message object to print from
-   * @param title
+   * @param title the title of the embed
    * @param categories the fields to add
    * @param color hex rgb number
    * @param image image path
-   * @param description
+   * @param description the descriptions of the message
    * @param thumbnail thumbnail url
-   * @param url
-   * @param buttons
+   * @param url the URL of this message
+   * @param components the components of this embed
+   * @return the sent message object
    */
   public static async sendEmbedMsgExplicit(
     msg: Message,
@@ -373,7 +424,7 @@ export class MessageHandler {
     thumbnail: string | undefined,
     image: string | undefined,
     url: string | undefined,
-    components: ActionRowBuilder<ButtonBuilder>[] | undefined
+    components: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[] | undefined
   ) {
     return await this.sendEmbedExplicit(
       msg.guild ?? undefined,
@@ -390,6 +441,13 @@ export class MessageHandler {
     );
   }
 
+  /**
+   * Splits the provided lines into several categories (each category with maximum 1024 characters)
+   * and adds a heading to the first category
+   * @param lines the lines to split among multiple categories
+   * @param heading the heading of the first category
+   * @returns the categories
+   */
   public static splitInCategories(lines: string[], heading: string) {
     // Clone lines array
     const linesClone = lines.slice();
