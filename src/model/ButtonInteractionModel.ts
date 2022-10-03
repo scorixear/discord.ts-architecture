@@ -29,7 +29,9 @@ export abstract class ButtonInteractionModel {
     if (this.deferReply) {
       setTimeout(async () => {
         try {
-          await interaction.deferReply({ ephemeral: this.deferReplyEphemeral });
+          if (interaction.replied && interaction.deferred) {
+            await interaction.deferReply({ ephemeral: this.deferReplyEphemeral });
+          }
         } catch (err) {
           Logger.exception('Error deferring reply', err, WARNINGLEVEL.ERROR);
         }
