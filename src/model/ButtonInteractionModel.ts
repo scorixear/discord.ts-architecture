@@ -29,7 +29,7 @@ export abstract class ButtonInteractionModel {
     if (this.deferReply) {
       setTimeout(async () => {
         try {
-          if (interaction.replied && interaction.deferred) {
+          if (!interaction.replied && !interaction.deferred) {
             await interaction.deferReply({ ephemeral: this.deferReplyEphemeral });
           }
         } catch (err) {
