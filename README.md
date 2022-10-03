@@ -43,7 +43,7 @@ discordHandler.login(process.env.TOKEN).then(() => {
 **Yes this is a lot**. But this is everything done. There is no more configuration needed. 
 - Your commands are already pushed to the Guilds
 - Your Interactions are already handled
-- exceptions are catched and logged 
+- Exceptions are catched and logged 
 - You have automatic reply deferring if the interaction takes too long
 
 ### Creating custom commands
@@ -117,7 +117,7 @@ But you get a lot of additional features with this.
 - We didn't respond in this example with a text message, we responded with an Embed message that contains Categories and Buttons
 
 ### Final Usage Advice
-The inital setup for this is higher for very simple projects. I suggest creating a template for discord bot project. Besides the shown setup there is nothing needed besides this. Creating additional commands and button interactions all follow the same architectural structure.
+The inital setup for this is higher for very simple projects. I suggest creating a template for discord bot project. Besides the shown setup there is nothing needed to do. Creating additional commands and button interactions all follow the same architectural structure.
 This creates better readability, maintainability and also a more robust behaviour.
 Additionally it is recommended to still catch any exception and missed rejection for an application.
 
