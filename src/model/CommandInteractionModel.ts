@@ -110,7 +110,7 @@ export abstract class CommandInteractionModel {
   public async handle(interaction: ChatInputCommandInteraction) {
     if (this.deferReply) {
       setTimeout(() => {
-        if (!interaction.replied) {
+        if (!interaction.replied && !interaction.deferred) {
           interaction.deferReply({ ephemeral: this.deferReplyEphemeral });
         }
       }, this.deferReply);

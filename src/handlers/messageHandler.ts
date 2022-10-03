@@ -94,7 +94,7 @@ export class MessageHandler {
     url?: string;
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
   }) {
-    if (param0.interaction.deferred) {
+    if (param0.interaction.deferred || param0.interaction.replied) {
       return await param0.interaction.editReply(await this.getErrorEmbedInteraction(param0));
     } else {
       return await param0.interaction.reply(await this.getErrorEmbedInteraction(param0));
@@ -118,7 +118,7 @@ export class MessageHandler {
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
     ephemeral?: boolean;
   }) {
-    if (param0.interaction.deferred) {
+    if (param0.interaction.deferred || param0.interaction.replied) {
       return await param0.interaction.editReply(await this.getEmbedInteraction(param0));
     } else {
       return await param0.interaction.reply(await this.getEmbedInteraction(param0));
