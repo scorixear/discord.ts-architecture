@@ -30,6 +30,7 @@ export class MessageHandler {
     thumbnail?: string;
     image?: string;
     url?: string;
+    files?: string[];
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
   }) {
     return await this.sendEmbedMsgExplicit(
@@ -41,6 +42,7 @@ export class MessageHandler {
       param0.thumbnail,
       param0.image,
       param0.url,
+      param0.files,
       param0.components
     );
   }
@@ -61,6 +63,7 @@ export class MessageHandler {
     thumbnail?: string;
     image?: string;
     url?: string;
+    files?: string[];
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
   }) {
     return await this.sendEmbedExplicit(
@@ -74,6 +77,7 @@ export class MessageHandler {
       param0.thumbnail,
       param0.image,
       param0.url,
+      param0.files,
       param0.components
     );
   }
@@ -92,6 +96,7 @@ export class MessageHandler {
     image?: string;
     color?: number;
     url?: string;
+    files?: string[];
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
   }) {
     if (param0.interaction.deferred || param0.interaction.replied) {
@@ -115,6 +120,7 @@ export class MessageHandler {
     image?: string;
     color?: number;
     url?: string;
+    files?: string[];
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
     ephemeral?: boolean;
   }) {
@@ -139,6 +145,7 @@ export class MessageHandler {
     image?: string;
     color?: number;
     url?: string;
+    files?: string[];
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
     ephemeral?: boolean;
   }) {
@@ -162,6 +169,7 @@ export class MessageHandler {
    * @param description
    * @param thumbnail thumbnail url string
    * @param url an url
+   * @param files path to files attached to the message
    * @param components the components added to the embed
    * @return the sent message object
    */
@@ -176,6 +184,7 @@ export class MessageHandler {
     thumbnail: string | undefined,
     image: string | undefined,
     url: string | undefined,
+    files: string[] | undefined,
     components: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[] | undefined
   ) {
     channel.sendTyping();
@@ -200,10 +209,14 @@ export class MessageHandler {
     if (thumbnail) {
       richText.setThumbnail(thumbnail);
     }
-    let files: AttachmentBuilder[] = [];
+    let images: AttachmentBuilder[] = [];
     if (image) {
-      files = [new AttachmentBuilder(`./src/assets/${image}`)];
+      images = [new AttachmentBuilder(`./src/assets/${image}`)];
       richText.setImage(`attachment://${image}`);
+    }
+    let fileAttachments: AttachmentBuilder[] = [];
+    if (files) {
+      fileAttachments = files.map((f) => new AttachmentBuilder(f));
     }
 
     if (guild && author) {
@@ -219,9 +232,9 @@ export class MessageHandler {
       richText.setURL(url);
     }
     if (components) {
-      return channel.send({ embeds: [richText], components, files });
+      return channel.send({ embeds: [richText], components, files: [...images, ...fileAttachments] });
     }
-    return channel.send({ embeds: [richText], files });
+    return channel.send({ embeds: [richText], files: [...images, ...fileAttachments] });
   }
 
   /**
@@ -238,6 +251,7 @@ export class MessageHandler {
     image?: string;
     color?: number;
     url?: string;
+    files?: string[];
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
     ephemeral?: boolean;
   }) {
@@ -251,6 +265,7 @@ export class MessageHandler {
       thumbnail: param0.thumbnail,
       image: param0.image,
       url: param0.url,
+      files: param0.files,
       components: param0.components,
       ephemeral: param0.ephemeral
     });
@@ -270,6 +285,7 @@ export class MessageHandler {
     image?: string;
     color?: number;
     url?: string;
+    files?: string[];
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
   }) {
     return this.getEmbed({
@@ -282,6 +298,7 @@ export class MessageHandler {
       thumbnail: param0.thumbnail,
       image: param0.image,
       url: param0.url,
+      files: param0.files,
       components: param0.components,
       ephemeral: true
     });
@@ -302,6 +319,7 @@ export class MessageHandler {
     thumbnail?: string;
     image?: string;
     url?: string;
+    files?: string[];
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
     ephemeral?: boolean;
   }) {
@@ -315,6 +333,7 @@ export class MessageHandler {
       param0.thumbnail,
       param0.image,
       param0.url,
+      param0.files,
       param0.components,
       param0.ephemeral
     );
@@ -331,6 +350,7 @@ export class MessageHandler {
    * @param thumbnail the URL to the thumbnail
    * @param image the path to the file under ./src/assets/
    * @param url the URL of this embed
+   * @param files path to files attached to the message
    * @param components the Components of this embed
    * @param ephemeral send as ephemeral or not
    * @returns the messageoptions object ready to be send
@@ -345,6 +365,7 @@ export class MessageHandler {
     thumbnail?: string,
     image?: string,
     url?: string,
+    files?: string[],
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[],
     ephemeral?: boolean
   ) {
@@ -369,10 +390,15 @@ export class MessageHandler {
     if (thumbnail) {
       richText.setThumbnail(thumbnail);
     }
-    let files: AttachmentBuilder[] = [];
+    let images: AttachmentBuilder[] = [];
     if (image) {
-      files = [new AttachmentBuilder(`./src/assets/${image}`)];
+      images = [new AttachmentBuilder(`./src/assets/${image}`)];
       richText.setImage(`attachment://${image}`);
+    }
+
+    let fileAttachments: AttachmentBuilder[] = [];
+    if (files) {
+      fileAttachments = files.map((f) => new AttachmentBuilder(f));
     }
 
     if (guild && author) {
@@ -394,10 +420,10 @@ export class MessageHandler {
       ephemeral: boolean;
       components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
       files: AttachmentBuilder[];
-    } = { embeds: [richText], ephemeral: eph, files };
+    } = { embeds: [richText], ephemeral: eph, files: [...images, ...fileAttachments] };
 
     if (components) {
-      returnValue = { embeds: [richText], ephemeral: eph, components, files };
+      returnValue = { embeds: [richText], ephemeral: eph, components, files: [...images, ...fileAttachments] };
     }
     return returnValue;
   }
@@ -412,6 +438,7 @@ export class MessageHandler {
    * @param description the descriptions of the message
    * @param thumbnail thumbnail url
    * @param url the URL of this message
+   * @param files path to files attached to the message
    * @param components the components of this embed
    * @return the sent message object
    */
@@ -424,6 +451,7 @@ export class MessageHandler {
     thumbnail: string | undefined,
     image: string | undefined,
     url: string | undefined,
+    files: string[] | undefined,
     components: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[] | undefined
   ) {
     return await this.sendEmbedExplicit(
@@ -437,6 +465,7 @@ export class MessageHandler {
       thumbnail,
       image,
       url,
+      files,
       components
     );
   }
