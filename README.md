@@ -1,4 +1,4 @@
-# discord.ts
+# discord.ts-architecture
 A Typescript Library for better Discord Bots.
 This library provides an OOP approach on top of the Discord.js library
 for Typescript projects. It does not "simplify" the approach advertised
