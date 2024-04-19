@@ -13,6 +13,8 @@ import {
   SlashCommandNumberOption,
   SlashCommandRoleOption,
   SlashCommandStringOption,
+  SlashCommandSubcommandBuilder,
+  SlashCommandSubcommandGroupBuilder,
   SlashCommandUserOption
 } from 'discord.js';
 
@@ -94,6 +96,10 @@ export abstract class CommandInteractionModel {
         this.slashCommandBuilder.addNumberOption(option);
       } else if (option instanceof SlashCommandMentionableOption) {
         this.slashCommandBuilder.addMentionableOption(option);
+      } else if (option instanceof SlashCommandSubcommandBuilder) {
+        this.slashCommandBuilder.addSubcommand(option);
+      } else if (option instanceof SlashCommandSubcommandGroupBuilder) {
+        this.slashCommandBuilder.addSubcommandGroup(option);
       } else {
         throw new Error('Not supported SlashCommand Option');
       }
