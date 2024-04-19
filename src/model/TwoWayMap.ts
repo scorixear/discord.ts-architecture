@@ -66,13 +66,27 @@ export class TwoWayMap<K, V> {
   }
 
   /**
-   * Returens the first value that matches the given action
+   * Returns the first value that matches the given action
    * @param action the action to perform
    * @returns the value
    */
   find(action: (key: K) => boolean) {
     for (const k of this.map.keys()) {
       if (action(k)) {
+        return this.map.get(k);
+      }
+    }
+    return undefined;
+  }
+
+  /**
+   * Returns the first value that matches the given action
+   * @param action the action to perform
+   * @returns the value or undefined if not found
+   */
+  findWithValue(action: (key: K, value: V) => boolean) {
+    for (const k of this.map.keys()) {
+      if (action(k, this.map.get(k) as V)) {
         return this.map.get(k);
       }
     }
