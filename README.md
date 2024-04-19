@@ -42,12 +42,12 @@ discordHandler.login(process.env.TOKEN).then(() => {
 ```
 **Yes this is a lot**. But this is everything done. There is no more configuration needed. 
 - Your commands are already pushed to the Guilds
-- Your Interactions are already handled
+- Your interactions are already handled
 - Exceptions are catched and logged 
 - You have automatic reply deferring if the interaction takes too long
 
 ### Creating custom commands
-A custom command is represented asa derrived class from CommandInteractionModel and could look like this (for a ping command).
+A custom command is represented as a derrived class from CommandInteractionModel and could look like this (for a ping command).
 
 ```ts
 import { CommandInteractionModel, MessageHandler} from 'discord.ts-architecture'
@@ -77,7 +77,7 @@ export class PingCommand extends CommandInteractionModel {
       return;
     }
 
-    // direct accesst to discord.js interaction allows you
+    // direct access to discord.js interactions allows you
     // to use every discord.js feature
     const testoption = interaction.options.getString('test', false);
 
@@ -110,14 +110,14 @@ export class PingCommand extends CommandInteractionModel {
 
 Again, this is a lot for a simple Ping command.
 But you get a lot of additional features with this.
-- You have custom usage and groups that could be used in a help command
-- Your Options are registered with the command as you specified
+- You have a custom usage and groups that could be used in a help command
+- Your options are registered with the command as you specified
 - If your command is taking longer then 3 seconds, the interaction is deferred and then properly picked up by the MessageHandler
-- You InteractionHandle is exception catched preventing bot shutdown
+- You InteractionHandle is exception catched preventing a bot shutdown
 - We didn't respond in this example with a text message, we responded with an Embed message that contains Categories and Buttons
 
 ### Final Usage Advice
-The inital setup for this is higher for very simple projects. I suggest creating a template for discord bot project. Besides the shown setup there is nothing needed to do. Creating additional commands and button interactions all follow the same architectural structure.
+The inital setup for this is higher for very simple projects. I suggest creating a template for discord bot projects. Besides the shown setup there is nothing needed to do. Creating additional commands and button interactions all follow the same architectural structure.
 This creates better readability, maintainability and also a more robust behaviour.
 Additionally it is recommended to still catch any exception and missed rejection for an application.
 
@@ -165,6 +165,7 @@ Provides methods for interaction with the discord.js Client and exposes client f
 | getGuilds | none | Promise<Discord.Collection<string, Discord.Guild>> | Returns the currently cache of guilds |
 | fetchMember | user: Discord.UserResolvable, guild: Discord.GuildResolvable | Promise<Discord.GuildMember> | Returns a guild member |
 | on | event: string, callback: (...args: any[]) => Discord.Awaitable<void> | Client<boolean> | Adds an event listener |
+| once | event: keyof ClientEvents, callback: (...args: any[]) => Discord.Awaitable<void> | Client<boolean> | Adds an event listener that is called once |
 | login | token: string | Promise<string> | Logs the client in |
 
 ## InteractionHandler
@@ -174,14 +175,14 @@ Initializes InteractionModels, pushes them to specified guilds and handles the '
 | Properties | Type | Description |
 | ---------- | ---- | ----------- |
 | buttonInteractions | TwoWayMap<string, ButtonInteractionModel> | A map of ButtonInteractionModels and their respective IDs |
-| selectMenuInteraction | TwoWayMap<string, SelectMenuInteractionModel> | A map of SelectMenuInteractionModels and their respective IDs |
+| selectMenuInteraction | TwoWayMap<string, AnySelectMenuInteractionModel> | A map of AnySelectMenuInteractionModel and their respective IDs |
 
 ### Constructor
 | Argument | Type | Description |
 | -------- | ---- | ----------- |
 | commandInteractions | CommandInteractionModel[] | The CommandInteractionModels the InteractionHandler will listen for |
 | buttonInteractions | TwoWayMap<string, ButtonInteractionModel> (default empty) | The ButtonInteractionModels the InteractionHandler will listen for |
-| selectMenuInteractions | TwoWayMap<string, SelectMenuInteractionModel> (default empty) | The SelectMenuInteractionModels the InteractionHandle will listen for |
+| selectMenuInteractions | TwoWayMap<string, AnySelectMenuInteractionModel> (default empty) | The AnySelectMenuInteractionModels the InteractionHandle will listen for |
 | afterConstruct | (models: CommandInteractionModel[]) => void (default NOP) | A callback that is called after the InteractionHandler has constructed all CommandInteractions |
 
 ### Methods
@@ -209,7 +210,7 @@ Provides a way to load and use languages strings.
 | replaceArgs | input: string, ...args: string[] | void | Replaces the arguments in the input string denoted by $ + index in the args array |
 
 ## MessageHandler
-Provides function to create and send embed messages
+Provides functions to create and send embed messages
 
 ### Properties
 | Properties | Type | Description |
@@ -483,7 +484,7 @@ Base class and replacement for deprecated ~~[SelectMenuInteractionModel](#select
 
 ## TwoWayMap
 A JS.Map implementation that provides direct mapping between two pairs.
-Used inside the InteractionHandler to map ButtonInteraction IDs to buttonInteractions and SelectMenuInteraction IDs to selectMenuInteractions.
+Used inside the InteractionHandler to map ButtonInteraction IDs to buttonInteractions and AnySelectMenuInteraction IDs to selectMenuInteractions.
 
 ### Properties
 | Properties | Type | Description |
@@ -504,3 +505,4 @@ Used inside the InteractionHandler to map ButtonInteraction IDs to buttonInterac
 | revGet | key: V | K | Get the key for the given value |
 | typeGet | type: new (id: string, deferReply: number \| undefined, deferReplyEphemeral: boolean) => V | K | Returns the first Key that matches the given type |
 | find | action: (key: K) => boolean | V | Return the first value that matches the given action |
+| findWithValue | action: (key: K, value: V) => boolean | V | Return the first value that matches the given action with the key and value |
