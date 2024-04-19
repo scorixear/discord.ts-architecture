@@ -1,12 +1,11 @@
-import { SelectMenuInteraction } from 'discord.js';
-import { StringSelectMenuInteractionModel } from './SelectMenuInteractionModels/StringSelectMenuInteractionModel';
-import { Logger, WARNINGLEVEL } from '../helpers/logging';
+import { StringSelectMenuInteraction } from 'discord.js';
+import { Logger, WARNINGLEVEL } from '../../helpers/logging';
+import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
 /**
- * Represents on SelectMenuInteraction
+ * Represents on @see StringSelectMenuInteraction
  * {@link id} the custom-id for this interaction (actual custom-id can be longer, only start is checked)
- * @deprecated Replaced by {@link StringSelectMenuInteractionModel}
  */
-export abstract class SelectMenuInteractionModel extends StringSelectMenuInteractionModel {
+export abstract class StringSelectMenuInteractionModel extends AnySelectMenuInteractionModel {
   /**
    * Default constructor
    * @param id the custom-id for this interaction (actual custom-id can be longer, check is done wiht startsWith())
@@ -18,10 +17,10 @@ export abstract class SelectMenuInteractionModel extends StringSelectMenuInterac
   }
 
   /**
-   * Called when @see SelectMenuInteraction was received
+   * Called when @see StringSelectMenuInteraction was received
    * @param interaction the interaction received
    */
-  public async handle(interaction: SelectMenuInteraction) {
+  public async handle(interaction: StringSelectMenuInteraction) {
     if (this.deferReply) {
       setTimeout(async () => {
         try {

@@ -4,7 +4,13 @@ import {
   ChatInputCommandInteraction,
   SelectMenuInteraction,
   Guild,
-  Interaction
+  Interaction,
+  StringSelectMenuInteraction,
+  AnySelectMenuInteraction,
+  ChannelSelectMenuInteraction,
+  MentionableSelectMenuInteraction,
+  RoleSelectMenuInteraction,
+  UserSelectMenuInteraction
 } from 'discord.js';
 
 import { ButtonInteractionModel } from '../model/ButtonInteractionModel';
@@ -16,17 +22,23 @@ import { AutocompleteInteractionModel } from '../model/AutocompleteInteractionMo
 import { TwoWayMap } from '../model/TwoWayMap';
 import { DiscordHandler } from './discordHandler';
 import { SelectMenuInteractionModel } from '../model/SelectMenuInteractionModel';
+import { AnySelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/AnySelectMenuInteractionModel';
+import { StringSelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/StringSelectMenuInteractionModel';
+import { ChannelSelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/ChannelSelectMenuInteractionModel';
+import { MentionableSelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/MentionableSelectMenuInteractionModel';
+import { RoleSelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/RoleSelectMenuInteractionModel';
+import { UserSelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/UserSelectMenuInteractionModel';
 
 /**
  * Initializes InteractionModels, pushs them to specified guilds
  * and handles the 'interactionCreate' event [link to event callback needed]
  *
  * {@link buttonInteractions} A map of @type {ButtonInteractionModel}s and their respective IDs
- * {@link selectMenuInteractions} A map of @type {SelectMenuInteractionModel}s and their respective IDs
+ * {@link selectMenuInteractions} A map of @type {AnySelectMenuInteractionModel}s and their respective IDs
  */
 export class InteractionHandler {
   public buttonInteractions: TwoWayMap<string, ButtonInteractionModel>;
-  public selectMenuInteractions: TwoWayMap<string, SelectMenuInteractionModel>;
+  public selectMenuInteractions: TwoWayMap<string, AnySelectMenuInteractionModel>;
   private commandInteractions: CommandInteractionModel[];
 
   /**
@@ -39,7 +51,7 @@ export class InteractionHandler {
   constructor(
     commandInteractions: CommandInteractionModel[],
     buttonInteractions: TwoWayMap<string, ButtonInteractionModel> = new TwoWayMap(new Map()),
-    selectMenuInteraction: TwoWayMap<string, SelectMenuInteractionModel> = new TwoWayMap(new Map()),
+    selectMenuInteraction: TwoWayMap<string, AnySelectMenuInteractionModel> = new TwoWayMap(new Map()),
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     afterConstruct: (models: CommandInteractionModel[]) => void = () => {}
   ) {
@@ -147,11 +159,60 @@ export class InteractionHandler {
         if (handler) {
           await (handler as AutocompleteInteractionModel).handleAutocomplete(commandInteraction);
         }
-      } else if (interaction.isSelectMenu()) {
-        const selectMenuInteraction = interaction as SelectMenuInteraction;
-        const handler = this.selectMenuInteractions.find((id) => selectMenuInteraction.customId.startsWith(id));
-        if (handler) {
-          await handler.handle(selectMenuInteraction);
+      } else if (interaction.isAnySelectMenu()) {
+        const selectMenuInteraction = interaction as AnySelectMenuInteraction;
+        if (interaction.isStringSelectMenu() || interaction.isSelectMenu()) {
+          const depr_handler = this.selectMenuInteractions.findWithValue(
+            (id, model) => selectMenuInteraction.customId.startsWith(id) && model instanceof SelectMenuInteractionModel
+          ) as SelectMenuInteractionModel | undefined;
+          if (depr_handler) {
+            await depr_handler.handle(selectMenuInteraction as SelectMenuInteraction);
+          } else {
+            const handler = this.selectMenuInteractions.findWithValue(
+              (id, model) =>
+                selectMenuInteraction.customId.startsWith(id) && model instanceof StringSelectMenuInteractionModel
+            ) as StringSelectMenuInteractionModel | undefined;
+            if (handler) {
+              await handler.handle(selectMenuInteraction as StringSelectMenuInteraction);
+            }
+          }
+        } else if (interaction.isChannelSelectMenu()) {
+          const handler = this.selectMenuInteractions.findWithValue(
+            (id, model) =>
+              selectMenuInteraction.customId.startsWith(id) && model instanceof ChannelSelectMenuInteractionModel
+          ) as ChannelSelectMenuInteractionModel | undefined;
+          if (handler) {
+            await handler.handle(selectMenuInteraction as ChannelSelectMenuInteraction);
+          }
+        } else if (interaction.isMentionableSelectMenu()) {
+          const handler = this.selectMenuInteractions.findWithValue(
+            (id, model) =>
+              selectMenuInteraction.customId.startsWith(id) && model instanceof MentionableSelectMenuInteractionModel
+          ) as MentionableSelectMenuInteractionModel | undefined;
+          if (handler) {
+            await handler.handle(selectMenuInteraction as MentionableSelectMenuInteraction);
+          }
+        } else if (interaction.isRoleSelectMenu()) {
+          const handler = this.selectMenuInteractions.findWithValue(
+            (id, model) =>
+              selectMenuInteraction.customId.startsWith(id) && model instanceof RoleSelectMenuInteractionModel
+          ) as RoleSelectMenuInteractionModel | undefined;
+          if (handler) {
+            await handler.handle(selectMenuInteraction as RoleSelectMenuInteraction);
+          }
+        } else if (interaction.isUserSelectMenu()) {
+          const handler = this.selectMenuInteractions.findWithValue(
+            (id, model) =>
+              selectMenuInteraction.customId.startsWith(id) && model instanceof UserSelectMenuInteractionModel
+          ) as UserSelectMenuInteractionModel | undefined;
+          if (handler) {
+            await handler.handle(selectMenuInteraction as UserSelectMenuInteraction);
+          }
+        } else {
+          const handler = this.selectMenuInteractions.find((id) => selectMenuInteraction.customId.startsWith(id));
+          if (handler) {
+            await handler.handle(selectMenuInteraction);
+          }
         }
       }
     } catch (err) {

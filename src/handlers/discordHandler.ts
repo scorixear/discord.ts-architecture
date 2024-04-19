@@ -1,4 +1,13 @@
-import { Client, Guild, GatewayIntentBits, Partials, Awaitable, GuildResolvable, UserResolvable } from 'discord.js';
+import {
+  Client,
+  Guild,
+  GatewayIntentBits,
+  Partials,
+  Awaitable,
+  GuildResolvable,
+  UserResolvable,
+  ClientEvents
+} from 'discord.js';
 
 /**
  * Provides methods for interaction with the discord.js @type {Client}
@@ -71,6 +80,10 @@ export class DiscordHandler {
    */
   public on(event: string, callback: (...args: any[]) => Awaitable<void>) {
     return this.client.on(event, callback);
+  }
+
+  public once(event: keyof ClientEvents, callback: (...args: any[]) => Awaitable<void>) {
+    return this.client.once(event, callback);
   }
 
   /**
