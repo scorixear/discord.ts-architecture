@@ -87,6 +87,16 @@ export class DiscordHandler {
   }
 
   /**
+   * Adds an event listener that is called only once
+   * @param event the event to listen on
+   * @param callback called when the event occurs
+   * @returns the client this event is listening on
+   */
+  public once(event: keyof ClientEvents, callback: (...args: any[]) => Awaitable<void>) {
+    return this.client.once(event, callback);
+  }
+
+  /**
    * Logs in the client
    * @param token the token to login with
    * @returns an promise that resolves when the login is done.
