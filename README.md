@@ -133,6 +133,13 @@ Additionally it is recommended to still catch any exception and missed rejection
 * [CommandInteractionModel](#commandinteractionmodel)
 * [AutocompleteInteractionModel](#autocompleteinteractionmodel)
 * [ButtonInteractionModel](#buttoninteractionmodel)
+* [AnySelectMenuInteractionModel](#anyselectmenuinteractionmodel)
+  * [ChannelSelectMenuInteractionModel](#channelselectmenuinteractionmodel)
+  * [MentionableSelectMenuInteractionModel](#mentionableselectmenuinteractionmodel)
+  * [RoleSelectMenuInteractionModel](#roleselectmenuinteractionmodel)
+  * [StringSelectMenuInteractionModel](#stringselectmenuinteractionmodel)
+  * [UserSelectMenuInteractionModel](#userselectmenuinteractionmodel)
+  * ~~[SelectMenuInteractionModel](#selectmenuinteractionmodel)~~ `deprecated`, use [StringSelectMenuInteractionModel](#stringselectmenuinteractionmodel) instead
 * [TwoWayMap](#twowaymap)
 
 ## DiscordHandler
@@ -325,8 +332,135 @@ Extends the CommandInteractionModel with an AutocompleteInteraction handler.
 | ------ | --------- | ------- | ----------- |
 | handle | interaction: ButtonInteraction | Promise\<void> | Called when ButtonInteraction was received. |
 
-## SelectMenuInteractionModel
+# SelectMenuInteraction Models
+## AnySelectMenuInteractionModel
+Base class for all SelectMenuInteractionModels
+### Properties
+| Properties | Type | Description |
+| ---------- | ---- | ----------- |
+| id | string | The id of the interaction |
+| deferReply | number \| undefined | The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply |
+| deferReplyEphemeral | boolean | If true, will defer reply as ephemeral, making the reply ephermeral aswell |
 
+### Constructor
+| Argument | Type | Description |
+| -------- | ---- | ----------- |
+| id | string | The id of the interaction |
+| deferReply | number \| undefined (default 2000) | The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply |
+| deferReplyEphemeral | boolean (default true) | If true, will defer reply as ephemeral, making the reply ephermeral aswell |
+
+### Methods
+| Method | Arguments | Returns | Description |
+| ------ | --------- | ------- | ----------- |
+| handle | interaction: AnySelectMenuInteraction | Promise\<void> | Called when AnySelectMenuInteraction was received. |
+
+## ChannelSelectMenuInteractionModel
+
+### Properties
+| Properties | Type | Description |
+| ---------- | ---- | ----------- |
+| id | string | The id of the interaction |
+| deferReply | number \| undefined | The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply |
+| deferReplyEphemeral | boolean | If true, will defer reply as ephemeral, making the reply ephermeral aswell |
+
+### Constructor
+| Argument | Type | Description |
+| -------- | ---- | ----------- |
+| id | string | The id of the interaction |
+| deferReply | number \| undefined (default 2000) | The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply |
+| deferReplyEphemeral | boolean (default true) | If true, will defer reply as ephemeral, making the reply ephermeral aswell |
+
+### Methods
+| Method | Arguments | Returns | Description |
+| ------ | --------- | ------- | ----------- |
+| handle | interaction: ChannelSelectMenuInteraction | Promise\<void> | Called when ChannelSelectMenuInteraction was received. |
+
+## MentionableSelectMenuInteractionModel
+
+### Properties
+| Properties | Type | Description |
+| ---------- | ---- | ----------- |
+| id | string | The id of the interaction |
+| deferReply | number \| undefined | The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply |
+| deferReplyEphemeral | boolean | If true, will defer reply as ephemeral, making the reply ephermeral aswell |
+
+### Constructor
+| Argument | Type | Description |
+| -------- | ---- | ----------- |
+| id | string | The id of the interaction |
+| deferReply | number \| undefined (default 2000) | The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply |
+| deferReplyEphemeral | boolean (default true) | If true, will defer reply as ephemeral, making the reply ephermeral aswell |
+
+### Methods
+| Method | Arguments | Returns | Description |
+| ------ | --------- | ------- | ----------- |
+| handle | interaction: MentionableSelectMenuInteraction | Promise\<void> | Called when MentionableSelectMenuInteraction was received. |
+
+## RoleSelectMenuInteractionModel
+
+### Properties
+| Properties | Type | Description |
+| ---------- | ---- | ----------- |
+| id | string | The id of the interaction |
+| deferReply | number \| undefined | The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply |
+| deferReplyEphemeral | boolean | If true, will defer reply as ephemeral, making the reply ephermeral aswell |
+
+### Constructor
+| Argument | Type | Description |
+| -------- | ---- | ----------- |
+| id | string | The id of the interaction |
+| deferReply | number \| undefined (default 2000) | The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply |
+| deferReplyEphemeral | boolean (default true) | If true, will defer reply as ephemeral, making the reply ephermeral aswell |
+
+### Methods
+| Method | Arguments | Returns | Description |
+| ------ | --------- | ------- | ----------- |
+| handle | interaction: RoleSelectMenuInteraction | Promise\<void> | Called when RoleSelectMenuInteraction was received. |
+
+## StringSelectMenuInteractionModel
+Base class and replacement for deprecated ~~[SelectMenuInteractionModel](#selectmenuinteractionmodel)~~
+### Properties
+| Properties | Type | Description |
+| ---------- | ---- | ----------- |
+| id | string | The id of the interaction |
+| deferReply | number \| undefined | The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply |
+| deferReplyEphemeral | boolean | If true, will defer reply as ephemeral, making the reply ephermeral aswell |
+
+### Constructor
+| Argument | Type | Description |
+| -------- | ---- | ----------- |
+| id | string | The id of the interaction |
+| deferReply | number \| undefined (default 2000) | The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply |
+| deferReplyEphemeral | boolean (default true) | If true, will defer reply as ephemeral, making the reply ephermeral aswell |
+
+### Methods
+| Method | Arguments | Returns | Description |
+| ------ | --------- | ------- | ----------- |
+| handle | interaction: StringSelectMenuInteraction | Promise\<void> | Called when StringSelectMenuInteraction was received. |
+
+## UserSelectMenuInteractionModel
+
+### Properties
+| Properties | Type | Description |
+| ---------- | ---- | ----------- |
+| id | string | The id of the interaction |
+| deferReply | number \| undefined | The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply |
+| deferReplyEphemeral | boolean | If true, will defer reply as ephemeral, making the reply ephermeral aswell |
+
+### Constructor
+| Argument | Type | Description |
+| -------- | ---- | ----------- |
+| id | string | The id of the interaction |
+| deferReply | number \| undefined (default 2000) | The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply |
+| deferReplyEphemeral | boolean (default true) | If true, will defer reply as ephemeral, making the reply ephermeral aswell |
+
+### Methods
+| Method | Arguments | Returns | Description |
+| ------ | --------- | ------- | ----------- |
+| handle | interaction: UserSelectMenuInteraction | Promise\<void> | Called when UserSelectMenuInteraction was received. |
+
+## SelectMenuInteractionModel
+**Deprecated** Use [StringSelectMenuInteractionModel](#stringselectmenuinteractionmodel) instead
 ### Properties
 | Properties | Type | Description |
 | ---------- | ---- | ----------- |
