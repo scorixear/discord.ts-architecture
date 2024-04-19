@@ -1,11 +1,11 @@
-import { ChannelSelectMenuInteraction } from 'discord.js';
+import { RoleSelectMenuInteraction } from 'discord.js';
 import { Logger, WARNINGLEVEL } from '../../helpers/logging';
-import { AnySelectMenuInteractionModel } from './AnySelectionMenuInteractionModel';
+import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
 /**
- * Represents on @see ChannelSelectMenuInteraction
+ * Represents on @see RoleSelectMenuInteraction
  * {@link id} the custom-id for this interaction (actual custom-id can be longer, only start is checked)
  */
-export abstract class ChannelSelectMenuInteractionModel extends AnySelectMenuInteractionModel {
+export abstract class RoleSelectMenuInteractionModel extends AnySelectMenuInteractionModel {
   /**
    * Default constructor
    * @param id the custom-id for this interaction (actual custom-id can be longer, check is done wiht startsWith())
@@ -17,10 +17,10 @@ export abstract class ChannelSelectMenuInteractionModel extends AnySelectMenuInt
   }
 
   /**
-   * Called when @see ChannelSelectMenuInteraction was received
+   * Called when @see RoleSelectMenuInteraction was received
    * @param interaction the interaction received
    */
-  public async handle(interaction: ChannelSelectMenuInteraction) {
+  public async handle(interaction: RoleSelectMenuInteraction) {
     if (this.deferReply) {
       setTimeout(async () => {
         try {

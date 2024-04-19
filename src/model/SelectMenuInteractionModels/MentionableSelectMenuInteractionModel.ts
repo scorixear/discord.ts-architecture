@@ -1,6 +1,6 @@
 import { MentionableSelectMenuInteraction } from 'discord.js';
 import { Logger, WARNINGLEVEL } from '../../helpers/logging';
-import { AnySelectMenuInteractionModel } from './AnySelectionMenuInteractionModel';
+import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
 /**
  * Represents on @see MentionableSelectMenuInteraction
  * {@link id} the custom-id for this interaction (actual custom-id can be longer, only start is checked)

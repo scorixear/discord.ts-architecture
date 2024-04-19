@@ -7,10 +7,10 @@ import { AutocompleteInteractionModel } from './model/AutocompleteInteractionMod
 import { ButtonInteractionModel } from './model/ButtonInteractionModel';
 import { CommandInteractionModel } from './model/CommandInteractionModel';
 import { SelectMenuInteractionModel } from './model/SelectMenuInteractionModel';
-import { AnySelectMenuInteractionModel } from './model/SelectMenuInteractionModels/AnySelectionMenuInteractionModel';
-import { ChannelSelectMenuInteractionModel } from './model/SelectMenuInteractionModels/ChannelSelectionMenuInteractionModel';
+import { AnySelectMenuInteractionModel } from './model/SelectMenuInteractionModels/AnySelectMenuInteractionModel';
+import { ChannelSelectMenuInteractionModel } from './model/SelectMenuInteractionModels/ChannelSelectMenuInteractionModel';
 import { MentionableSelectMenuInteractionModel } from './model/SelectMenuInteractionModels/MentionableSelectMenuInteractionModel';
-import { RoleSelectMenuInteractionModel } from './model/SelectMenuInteractionModels/RoleSelectionMenuInteractionModel';
+import { RoleSelectMenuInteractionModel } from './model/SelectMenuInteractionModels/RoleSelectMenuInteractionModel';
 import { StringSelectMenuInteractionModel } from './model/SelectMenuInteractionModels/StringSelectMenuInteractionModel';
 import { UserSelectMenuInteractionModel } from './model/SelectMenuInteractionModels/UserSelectMenuInteractionModel';
 import { TwoWayMap } from './model/TwoWayMap';

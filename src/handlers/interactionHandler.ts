@@ -22,11 +22,11 @@ import { AutocompleteInteractionModel } from '../model/AutocompleteInteractionMo
 import { TwoWayMap } from '../model/TwoWayMap';
 import { DiscordHandler } from './discordHandler';
 import { SelectMenuInteractionModel } from '../model/SelectMenuInteractionModel';
-import { AnySelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/AnySelectionMenuInteractionModel';
+import { AnySelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/AnySelectMenuInteractionModel';
 import { StringSelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/StringSelectMenuInteractionModel';
-import { ChannelSelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/ChannelSelectionMenuInteractionModel';
+import { ChannelSelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/ChannelSelectMenuInteractionModel';
 import { MentionableSelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/MentionableSelectMenuInteractionModel';
-import { RoleSelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/RoleSelectionMenuInteractionModel';
+import { RoleSelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/RoleSelectMenuInteractionModel';
 import { UserSelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/UserSelectMenuInteractionModel';
 
 /**
