@@ -82,10 +82,6 @@ export class DiscordHandler {
     return this.client.on(event, callback);
   }
 
-  public once(event: keyof ClientEvents, callback: (...args: any[]) => Awaitable<void>) {
-    return this.client.once(event, callback);
-  }
-
   /**
    * Adds an event listener that is called only once
    * @param event the event to listen on
