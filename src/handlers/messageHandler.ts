@@ -569,6 +569,7 @@ export class MessageHandler {
    * @param lines the lines to split among multiple categories
    * @param heading the heading of the first category
    * @returns the categories
+   * @throws Error if one of the lines is longer than 1023 characters
    */
   public static splitInCategories(lines: string[], heading: string) {
     // Clone lines array
