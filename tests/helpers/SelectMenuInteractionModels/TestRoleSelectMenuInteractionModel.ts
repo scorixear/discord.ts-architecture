@@ -1,7 +1,7 @@
-import { ButtonInteraction } from 'discord.js';
-import { ButtonInteractionModel } from '../../src/model/ButtonInteractionModel';
+import { RoleSelectMenuInteraction } from 'discord.js';
+import { RoleSelectMenuInteractionModel } from '../../../src/model/SelectMenuInteractionModels/RoleSelectMenuInteractionModel';
 
-export class TestButtonInteractionModel extends ButtonInteractionModel {
+export class TestRoleSelectMenuInteractionModel extends RoleSelectMenuInteractionModel {
   public constructorCalled: boolean = false;
   public constructorCalledWith: any[] = [];
 
@@ -14,7 +14,7 @@ export class TestButtonInteractionModel extends ButtonInteractionModel {
   public handleCalled: number = 0;
   public handleCalledWith: any[] = [];
 
-  public override async handle(interaction: ButtonInteraction): Promise<void> {
+  public override async handle(interaction: RoleSelectMenuInteraction): Promise<void> {
     this.handleCalled++;
     this.handleCalledWith.push(interaction);
   }

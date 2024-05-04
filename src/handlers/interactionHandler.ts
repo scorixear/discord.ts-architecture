@@ -39,7 +39,7 @@ import { UserSelectMenuInteractionModel } from '../model/SelectMenuInteractionMo
 export class InteractionHandler {
   public buttonInteractions: TwoWayMap<string, ButtonInteractionModel>;
   public selectMenuInteractions: TwoWayMap<string, AnySelectMenuInteractionModel>;
-  private commandInteractions: CommandInteractionModel[];
+  public commandInteractions: CommandInteractionModel[];
 
   /**
    *
