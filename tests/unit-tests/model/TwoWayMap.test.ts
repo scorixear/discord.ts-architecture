@@ -1,6 +1,6 @@
 import 'jest';
-import { TwoWayMap } from '../../src/model/TwoWayMap';
-import { TestButtonInteractionModel } from '../helpers/TestButtonInteractionModel';
+import { TwoWayMap } from '../../../src/model/TwoWayMap';
+import { TestButtonInteractionModel } from '../../helpers/TestButtonInteractionModel';
 
 describe('TwoWayMap', () => {
   let SuT: TwoWayMap<string, number>;

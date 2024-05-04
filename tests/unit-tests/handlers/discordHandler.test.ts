@@ -1,6 +1,6 @@
 import 'jest';
 
-import { DiscordHandler } from '../../src/handlers/discordHandler';
+import { DiscordHandler } from '../../../src/handlers/discordHandler';
 import { Client, Events, GatewayIntentBits, Guild, Partials } from 'discord.js';
 jest.mock('discord.js', () => ({
   Client: jest.fn().mockImplementation(() => ({

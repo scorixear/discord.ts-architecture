@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import 'jest';
-import { CommandInteractionModel } from '../../src/model/CommandInteractionModel';
-import { AnySelectMenuInteractionModel } from '../../src/model/SelectMenuInteractionModels/AnySelectMenuInteractionModel';
-import { ButtonInteractionModel } from '../../src/model/ButtonInteractionModel';
-import { DiscordHandler } from '../../src/handlers/discordHandler';
-import { Logger } from '../../src/helpers/logging';
-import { InteractionHelper } from '../helpers/InteractionHelper';
+import { CommandInteractionModel } from '../../../src/model/CommandInteractionModel';
+import { AnySelectMenuInteractionModel } from '../../../src/model/SelectMenuInteractionModels/AnySelectMenuInteractionModel';
+import { ButtonInteractionModel } from '../../../src/model/ButtonInteractionModel';
+import { DiscordHandler } from '../../../src/handlers/discordHandler';
+import { Logger } from '../../../src/helpers/logging';
+import { InteractionHelper } from '../../helpers/InteractionHelper';
 
-import { InteractionHandler } from '../../src/handlers/interactionHandler';
-import { TwoWayMap } from '../../src/model/TwoWayMap';
-import { TestCommandInteractionModel } from '../helpers/TestCommandInteractionModel';
-import { TestMentionableSelectMenuInteractionModel } from '../helpers/SelectMenuInteractionModels/TestMentionableSelectMenuInteractionModel';
-import { TestRoleSelectMenuInteractionModel } from '../helpers/SelectMenuInteractionModels/TestRoleSelectMenuInteractionModel';
-import { TestStringSelectMenuInteractionModel } from '../helpers/SelectMenuInteractionModels/TestStringSelectMenuInteractionModel';
-import { TestUserSelectMenuInteractionModel } from '../helpers/SelectMenuInteractionModels/TestUserSelectMenuInterationModel';
-import { TestSelectMenuInteractionModel } from '../helpers/TestSelectMenuInteractionModel';
-import { TestButtonInteractionModel } from '../helpers/TestButtonInteractionModel';
-import { TestAutocompleteInteractionModel } from '../helpers/TestAutocompleteInteractionModel';
+import { InteractionHandler } from '../../../src/handlers/interactionHandler';
+import { TwoWayMap } from '../../../src/model/TwoWayMap';
+import { TestCommandInteractionModel } from '../../helpers/TestCommandInteractionModel';
+import { TestMentionableSelectMenuInteractionModel } from '../../helpers/SelectMenuInteractionModels/TestMentionableSelectMenuInteractionModel';
+import { TestRoleSelectMenuInteractionModel } from '../../helpers/SelectMenuInteractionModels/TestRoleSelectMenuInteractionModel';
+import { TestStringSelectMenuInteractionModel } from '../../helpers/SelectMenuInteractionModels/TestStringSelectMenuInteractionModel';
+import { TestUserSelectMenuInteractionModel } from '../../helpers/SelectMenuInteractionModels/TestUserSelectMenuInterationModel';
+import { TestSelectMenuInteractionModel } from '../../helpers/TestSelectMenuInteractionModel';
+import { TestButtonInteractionModel } from '../../helpers/TestButtonInteractionModel';
+import { TestAutocompleteInteractionModel } from '../../helpers/TestAutocompleteInteractionModel';
 import { REST } from '@discordjs/rest';
 import {
   AnySelectMenuInteraction,
@@ -34,12 +34,12 @@ import {
   StringSelectMenuInteraction,
   UserSelectMenuInteraction
 } from 'discord.js';
-import { TestChannelSelectMenuInteractionModel } from '../helpers/SelectMenuInteractionModels/TestChannelSelectMenuInteractionModel';
-import { TestAnySelectMenuInteractionModel } from '../helpers/SelectMenuInteractionModels/TestAnySelectMenuInteractionModel';
+import { TestChannelSelectMenuInteractionModel } from '../../helpers/SelectMenuInteractionModels/TestChannelSelectMenuInteractionModel';
+import { TestAnySelectMenuInteractionModel } from '../../helpers/SelectMenuInteractionModels/TestAnySelectMenuInteractionModel';
 
-jest.mock('../../src/helpers/logging.ts');
+jest.mock('../../../src/helpers/logging.ts');
 
-jest.mock('../../src/handlers/discordHandler', () => ({
+jest.mock('../../../src/handlers/discordHandler', () => ({
   DiscordHandler: jest.fn().mockImplementation(() => ({
     getGuilds: jest.fn().mockReturnValue(
       new Collection<string, any>([
