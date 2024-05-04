@@ -79,7 +79,7 @@ export class Logger {
       if (error.stack) {
         console.error(error.stack);
       }
-    } else if (error instanceof String) {
+    } else if (typeof error === 'string') {
       console.error(error);
     }
 
