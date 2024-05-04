@@ -1,10 +1,9 @@
-import { ButtonInteraction } from 'discord.js';
-import { ButtonInteractionModel } from '../../src/model/ButtonInteractionModel';
+import { AnySelectMenuInteraction } from 'discord.js';
+import { AnySelectMenuInteractionModel } from '../../../src/model/SelectMenuInteractionModels/AnySelectMenuInteractionModel';
 
-export class TestButtonInteractionModel extends ButtonInteractionModel {
+export class TestAnySelectMenuInteractionModel extends AnySelectMenuInteractionModel {
   public constructorCalled: boolean = false;
   public constructorCalledWith: any[] = [];
-  public throwErrorOnHandle: boolean = false;
 
   constructor(id: string, deferReply: number | undefined = 0, deferReplyEphemeral: boolean = false) {
     super(id, deferReply, deferReplyEphemeral);
@@ -15,10 +14,7 @@ export class TestButtonInteractionModel extends ButtonInteractionModel {
   public handleCalled: number = 0;
   public handleCalledWith: any[] = [];
 
-  public override async handle(interaction: ButtonInteraction): Promise<void> {
-    if (this.throwErrorOnHandle) {
-      throw new Error('TestButtonInteractionModel.handle');
-    }
+  public override async handle(interaction: AnySelectMenuInteraction): Promise<void> {
     this.handleCalled++;
     this.handleCalledWith.push(interaction);
   }
@@ -26,7 +22,6 @@ export class TestButtonInteractionModel extends ButtonInteractionModel {
   public clearAllMocks(): void {
     this.constructorCalled = false;
     this.constructorCalledWith = [];
-    this.throwErrorOnHandle = false;
     this.handleCalled = 0;
     this.handleCalledWith = [];
   }
