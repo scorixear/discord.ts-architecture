@@ -1,4 +1,3 @@
-import { ButtonBuilder, SelectMenuBuilder } from '@discordjs/builders';
 import {
   Guild,
   Message,
@@ -9,7 +8,13 @@ import {
   ActionRowBuilder,
   EmbedBuilder,
   AttachmentBuilder,
-  SelectMenuInteraction
+  StringSelectMenuBuilder,
+  UserSelectMenuBuilder,
+  RoleSelectMenuBuilder,
+  MentionableSelectMenuBuilder,
+  ChannelSelectMenuBuilder,
+  AnySelectMenuInteraction,
+  ButtonBuilder
 } from 'discord.js';
 
 /**
@@ -31,7 +36,14 @@ export class MessageHandler {
     image?: string;
     url?: string;
     files?: string[];
-    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
+    components?: ActionRowBuilder<
+      | ButtonBuilder
+      | StringSelectMenuBuilder
+      | UserSelectMenuBuilder
+      | RoleSelectMenuBuilder
+      | MentionableSelectMenuBuilder
+      | ChannelSelectMenuBuilder
+    >[];
   }) {
     return await this.sendEmbedMsgExplicit(
       param0.msg,
@@ -64,7 +76,14 @@ export class MessageHandler {
     image?: string;
     url?: string;
     files?: string[];
-    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
+    components?: ActionRowBuilder<
+      | ButtonBuilder
+      | StringSelectMenuBuilder
+      | UserSelectMenuBuilder
+      | RoleSelectMenuBuilder
+      | MentionableSelectMenuBuilder
+      | ChannelSelectMenuBuilder
+    >[];
   }) {
     return await this.sendEmbedExplicit(
       param0.guild,
@@ -88,7 +107,7 @@ export class MessageHandler {
    * @returns the sent message object
    */
   public static async replyError(param0: {
-    interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction;
+    interaction: CommandInteraction | ButtonInteraction | AnySelectMenuInteraction;
     title?: string;
     categories?: { title: string; text?: string; inline?: boolean }[];
     description?: string;
@@ -97,7 +116,14 @@ export class MessageHandler {
     color?: number;
     url?: string;
     files?: string[];
-    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
+    components?: ActionRowBuilder<
+      | ButtonBuilder
+      | StringSelectMenuBuilder
+      | UserSelectMenuBuilder
+      | RoleSelectMenuBuilder
+      | MentionableSelectMenuBuilder
+      | ChannelSelectMenuBuilder
+    >[];
   }) {
     if (param0.interaction.deferred || param0.interaction.replied) {
       return await param0.interaction.editReply(await this.getErrorEmbedInteraction(param0));
@@ -112,7 +138,7 @@ export class MessageHandler {
    * @returns the sent message object
    */
   public static async reply(param0: {
-    interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction;
+    interaction: CommandInteraction | ButtonInteraction | AnySelectMenuInteraction;
     title?: string;
     categories?: { title: string; text?: string; inline?: boolean }[];
     description?: string;
@@ -121,7 +147,14 @@ export class MessageHandler {
     color?: number;
     url?: string;
     files?: string[];
-    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
+    components?: ActionRowBuilder<
+      | ButtonBuilder
+      | StringSelectMenuBuilder
+      | UserSelectMenuBuilder
+      | RoleSelectMenuBuilder
+      | MentionableSelectMenuBuilder
+      | ChannelSelectMenuBuilder
+    >[];
     ephemeral?: boolean;
   }) {
     if (param0.interaction.deferred || param0.interaction.replied) {
@@ -137,7 +170,7 @@ export class MessageHandler {
    * @returns the sent message object
    */
   public static async followUp(param0: {
-    interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction;
+    interaction: CommandInteraction | ButtonInteraction | AnySelectMenuInteraction;
     title?: string;
     categories?: { title: string; text?: string; inline?: boolean }[];
     description?: string;
@@ -146,7 +179,14 @@ export class MessageHandler {
     color?: number;
     url?: string;
     files?: string[];
-    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
+    components?: ActionRowBuilder<
+      | ButtonBuilder
+      | StringSelectMenuBuilder
+      | UserSelectMenuBuilder
+      | RoleSelectMenuBuilder
+      | MentionableSelectMenuBuilder
+      | ChannelSelectMenuBuilder
+    >[];
     ephemeral?: boolean;
   }) {
     if (param0.interaction.replied) {
@@ -185,7 +225,16 @@ export class MessageHandler {
     image: string | undefined,
     url: string | undefined,
     files: string[] | undefined,
-    components: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[] | undefined
+    components:
+      | ActionRowBuilder<
+          | ButtonBuilder
+          | StringSelectMenuBuilder
+          | UserSelectMenuBuilder
+          | RoleSelectMenuBuilder
+          | MentionableSelectMenuBuilder
+          | ChannelSelectMenuBuilder
+        >[]
+      | undefined
   ) {
     channel.sendTyping();
     const richText: EmbedBuilder = new EmbedBuilder();
@@ -243,7 +292,7 @@ export class MessageHandler {
    * @returns the MessageOptions object ready to be sent
    */
   public static async getEmbedInteraction(param0: {
-    interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction;
+    interaction: CommandInteraction | ButtonInteraction | AnySelectMenuInteraction;
     title?: string;
     categories?: { title: string; text?: string; inline?: boolean }[];
     description?: string;
@@ -252,7 +301,14 @@ export class MessageHandler {
     color?: number;
     url?: string;
     files?: string[];
-    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
+    components?: ActionRowBuilder<
+      | ButtonBuilder
+      | StringSelectMenuBuilder
+      | UserSelectMenuBuilder
+      | RoleSelectMenuBuilder
+      | MentionableSelectMenuBuilder
+      | ChannelSelectMenuBuilder
+    >[];
     ephemeral?: boolean;
   }) {
     return this.getEmbed({
@@ -277,7 +333,7 @@ export class MessageHandler {
    * @returns the MessageOptions object
    */
   public static async getErrorEmbedInteraction(param0: {
-    interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction;
+    interaction: CommandInteraction | ButtonInteraction | AnySelectMenuInteraction;
     title?: string;
     categories?: { title: string; text?: string; inline?: boolean }[];
     description?: string;
@@ -286,7 +342,14 @@ export class MessageHandler {
     color?: number;
     url?: string;
     files?: string[];
-    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
+    components?: ActionRowBuilder<
+      | ButtonBuilder
+      | StringSelectMenuBuilder
+      | UserSelectMenuBuilder
+      | RoleSelectMenuBuilder
+      | MentionableSelectMenuBuilder
+      | ChannelSelectMenuBuilder
+    >[];
   }) {
     return this.getEmbed({
       guild: param0.interaction.guild ?? undefined,
@@ -320,7 +383,14 @@ export class MessageHandler {
     image?: string;
     url?: string;
     files?: string[];
-    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
+    components?: ActionRowBuilder<
+      | ButtonBuilder
+      | StringSelectMenuBuilder
+      | UserSelectMenuBuilder
+      | RoleSelectMenuBuilder
+      | MentionableSelectMenuBuilder
+      | ChannelSelectMenuBuilder
+    >[];
     ephemeral?: boolean;
   }) {
     return this.getEmbedExplicit(
@@ -366,7 +436,14 @@ export class MessageHandler {
     image?: string,
     url?: string,
     files?: string[],
-    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[],
+    components?: ActionRowBuilder<
+      | ButtonBuilder
+      | StringSelectMenuBuilder
+      | UserSelectMenuBuilder
+      | RoleSelectMenuBuilder
+      | MentionableSelectMenuBuilder
+      | ChannelSelectMenuBuilder
+    >[],
     ephemeral?: boolean
   ) {
     const richText: EmbedBuilder = new EmbedBuilder();
@@ -418,7 +495,14 @@ export class MessageHandler {
     let returnValue: {
       embeds: EmbedBuilder[];
       ephemeral: boolean;
-      components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[];
+      components?: ActionRowBuilder<
+        | ButtonBuilder
+        | StringSelectMenuBuilder
+        | UserSelectMenuBuilder
+        | RoleSelectMenuBuilder
+        | MentionableSelectMenuBuilder
+        | ChannelSelectMenuBuilder
+      >[];
       files: AttachmentBuilder[];
     } = { embeds: [richText], ephemeral: eph, files: [...images, ...fileAttachments] };
 
@@ -452,7 +536,16 @@ export class MessageHandler {
     image: string | undefined,
     url: string | undefined,
     files: string[] | undefined,
-    components: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[] | undefined
+    components:
+      | ActionRowBuilder<
+          | ButtonBuilder
+          | StringSelectMenuBuilder
+          | UserSelectMenuBuilder
+          | RoleSelectMenuBuilder
+          | MentionableSelectMenuBuilder
+          | ChannelSelectMenuBuilder
+        >[]
+      | undefined
   ) {
     return await this.sendEmbedExplicit(
       msg.guild ?? undefined,
@@ -476,6 +569,7 @@ export class MessageHandler {
    * @param lines the lines to split among multiple categories
    * @param heading the heading of the first category
    * @returns the categories
+   * @throws Error if one of the lines is longer than 1023 characters
    */
   public static splitInCategories(lines: string[], heading: string) {
     // Clone lines array
@@ -484,6 +578,9 @@ export class MessageHandler {
     const categoryStrings: string[] = [''];
     // as long as we need to add lines
     while (linesClone.length > 0) {
+      if (linesClone[0].length + 1 >= 1024) {
+        throw new Error('One of the given lines are longer than 1023 characters. Split them up in multiple lines.');
+      }
       const currentString = categoryStrings[categoryStrings.length - 1];
       // if current category + this line is not too long
       if (currentString.length + linesClone[0].length + 1 < 1024) {
