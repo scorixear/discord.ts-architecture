@@ -17,6 +17,7 @@ import {
   SlashCommandSubcommandGroupBuilder,
   SlashCommandUserOption
 } from 'discord.js';
+import { Logger, WARNINGLEVEL } from '../helpers/logging';
 
 /**
  * Represents one SlashCommand and should be extended by custom implementation (overriding the handle method).
@@ -115,9 +116,13 @@ export abstract class CommandInteractionModel {
    */
   public async handle(interaction: ChatInputCommandInteraction) {
     if (this.deferReply) {
-      setTimeout(() => {
-        if (!interaction.replied && !interaction.deferred) {
-          interaction.deferReply({ ephemeral: this.deferReplyEphemeral });
+      setTimeout(async () => {
+        try {
+          if (!interaction.replied && !interaction.deferred) {
+            await interaction.deferReply({ ephemeral: this.deferReplyEphemeral });
+          }
+        } catch (err) {
+          Logger.exception('Error deferring reply', err, WARNINGLEVEL.ERROR);
         }
       }, this.deferReply);
     }
