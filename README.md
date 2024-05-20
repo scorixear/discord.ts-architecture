@@ -1,5 +1,5 @@
 # discord.ts-architecture
-![GitHub License](https://img.shields.io/github/license/scorixear/discord.ts-architecture)
+
 ![NPM Version](https://img.shields.io/npm/v/discord.ts-architecture)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/scorixear/discord.ts-architecture/node.yml)
 ![NPM Downloads](https://img.shields.io/npm/d18m/discord.ts-architecture)
