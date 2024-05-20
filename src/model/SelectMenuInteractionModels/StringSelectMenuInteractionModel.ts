@@ -1,5 +1,4 @@
 import { StringSelectMenuInteraction } from 'discord.js';
-import { Logger, WARNINGLEVEL } from '../../helpers/logging';
 import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
 /**
  * Represents on @see StringSelectMenuInteraction
@@ -20,17 +19,13 @@ export abstract class StringSelectMenuInteractionModel extends AnySelectMenuInte
    * Called when @see StringSelectMenuInteraction was received
    * @param interaction the interaction received
    */
-  public async handle(interaction: StringSelectMenuInteraction) {
-    if (this.deferReply) {
-      setTimeout(async () => {
-        try {
-          if (!interaction.replied && !interaction.deferred) {
-            await interaction.deferReply({ ephemeral: this.deferReplyEphemeral });
-          }
-        } catch (err) {
-          Logger.exception('Error deferring reply', err, WARNINGLEVEL.ERROR);
-        }
-      }, this.deferReply);
-    }
+  public abstract override handle(interaction: StringSelectMenuInteraction): Promise<void>;
+
+  /**
+   * Calls a deferred reply if the interaction was not replied to / deferred in the given {@link deferReply} timeframe
+   * @param interaction the interaction to activate deferred reply for
+   */
+  public override async activateDeferredReply(interaction: StringSelectMenuInteraction) {
+    super.activateDeferredReply(interaction);
   }
 }

@@ -1,5 +1,4 @@
 import { ChannelSelectMenuInteraction } from 'discord.js';
-import { Logger, WARNINGLEVEL } from '../../helpers/logging';
 import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
 /**
  * Represents on @see ChannelSelectMenuInteraction
@@ -20,17 +19,13 @@ export abstract class ChannelSelectMenuInteractionModel extends AnySelectMenuInt
    * Called when @see ChannelSelectMenuInteraction was received
    * @param interaction the interaction received
    */
-  public async handle(interaction: ChannelSelectMenuInteraction) {
-    if (this.deferReply) {
-      setTimeout(async () => {
-        try {
-          if (!interaction.replied && !interaction.deferred) {
-            await interaction.deferReply({ ephemeral: this.deferReplyEphemeral });
-          }
-        } catch (err) {
-          Logger.exception('Error deferring reply', err, WARNINGLEVEL.ERROR);
-        }
-      }, this.deferReply);
-    }
+  public abstract override handle(interaction: ChannelSelectMenuInteraction): Promise<void>;
+
+  /**
+   * Calls a deferred reply if the interaction was not replied to / deferred in the given {@link deferReply} timeframe
+   * @param interaction the interaction to activate deferred reply for
+   */
+  public override async activateDeferredReply(interaction: ChannelSelectMenuInteraction) {
+    super.activateDeferredReply(interaction);
   }
 }

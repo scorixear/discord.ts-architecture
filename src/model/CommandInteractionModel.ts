@@ -108,13 +108,16 @@ export abstract class CommandInteractionModel {
   }
 
   /**
-   * Called when Interaction was received. You might want to call super.handle()
-   * to activate defer reply and permission checking
-   * @param interaction the Interaction received
-   * @returns none
-   * @throws Error user is not allowed to execute the command
+   * Called when @see ChatInputCommandInteraction was received
+   * @param interaction the interaction received
    */
-  public async handle(interaction: ChatInputCommandInteraction) {
+  public abstract handle(interaction: ChatInputCommandInteraction): Promise<void>;
+
+  /**
+   * Calls a deferred reply if the interaction was not replied to / deferred in the given {@link deferReply} timeframe
+   * @param interaction the interaction to activate deferred reply for
+   */
+  public async activateDeferredReply(interaction: ChatInputCommandInteraction) {
     if (this.deferReply) {
       setTimeout(async () => {
         try {
@@ -126,7 +129,14 @@ export abstract class CommandInteractionModel {
         }
       }, this.deferReply);
     }
+  }
 
+  /**
+   * Checks if the given command is allowed to be executed by the user
+   * @param interaction the Interaction received
+   * @returns true if the user has Permission to execute the command
+   */
+  public async checkPermissions(interaction: ChatInputCommandInteraction): Promise<boolean> {
     if (this.allowedRoles && interaction.guild) {
       const applicationCommands = await interaction.guild.commands.fetch();
       const applicationCommand = applicationCommands.find(
@@ -136,13 +146,14 @@ export abstract class CommandInteractionModel {
       if (applicationCommand) {
         const member = await (interaction.member as GuildMember).fetch();
         if (member.user.id === process.env.OWNER_ID) {
-          return;
+          return true;
         }
         if (member.roles.cache.find((role: Role) => this.allowedRoles?.includes(role) ?? false)) {
-          return;
+          return true;
         }
-        throw Error('No permission');
+        return false;
       }
     }
+    return true;
   }
 }

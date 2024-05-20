@@ -2,7 +2,6 @@ import {
   AutocompleteInteraction,
   ButtonInteraction,
   ChatInputCommandInteraction,
-  SelectMenuInteraction,
   Guild,
   Interaction,
   StringSelectMenuInteraction,
@@ -21,7 +20,6 @@ import { Logger, WARNINGLEVEL } from '../helpers/logging';
 import { AutocompleteInteractionModel } from '../model/AutocompleteInteractionModel';
 import { TwoWayMap } from '../model/TwoWayMap';
 import { DiscordHandler } from './discordHandler';
-import { SelectMenuInteractionModel } from '../model/SelectMenuInteractionModel';
 import { AnySelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/AnySelectMenuInteractionModel';
 import { StringSelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/StringSelectMenuInteractionModel';
 import { ChannelSelectMenuInteractionModel } from '../model/SelectMenuInteractionModels/ChannelSelectMenuInteractionModel';
@@ -162,19 +160,12 @@ export class InteractionHandler {
       } else if (interaction.isAnySelectMenu()) {
         const selectMenuInteraction = interaction as AnySelectMenuInteraction;
         if (interaction.isStringSelectMenu() || interaction.isSelectMenu()) {
-          const depr_handler = this.selectMenuInteractions.findWithValue(
-            (id, model) => selectMenuInteraction.customId.startsWith(id) && model instanceof SelectMenuInteractionModel
-          ) as SelectMenuInteractionModel | undefined;
-          if (depr_handler) {
-            await depr_handler.handle(selectMenuInteraction as SelectMenuInteraction);
-          } else {
-            const handler = this.selectMenuInteractions.findWithValue(
-              (id, model) =>
-                selectMenuInteraction.customId.startsWith(id) && model instanceof StringSelectMenuInteractionModel
-            ) as StringSelectMenuInteractionModel | undefined;
-            if (handler) {
-              await handler.handle(selectMenuInteraction as StringSelectMenuInteraction);
-            }
+          const handler = this.selectMenuInteractions.findWithValue(
+            (id, model) =>
+              selectMenuInteraction.customId.startsWith(id) && model instanceof StringSelectMenuInteractionModel
+          ) as StringSelectMenuInteractionModel | undefined;
+          if (handler) {
+            await handler.handle(selectMenuInteraction as StringSelectMenuInteraction);
           }
         } else if (interaction.isChannelSelectMenu()) {
           const handler = this.selectMenuInteractions.findWithValue(

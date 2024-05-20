@@ -25,7 +25,6 @@ describe('RoleSelectMenuInteractionModel', () => {
     jest.clearAllMocks();
     jest.useFakeTimers();
     SuT = new TestRoleSelectMenuInteractionModel('test', 1000, true);
-    SuT.callSuperHandle = true;
     throwMockError = false;
     mockInteraction.replied = false;
     mockInteraction.deferred = false;
@@ -44,23 +43,20 @@ describe('RoleSelectMenuInteractionModel', () => {
     });
   });
 
-  describe('handle', () => {
+  describe('activateDeferredReply', () => {
     it('should not call if deferReply is undefined', async () => {
       SuT = new TestRoleSelectMenuInteractionModel('test', undefined, true);
-      SuT.callSuperHandle = true;
-      await SuT.handle(mockInteraction as any);
+      await SuT.activateDeferredReply(mockInteraction as any);
       jest.advanceTimersByTime(1000);
       await flushPromises();
-      expect(SuT.handleCalled).toBe(1);
       expect(mockInteraction.deferReply).not.toHaveBeenCalled();
       expect(Logger.exception).not.toHaveBeenCalled();
     });
 
     it('should call deferReply if deferReply is defined', async () => {
-      await SuT.handle(mockInteraction as any);
+      await SuT.activateDeferredReply(mockInteraction as any);
       jest.advanceTimersByTime(1000);
       await flushPromises();
-      expect(SuT.handleCalled).toBe(1);
       expect(mockInteraction.deferReply).toHaveBeenCalledWith({ ephemeral: true });
       expect(Logger.exception).not.toHaveBeenCalled();
     });
@@ -68,20 +64,18 @@ describe('RoleSelectMenuInteractionModel', () => {
     it('should not call deferReply if interation was replied and deferred', async () => {
       mockInteraction.replied = true;
       mockInteraction.deferred = true;
-      await SuT.handle(mockInteraction as any);
+      await SuT.activateDeferredReply(mockInteraction as any);
       jest.advanceTimersByTime(1000);
       await flushPromises();
-      expect(SuT.handleCalled).toBe(1);
       expect(mockInteraction.deferReply).not.toHaveBeenCalled();
       expect(Logger.exception).not.toHaveBeenCalled();
     });
 
     it('should call logger if deferReply is defined and error occurs', async () => {
       throwMockError = true;
-      await SuT.handle(mockInteraction as any);
+      await SuT.activateDeferredReply(mockInteraction as any);
       jest.advanceTimersByTime(1000);
       await flushPromises();
-      expect(SuT.handleCalled).toBe(1);
       expect(mockInteraction.deferReply).toHaveBeenCalledWith({ ephemeral: true });
       expect(Logger.exception).toHaveBeenCalled();
     });

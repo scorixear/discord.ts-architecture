@@ -91,7 +91,6 @@ describe('CommandInteractionModel', () => {
     originalEnv = process.env;
     process.env = { ...originalEnv, OWNER_ID: '' };
     SuT = new TestCommandInteractionModel('test', 'test', 'test', 'test', 'test', [], 1000, true, ['abc']);
-    SuT.callSuperHandle = true;
     throwMockError = false;
     mockInteraction.replied = false;
     mockInteraction.deferred = false;
@@ -150,23 +149,20 @@ describe('CommandInteractionModel', () => {
     });
   });
 
-  describe('handle', () => {
+  describe('activateDeferredReply', () => {
     it('should not call if deferReply is undefined', async () => {
       SuT = new TestCommandInteractionModel('test', 'test', 'test', 'test', 'test', [], undefined, true, ['abc']);
-      SuT.callSuperHandle = true;
-      await SuT.handle(mockInteraction as any);
+      await SuT.activateDeferredReply(mockInteraction as any);
       jest.advanceTimersByTime(1000);
       await flushPromises();
-      expect(SuT.handleCalled).toBe(1);
       expect(mockInteraction.deferReply).not.toHaveBeenCalled();
       expect(Logger.exception).not.toHaveBeenCalled();
     });
 
     it('should call deferReply if deferReply is defined', async () => {
-      await SuT.handle(mockInteraction as any);
+      await SuT.activateDeferredReply(mockInteraction as any);
       jest.advanceTimersByTime(1000);
       await flushPromises();
-      expect(SuT.handleCalled).toBe(1);
       expect(mockInteraction.deferReply).toHaveBeenCalledWith({ ephemeral: true });
       expect(Logger.exception).not.toHaveBeenCalled();
     });
@@ -174,46 +170,39 @@ describe('CommandInteractionModel', () => {
     it('should not call deferReply if interation was replied and deferred', async () => {
       mockInteraction.replied = true;
       mockInteraction.deferred = true;
-      await SuT.handle(mockInteraction as any);
+      await SuT.activateDeferredReply(mockInteraction as any);
       jest.advanceTimersByTime(1000);
       await flushPromises();
-      expect(SuT.handleCalled).toBe(1);
       expect(mockInteraction.deferReply).not.toHaveBeenCalled();
       expect(Logger.exception).not.toHaveBeenCalled();
     });
 
     it('should call logger if deferReply is defined and error occurs', async () => {
       throwMockError = true;
-      await SuT.handle(mockInteraction as any);
+      await SuT.activateDeferredReply(mockInteraction as any);
       jest.advanceTimersByTime(1000);
       await flushPromises();
-      expect(SuT.handleCalled).toBe(1);
       expect(mockInteraction.deferReply).toHaveBeenCalledWith({ ephemeral: true });
       expect(Logger.exception).toHaveBeenCalled();
     });
-
+  });
+  describe('checkPermissions', () => {
     it('should not call fetch if allowedRoles is undefined', async () => {
       SuT = new TestCommandInteractionModel('test', 'test', 'test', 'test', 'test', [], 1000, true, undefined);
-      SuT.callSuperHandle = true;
-      await SuT.handle(mockInteraction as any);
-      expect(SuT.handleCalled).toBe(1);
+      expect(await SuT.checkPermissions(mockInteraction as any)).toBeTruthy();
       expect(mockInteraction.guild.commands.fetch).not.toHaveBeenCalled();
     });
 
     it('should not call fetch if applicationCommand not found', async () => {
       SuT = new TestCommandInteractionModel('notFound', 'test', 'test', 'test', 'test', [], 1000, true, ['abc']);
-      SuT.callSuperHandle = true;
-      await SuT.handle(mockInteraction as any);
-      expect(SuT.handleCalled).toBe(1);
+      expect(await SuT.checkPermissions(mockInteraction as any)).toBeTruthy();
       expect(mockInteraction.guild.commands.fetch).toHaveBeenCalled();
       expect(mockInteraction.member.fetch).not.toHaveBeenCalled();
     });
 
     it('should return early if user is owner', async () => {
       process.env = { ...originalEnv, OWNER_ID: 'owner' };
-      SuT.callSuperHandle = true;
-      await SuT.handle(mockInteraction as any);
-      expect(SuT.handleCalled).toBe(1);
+      expect(await SuT.checkPermissions(mockInteraction as any)).toBeTruthy();
       expect(mockInteraction.guild.commands.fetch).toHaveBeenCalled();
       expect(mockInteraction.member.fetch).toHaveBeenCalled();
       const mockedFetch = await mockInteraction.member.fetch.mock.results[0].value;
@@ -221,9 +210,7 @@ describe('CommandInteractionModel', () => {
     });
 
     it('should return early if role was found', async () => {
-      SuT.callSuperHandle = true;
-      await SuT.handle(mockInteraction as any);
-      expect(SuT.handleCalled).toBe(1);
+      expect(await SuT.checkPermissions(mockInteraction as any)).toBeTruthy();
       expect(mockInteraction.guild.commands.fetch).toHaveBeenCalled();
       expect(mockInteraction.member.fetch).toHaveBeenCalled();
       const mockedFetch = await mockInteraction.member.fetch.mock.results[0].value;
@@ -232,8 +219,7 @@ describe('CommandInteractionModel', () => {
 
     it('should throw if no role was found', async () => {
       SuT = new TestCommandInteractionModel('test', 'test', 'test', 'test', 'test', [], 1000, true, ['def']);
-      SuT.callSuperHandle = true;
-      await expect(SuT.handle(mockInteraction as any)).rejects.toThrow();
+      expect(await SuT.checkPermissions(mockInteraction as any)).toBeFalsy();
     });
   });
 });

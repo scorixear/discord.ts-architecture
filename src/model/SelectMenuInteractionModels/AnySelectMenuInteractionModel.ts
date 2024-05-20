@@ -25,7 +25,13 @@ export abstract class AnySelectMenuInteractionModel {
    * Called when @see AnySelectMenuInteraction was received
    * @param interaction the interaction received
    */
-  public async handle(interaction: AnySelectMenuInteraction) {
+  public abstract handle(interaction: AnySelectMenuInteraction): Promise<void>;
+
+  /**
+   * Calls a deferred reply if the interaction was not replied to / deferred in the given {@link deferReply} timeframe
+   * @param interaction the interaction to activate deferred reply for
+   */
+  public async activateDeferredReply(interaction: AnySelectMenuInteraction) {
     if (this.deferReply) {
       setTimeout(async () => {
         try {

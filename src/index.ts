@@ -31,6 +31,10 @@ export {
   RoleSelectMenuInteractionModel,
   StringSelectMenuInteractionModel,
   UserSelectMenuInteractionModel,
-  SelectMenuInteractionModel,
   TwoWayMap
+};
+
+export {
+  /** @deprecated Use {@link StringSelectMenuInteractionModel} instead */
+  StringSelectMenuInteractionModel as SelectMenuInteractionModel
 };
