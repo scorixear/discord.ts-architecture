@@ -1,9 +1,9 @@
 import 'jest';
 
-import { Logger } from '../../../../src/helpers/logging';
+import { Logger } from '../../../../src/logging/logger';
 import { TestMentionableSelectMenuInteractionModel } from '../../../helpers/SelectMenuInteractionModels/TestMentionableSelectMenuInteractionModel';
 
-jest.mock('../../../../src/helpers/logging');
+jest.mock('../../../../src/logging/logger');
 
 let throwMockError = false;
 const mockInteraction = {

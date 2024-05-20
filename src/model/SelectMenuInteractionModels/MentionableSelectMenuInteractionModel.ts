@@ -1,10 +1,14 @@
 import { MentionableSelectMenuInteraction } from 'discord.js';
 import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
+import { IMentionableSelectMenuInteractionModel } from '../abstractions/SelectMenuInterationModels/IMentionableSelectMenuInteractionModel';
 /**
  * Represents on @see MentionableSelectMenuInteraction
  * {@link id} the custom-id for this interaction (actual custom-id can be longer, only start is checked)
  */
-export abstract class MentionableSelectMenuInteractionModel extends AnySelectMenuInteractionModel {
+export abstract class MentionableSelectMenuInteractionModel
+  extends AnySelectMenuInteractionModel
+  implements IMentionableSelectMenuInteractionModel
+{
   /**
    * Default constructor
    * @param id the custom-id for this interaction (actual custom-id can be longer, check is done wiht startsWith())
@@ -25,7 +29,7 @@ export abstract class MentionableSelectMenuInteractionModel extends AnySelectMen
    * Calls a deferred reply if the interaction was not replied to / deferred in the given {@link deferReply} timeframe
    * @param interaction the interaction to activate deferred reply for
    */
-  public override async activateDeferredReply(interaction: MentionableSelectMenuInteraction) {
+  public override activateDeferredReply(interaction: MentionableSelectMenuInteraction) {
     super.activateDeferredReply(interaction);
   }
 }

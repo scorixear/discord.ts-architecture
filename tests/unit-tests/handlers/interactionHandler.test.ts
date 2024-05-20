@@ -4,7 +4,7 @@ import { CommandInteractionModel } from '../../../src/model/CommandInteractionMo
 import { AnySelectMenuInteractionModel } from '../../../src/model/SelectMenuInteractionModels/AnySelectMenuInteractionModel';
 import { ButtonInteractionModel } from '../../../src/model/ButtonInteractionModel';
 import { DiscordHandler } from '../../../src/handlers/discordHandler';
-import { Logger } from '../../../src/helpers/logging';
+import { Logger } from '../../../src/logging/logger';
 import { InteractionHelper } from '../../helpers/InteractionHelper';
 
 import { InteractionHandler } from '../../../src/handlers/interactionHandler';
@@ -25,7 +25,6 @@ import {
   ChannelSelectMenuInteraction,
   ChatInputCommandInteraction,
   Collection,
-  Interaction,
   InteractionType,
   MentionableSelectMenuInteraction,
   RoleSelectMenuInteraction,
@@ -36,7 +35,7 @@ import {
 import { TestChannelSelectMenuInteractionModel } from '../../helpers/SelectMenuInteractionModels/TestChannelSelectMenuInteractionModel';
 import { TestAnySelectMenuInteractionModel } from '../../helpers/SelectMenuInteractionModels/TestAnySelectMenuInteractionModel';
 
-jest.mock('../../../src/helpers/logging.ts');
+jest.mock('../../../src/logging/logger.ts');
 
 jest.mock('../../../src/handlers/discordHandler', () => ({
   DiscordHandler: jest.fn().mockImplementation(() => ({

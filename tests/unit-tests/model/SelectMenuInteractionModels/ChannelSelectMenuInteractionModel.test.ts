@@ -1,9 +1,9 @@
 import 'jest';
 
-import { Logger } from '../../../../src/helpers/logging';
+import { Logger } from '../../../../src/logging/logger';
 import { TestChannelSelectMenuInteractionModel } from '../../../helpers/SelectMenuInteractionModels/TestChannelSelectMenuInteractionModel';
 
-jest.mock('../../../../src/helpers/logging');
+jest.mock('../../../../src/logging/logger');
 
 let throwMockError = false;
 const mockInteraction = {

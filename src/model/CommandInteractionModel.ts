@@ -17,7 +17,9 @@ import {
   SlashCommandSubcommandGroupBuilder,
   SlashCommandUserOption
 } from 'discord.js';
-import { Logger, WARNINGLEVEL } from '../helpers/logging';
+import { Logger } from '../logging/logger';
+import { WarningLevel } from '../logging/warninglevel';
+import { ICommandInteractionModel } from './abstractions/ICommandInteractionModel';
 
 /**
  * Represents one SlashCommand and should be extended by custom implementation (overriding the handle method).
@@ -32,7 +34,7 @@ import { Logger, WARNINGLEVEL } from '../helpers/logging';
  * {@link deferReplyEphemeral} If true, will defer reply as ephemeral, making the reply ephemeral aswell
  * {@link slashCommandBuilder} The builder for this command
  */
-export abstract class CommandInteractionModel {
+export abstract class CommandInteractionModel implements ICommandInteractionModel {
   public command: string;
   public description: string;
   public example: string;
@@ -117,7 +119,7 @@ export abstract class CommandInteractionModel {
    * Calls a deferred reply if the interaction was not replied to / deferred in the given {@link deferReply} timeframe
    * @param interaction the interaction to activate deferred reply for
    */
-  public async activateDeferredReply(interaction: ChatInputCommandInteraction) {
+  public activateDeferredReply(interaction: ChatInputCommandInteraction) {
     if (this.deferReply) {
       setTimeout(async () => {
         try {
@@ -125,7 +127,7 @@ export abstract class CommandInteractionModel {
             await interaction.deferReply({ ephemeral: this.deferReplyEphemeral });
           }
         } catch (err) {
-          Logger.exception('Error deferring reply', err, WARNINGLEVEL.ERROR);
+          Logger.exception('Error deferring reply', err, WarningLevel.ERROR);
         }
       }, this.deferReply);
     }

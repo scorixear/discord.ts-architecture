@@ -1,10 +1,12 @@
 import { AnySelectMenuInteraction } from 'discord.js';
-import { Logger, WARNINGLEVEL } from '../../helpers/logging';
+import { Logger } from '../../logging/logger';
+import { WarningLevel } from '../../logging/warninglevel';
+import { IAnySelectMenuInteractionModel } from '../abstractions/SelectMenuInterationModels/IAnySelectMenuInteractionModel';
 /**
  * Represents on @see AnySelectMenuInteraction
  * {@link id} the custom-id for this interaction (actual custom-id can be longer, only start is checked)
  */
-export abstract class AnySelectMenuInteractionModel {
+export abstract class AnySelectMenuInteractionModel implements IAnySelectMenuInteractionModel {
   public id: string;
   protected deferReply?: number;
   protected deferReplyEphemeral?: boolean;
@@ -31,7 +33,7 @@ export abstract class AnySelectMenuInteractionModel {
    * Calls a deferred reply if the interaction was not replied to / deferred in the given {@link deferReply} timeframe
    * @param interaction the interaction to activate deferred reply for
    */
-  public async activateDeferredReply(interaction: AnySelectMenuInteraction) {
+  public activateDeferredReply(interaction: AnySelectMenuInteraction) {
     if (this.deferReply) {
       setTimeout(async () => {
         try {
@@ -39,7 +41,7 @@ export abstract class AnySelectMenuInteractionModel {
             await interaction.deferReply({ ephemeral: this.deferReplyEphemeral });
           }
         } catch (err) {
-          Logger.exception('Error deferring reply', err, WARNINGLEVEL.ERROR);
+          Logger.exception('Error deferring reply', err, WarningLevel.ERROR);
         }
       }, this.deferReply);
     }

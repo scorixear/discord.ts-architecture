@@ -1,6 +1,6 @@
 import 'jest';
 
-import { Logger } from '../../../src/helpers/logging';
+import { Logger } from '../../../src/logging/logger';
 import { TestCommandInteractionModel } from '../../helpers/TestCommandInteractionModel';
 import {
   SlashCommandAttachmentOption,
@@ -17,7 +17,7 @@ import {
   SlashCommandUserOption
 } from 'discord.js';
 
-jest.mock('../../../src/helpers/logging');
+jest.mock('../../../src/logging/logger');
 
 jest.mock('discord.js', () => ({
   ...jest.requireActual('discord.js'),

@@ -1,10 +1,14 @@
 import { RoleSelectMenuInteraction } from 'discord.js';
 import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
+import { IRoleSelectMenuInteractionModel } from '../abstractions/SelectMenuInterationModels/IRoleSelectMenuInteractionModel';
 /**
  * Represents on @see RoleSelectMenuInteraction
  * {@link id} the custom-id for this interaction (actual custom-id can be longer, only start is checked)
  */
-export abstract class RoleSelectMenuInteractionModel extends AnySelectMenuInteractionModel {
+export abstract class RoleSelectMenuInteractionModel
+  extends AnySelectMenuInteractionModel
+  implements IRoleSelectMenuInteractionModel
+{
   /**
    * Default constructor
    * @param id the custom-id for this interaction (actual custom-id can be longer, check is done wiht startsWith())
@@ -25,7 +29,7 @@ export abstract class RoleSelectMenuInteractionModel extends AnySelectMenuIntera
    * Calls a deferred reply if the interaction was not replied to / deferred in the given {@link deferReply} timeframe
    * @param interaction the interaction to activate deferred reply for
    */
-  public override async activateDeferredReply(interaction: RoleSelectMenuInteraction) {
+  public override activateDeferredReply(interaction: RoleSelectMenuInteraction) {
     super.activateDeferredReply(interaction);
   }
 }

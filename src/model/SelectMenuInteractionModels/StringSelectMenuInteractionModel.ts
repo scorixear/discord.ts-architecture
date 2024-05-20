@@ -1,10 +1,14 @@
 import { StringSelectMenuInteraction } from 'discord.js';
 import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
+import { IStringSelectMenuInteractionModel } from '../abstractions/SelectMenuInterationModels/IStringSelectMenuInteractionModel';
 /**
  * Represents on @see StringSelectMenuInteraction
  * {@link id} the custom-id for this interaction (actual custom-id can be longer, only start is checked)
  */
-export abstract class StringSelectMenuInteractionModel extends AnySelectMenuInteractionModel {
+export abstract class StringSelectMenuInteractionModel
+  extends AnySelectMenuInteractionModel
+  implements IStringSelectMenuInteractionModel
+{
   /**
    * Default constructor
    * @param id the custom-id for this interaction (actual custom-id can be longer, check is done wiht startsWith())
@@ -25,7 +29,7 @@ export abstract class StringSelectMenuInteractionModel extends AnySelectMenuInte
    * Calls a deferred reply if the interaction was not replied to / deferred in the given {@link deferReply} timeframe
    * @param interaction the interaction to activate deferred reply for
    */
-  public override async activateDeferredReply(interaction: StringSelectMenuInteraction) {
+  public override activateDeferredReply(interaction: StringSelectMenuInteraction) {
     super.activateDeferredReply(interaction);
   }
 }

@@ -1,3 +1,5 @@
+import { ITwoWayMap } from './abstractions/ITwoWayMap';
+
 /**
  * A @see Map implementation that provides direct mapping between to pairs.
  * Used inside the InteractionHandler to map ButtonInteraction and SelectMenuInteraction IDs
@@ -5,7 +7,7 @@
  * @type {K} Represent the generic Key Type
  * @type {V} Represents the generic Value Type
  */
-export class TwoWayMap<K, V> {
+export class TwoWayMap<K, V> implements ITwoWayMap<K, V> {
   private map: Map<K, V>;
   private reverseMap: Map<V, K>;
   /**
