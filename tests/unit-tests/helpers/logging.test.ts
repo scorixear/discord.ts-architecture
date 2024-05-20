@@ -1,5 +1,6 @@
 import 'jest';
-import { Logger as SuT, WARNINGLEVEL } from '../../../src/helpers/logging';
+import { Logger as SuT } from '../../../src/logging/logger';
+import { WarningLevel } from '../../../src/logging/warninglevel';
 
 const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation(() => {});
 const mockConsoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
@@ -16,12 +17,12 @@ describe('Logger', () => {
 
   describe('log', () => {
     it('should log the message with the given warning level and arguments', () => {
-      SuT.log('message', WARNINGLEVEL.INFO, 'arg1', 'arg2');
+      SuT.log('message', WarningLevel.INFO, 'arg1', 'arg2');
       expect(mockConsoleLog).toHaveBeenCalledWith('[INFO] message', 'arg1', 'arg2');
     });
 
     it('should exit the process with error-code 1 if warning level is CRIT', () => {
-      SuT.log('message', WARNINGLEVEL.CRIT, 'arg1', 'arg2');
+      SuT.log('message', WarningLevel.CRIT, 'arg1', 'arg2');
       expect(mockConsoleLog).toHaveBeenCalledWith('[CRITICAL] message', 'arg1', 'arg2');
       expect(mockProcessExit).toHaveBeenCalledWith(1);
     });
@@ -60,7 +61,7 @@ describe('Logger', () => {
     it('should log the message to error and log', () => {
       const error = new Error('error message');
 
-      SuT.exception('message', error, WARNINGLEVEL.INFO, 'arg1', 'arg2');
+      SuT.exception('message', error, WarningLevel.INFO, 'arg1', 'arg2');
       expect(mockConsoleError).toHaveBeenCalledTimes(2);
       expect(mockConsoleError).toHaveBeenNthCalledWith(1, error.message);
       expect(mockConsoleLog).toHaveBeenCalledWith('[INFO] message', 'arg1', 'arg2');
@@ -68,7 +69,7 @@ describe('Logger', () => {
 
     it('should log error message to error and log', () => {
       const error = 'error message';
-      SuT.exception('message', error, WARNINGLEVEL.INFO, 'arg1', 'arg2');
+      SuT.exception('message', error, WarningLevel.INFO, 'arg1', 'arg2');
       expect(mockConsoleError).toHaveBeenCalledWith(error);
       expect(mockConsoleLog).toHaveBeenCalledWith('[INFO] message', 'arg1', 'arg2');
     });
