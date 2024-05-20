@@ -125,3 +125,6 @@ But you get a lot of additional features with this.
 The inital setup for this is higher for very simple projects. I suggest creating a template for discord bot projects. Besides the shown setup there is nothing needed to do. Creating additional commands and button interactions all follow the same architectural structure.
 This creates better readability, maintainability and also a more robust behaviour.
 Additionally it is recommended to still catch any exception and missed rejection for an application.
+
+# Wiki
+See the [Wiki](https://github.com/scorixear/discord.ts-architecture/wiki) for a detailed documentation of the library.

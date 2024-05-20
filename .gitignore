@@ -1,6 +1,9 @@
 # Library
 /lib
 
+# Documentation
+/docs
+
 # Logs
 logs
 *.log
