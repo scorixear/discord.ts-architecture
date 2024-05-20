@@ -14,11 +14,13 @@ import {
   MentionableSelectMenuBuilder,
   ChannelSelectMenuBuilder,
   AnySelectMenuInteraction,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  BaseMessageOptions,
   ButtonBuilder
 } from 'discord.js';
 
 /**
- * Provides functions to create and send embed messages
+ * A class to handle messages and send embeds
  */
 export class MessageHandler {
   /**
@@ -287,7 +289,7 @@ export class MessageHandler {
   }
 
   /**
-   * Returns a {@link MessageOptions} object from the given interaction
+   * Returns a {@link BaseMessageOptions} object from the given interaction
    * @param param0 the parameters of the embed
    * @returns the MessageOptions object ready to be sent
    */
@@ -328,7 +330,7 @@ export class MessageHandler {
   }
 
   /**
-   * Returns a @see {MessageOptions} object from the given interaction ready to be send
+   * Returns a @see {BaseMessageOptions} object from the given interaction ready to be send
    * @param param0 the parameters for the embed
    * @returns the MessageOptions object
    */
@@ -368,7 +370,7 @@ export class MessageHandler {
   }
 
   /**
-   * Returns a @see {MessageOptions} object ready to be send
+   * Returns a @see {BaseMessageOptions} object ready to be send
    * @param param0 the parameters for the embed
    * @returns the MessageOptions object
    */
@@ -410,7 +412,7 @@ export class MessageHandler {
   }
 
   /**
-   * Returns a @see {MessageOptions} object ready to be send
+   * Returns a @see {BaseMessageOptions} object ready to be send
    * @param guild the guild to send to
    * @param author the author set in the bottom of the message
    * @param title the title of the message

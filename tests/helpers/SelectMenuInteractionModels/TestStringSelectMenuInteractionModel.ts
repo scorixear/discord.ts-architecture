@@ -13,14 +13,10 @@ export class TestStringSelectMenuInteractionModel extends StringSelectMenuIntera
 
   public handleCalled: number = 0;
   public handleCalledWith: any[] = [];
-  public callSuperHandle: boolean = false;
 
   public override async handle(interaction: StringSelectMenuInteraction): Promise<void> {
     this.handleCalled++;
     this.handleCalledWith.push(interaction);
-    if (this.callSuperHandle) {
-      await super.handle(interaction);
-    }
   }
 
   public clearAllMocks(): void {

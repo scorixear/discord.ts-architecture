@@ -4,7 +4,7 @@ import { CommandInteractionModel } from '../../../src/model/CommandInteractionMo
 import { AnySelectMenuInteractionModel } from '../../../src/model/SelectMenuInteractionModels/AnySelectMenuInteractionModel';
 import { ButtonInteractionModel } from '../../../src/model/ButtonInteractionModel';
 import { DiscordHandler } from '../../../src/handlers/discordHandler';
-import { Logger } from '../../../src/helpers/logging';
+import { Logger } from '../../../src/logging/logger';
 import { InteractionHelper } from '../../helpers/InteractionHelper';
 
 import { InteractionHandler } from '../../../src/handlers/interactionHandler';
@@ -14,7 +14,6 @@ import { TestMentionableSelectMenuInteractionModel } from '../../helpers/SelectM
 import { TestRoleSelectMenuInteractionModel } from '../../helpers/SelectMenuInteractionModels/TestRoleSelectMenuInteractionModel';
 import { TestStringSelectMenuInteractionModel } from '../../helpers/SelectMenuInteractionModels/TestStringSelectMenuInteractionModel';
 import { TestUserSelectMenuInteractionModel } from '../../helpers/SelectMenuInteractionModels/TestUserSelectMenuInterationModel';
-import { TestSelectMenuInteractionModel } from '../../helpers/TestSelectMenuInteractionModel';
 import { TestButtonInteractionModel } from '../../helpers/TestButtonInteractionModel';
 import { TestAutocompleteInteractionModel } from '../../helpers/TestAutocompleteInteractionModel';
 import { REST } from '@discordjs/rest';
@@ -26,7 +25,6 @@ import {
   ChannelSelectMenuInteraction,
   ChatInputCommandInteraction,
   Collection,
-  Interaction,
   InteractionType,
   MentionableSelectMenuInteraction,
   RoleSelectMenuInteraction,
@@ -37,7 +35,7 @@ import {
 import { TestChannelSelectMenuInteractionModel } from '../../helpers/SelectMenuInteractionModels/TestChannelSelectMenuInteractionModel';
 import { TestAnySelectMenuInteractionModel } from '../../helpers/SelectMenuInteractionModels/TestAnySelectMenuInteractionModel';
 
-jest.mock('../../../src/helpers/logging.ts');
+jest.mock('../../../src/logging/logger.ts');
 
 jest.mock('../../../src/handlers/discordHandler', () => ({
   DiscordHandler: jest.fn().mockImplementation(() => ({
@@ -114,7 +112,6 @@ describe('InteractionHandler', () => {
     ];
 
     selectMenuInteractions = new Map<string, AnySelectMenuInteractionModel>([
-      ['selectMenu1', new TestSelectMenuInteractionModel('selectMenu1')],
       ['selectMenu2', new TestStringSelectMenuInteractionModel('selectMenu2')],
       ['selectMenu3', new TestChannelSelectMenuInteractionModel('selectMenu3')],
       ['selectMenu4', new TestMentionableSelectMenuInteractionModel('selectMenu4')],
@@ -304,13 +301,13 @@ describe('InteractionHandler', () => {
         isAnySelectMenu: true,
         isSelectMenu: true,
         isStringSelectMenu: false,
-        customId: 'selectMenu1'
+        customId: 'selectMenu2'
       });
       await SuT.handle(mockSelectMenuInteraction as unknown as SelectMenuInteraction);
       selectMenuInteractions.forEach((v, k) => {
-        if (k === 'selectMenu1') {
-          expect((v as TestSelectMenuInteractionModel).handleCalled).toBe(1);
-          expect((v as TestSelectMenuInteractionModel).handleCalledWith[0]).toBe(mockSelectMenuInteraction);
+        if (k === 'selectMenu2') {
+          expect((v as TestStringSelectMenuInteractionModel).handleCalled).toBe(1);
+          expect((v as TestStringSelectMenuInteractionModel).handleCalledWith[0]).toBe(mockSelectMenuInteraction);
         } else {
           expect((v as any).handleCalled).toBe(0);
         }

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://typedoc-plugin-markdown.org/schema.json",
+  "plugin": ["typedoc-plugin-markdown", "typedoc-github-wiki-theme"],
+  "out": "docs",
+  "readme": "./README.md",
+  "mergeReadme": true,
+  "useCodeBlocks": true,
+  "expandParameters": true,
+}
