@@ -1,6 +1,10 @@
 import { ChannelSelectMenuInteraction } from 'discord.js';
 import { IAnySelectMenuInteractionModel } from './IAnySelectMenuInteractionModel';
 
+/**
+ * Represents one ChannelSelectInteraction and should be implemented by custom implementation (overriding the handle method).
+ * See @see ChannelSelectMenuInteractionModel for a abstract base class
+ */
 export interface IChannelSelectMenuInteractionModel extends IAnySelectMenuInteractionModel {
   /**
    * Called when @see ChannelSelectMenuInteraction was received

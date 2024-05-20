@@ -4,13 +4,30 @@ import { WarningLevel } from '../logging/warninglevel';
 import { IButtonInteractionModel } from './abstractions/IButtonInteractionModel';
 
 /**
- * Represents a Button Interaction
- * {@link id} the custom-id for this interaction (actual custom-id can be longer, only start is checked)
+ * Represents a Button Interaction and should be extended by custom implementation (overriding the handle method).
  */
 export abstract class ButtonInteractionModel implements IButtonInteractionModel {
+  /**
+   * The custom-id for this interaction (actual custom-id can be longer, only start is checked)
+   * @type {string}
+   * @memberof ButtonInteractionModel
+   * @public
+   */
   public id: string;
-  private deferReply?: number;
-  private deferReplyEphemeral: boolean;
+  /**
+   * The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply
+   * @type {number}
+   * @public
+   * @readonly
+   */
+  public readonly deferReply?: number;
+  /**
+   * If true, will defer reply as ephemeral, making the reply ephemeral aswell
+   * @type {boolean}
+   * @public
+   * @readonly
+   */
+  public readonly deferReplyEphemeral?: boolean;
   /**
    * Default constructor
    * @param id the custom-id for this interaction (actual custom-id can be longer, check is done wiht startsWith())

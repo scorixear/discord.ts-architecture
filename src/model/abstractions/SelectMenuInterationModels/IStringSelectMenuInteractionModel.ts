@@ -1,6 +1,10 @@
 import { StringSelectMenuInteraction } from 'discord.js';
 import { IAnySelectMenuInteractionModel } from './IAnySelectMenuInteractionModel';
 
+/**
+ * Represents one StringSelectInteraction and should be implemented by custom implementation (overriding the handle method).
+ * See @see StringSelectMenuInteractionModel for a abstract base class
+ */
 export interface IStringSelectMenuInteractionModel extends IAnySelectMenuInteractionModel {
   /**
    * Called when @see StringSelectMenuInteraction was received

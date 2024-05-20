@@ -1,6 +1,10 @@
 import { RoleSelectMenuInteraction } from 'discord.js';
 import { IAnySelectMenuInteractionModel } from './IAnySelectMenuInteractionModel';
 
+/**
+ * Represents one RoleSelectInteraction and should be implemented by custom implementation (overriding the handle method).
+ * See @see RoleSelectMenuInteractionModel for a abstract base class
+ */
 export interface IRoleSelectMenuInteractionModel extends IAnySelectMenuInteractionModel {
   /**
    * Called when @see RoleSelectMenuInteraction was received

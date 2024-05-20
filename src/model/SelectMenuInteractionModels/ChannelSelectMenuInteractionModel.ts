@@ -2,8 +2,7 @@ import { ChannelSelectMenuInteraction } from 'discord.js';
 import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
 import { IChannelSelectMenuInteractionModel } from '../abstractions/SelectMenuInterationModels/IChannelSelectMenuInteractionModel';
 /**
- * Represents on @see ChannelSelectMenuInteraction
- * {@link id} the custom-id for this interaction (actual custom-id can be longer, only start is checked)
+ * Represents Implemenation for @see ChannelSelectMenuInteraction
  */
 export abstract class ChannelSelectMenuInteractionModel
   extends AnySelectMenuInteractionModel

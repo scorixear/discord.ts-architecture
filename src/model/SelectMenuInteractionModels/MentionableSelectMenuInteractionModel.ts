@@ -2,8 +2,7 @@ import { MentionableSelectMenuInteraction } from 'discord.js';
 import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
 import { IMentionableSelectMenuInteractionModel } from '../abstractions/SelectMenuInterationModels/IMentionableSelectMenuInteractionModel';
 /**
- * Represents on @see MentionableSelectMenuInteraction
- * {@link id} the custom-id for this interaction (actual custom-id can be longer, only start is checked)
+ * Represents Implemenation for @see MentionableSelectMenuInteraction
  */
 export abstract class MentionableSelectMenuInteractionModel
   extends AnySelectMenuInteractionModel

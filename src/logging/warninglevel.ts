@@ -1,6 +1,5 @@
 /**
- * Provides warning levels.
- * {@link CRIT} shuts down the process with error-code 1
+ * Enum for the different levels of logging
  */
 export enum WarningLevel {
   INFO = 'INFO',

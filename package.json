@@ -10,7 +10,8 @@
     "clean": "rimraf --glob lib/*",
     "lint": "eslint ./src --ext .ts --fix ",
     "tsc": "tsc",
-    "build": "npm-run-all clean lint tsc",
+    "docs": "typedoc ./src/index.ts",
+    "build": "npm-run-all clean lint tsc docs",
     "publish-patch": "npm version patch && git push && git push origin --tags && npm publish",
     "publish-minor": "npm version minor && git push && git push origin --tags && npm publish",
     "publish-major": "npm version major && git push && git push origin --tags && npm publish"
@@ -43,6 +44,8 @@
     "rimraf": "^5.0.5",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
+    "typedoc": "^0.25.13",
+    "typedoc-plugin-markdown": "^4.0.2",
     "typescript": "^5.4.5"
   },
   "files": [

@@ -6,6 +6,7 @@ import { ITwoWayMap } from './abstractions/ITwoWayMap';
  * to ButtonInteractionModels and SelectMenuInteractionModels.
  * @type {K} Represent the generic Key Type
  * @type {V} Represents the generic Value Type
+ * @interface TwoWayMap
  */
 export class TwoWayMap<K, V> implements ITwoWayMap<K, V> {
   private map: Map<K, V>;

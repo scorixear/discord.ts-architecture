@@ -1,3 +1,9 @@
+/**
+ * Represents a two way map
+ * @type {K} Represents the generic Key Type
+ * @type {V} Represents the generic Value Type
+ * @see TwoWayMap
+ */
 export interface ITwoWayMap<K, V> {
   /**
    * Sets the value for the given key

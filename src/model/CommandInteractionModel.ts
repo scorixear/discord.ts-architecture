@@ -23,30 +23,79 @@ import { ICommandInteractionModel } from './abstractions/ICommandInteractionMode
 
 /**
  * Represents one SlashCommand and should be extended by custom implementation (overriding the handle method).
- * {@link command} The command used in Discord
- * {@link description} The description of the command (not more then 120 characters)
- * {@link example} An example how to use the command
- * {@link categoy} The category of the command
- * {@link usage} The usage of the command
- * {@link allowedRoles} The roles that are allowed to use the command
- * {@link Ready} A Promise that should be resolved when the command is ready to be used
- * {@link deferReply} The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply
- * {@link deferReplyEphemeral} If true, will defer reply as ephemeral, making the reply ephemeral aswell
- * {@link slashCommandBuilder} The builder for this command
  */
 export abstract class CommandInteractionModel implements ICommandInteractionModel {
+  /**
+   * The command used in Discord
+   * @type {string}
+   * @memberof CommandInteractionModel
+   * @public
+   */
   public command: string;
+  /**
+   * The description of the command (not more then 120 characters)
+   * @type {string}
+   * @memberof CommandInteractionModel
+   * @public
+   */
   public description: string;
+  /**
+   * An example how to use the command
+   * @type {string}
+   * @memberof CommandInteractionModel
+   * @public
+   */
   public example: string;
+  /**
+   * The category of the command
+   * @type {string}
+   * @memberof CommandInteractionModel
+   * @public
+   */
   public category: string;
+  /**
+   * The usage of the command
+   * @type {string}
+   * @memberof CommandInteractionModel
+   * @public
+   */
   public usage: string;
-  public id?: Record<string, string>;
+  /**
+   * The roles that are allowed to use the command
+   * @type {RoleResolvable[]}
+   * @memberof CommandInteractionModel
+   * @public
+   */
   public allowedRoles?: RoleResolvable[];
+  /**
+   * A Promise that should be resolved when the command is ready to be used
+   * @type {Promise<any>}
+   * @memberof CommandInteractionModel
+   * @public
+   */
   public Ready?: Promise<any>;
-  private deferReply?: number;
-  private deferReplyEphemeral: boolean;
-
+  /**
+   * The builder used for this command
+   * @type {SlashCommandBuilder}
+   * @memberof CommandInteractionModel
+   * @public
+   */
   public slashCommandBuilder: SlashCommandBuilder;
+
+  /**
+   * The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply
+   * @type {number}
+   * @public
+   * @readonly
+   */
+  public readonly deferReply?: number;
+  /**
+   * If true, will defer reply as ephemeral, making the reply ephemeral aswell
+   * @type {boolean}
+   * @public
+   * @readonly
+   */
+  public readonly deferReplyEphemeral?: boolean;
 
   /**
    * Constructs the command

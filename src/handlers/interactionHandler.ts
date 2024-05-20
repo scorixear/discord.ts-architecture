@@ -32,14 +32,26 @@ import { IUserSelectMenuInteractionModel } from '../model/abstractions/SelectMen
 /**
  * Initializes InteractionModels, pushs them to specified guilds
  * and handles the 'interactionCreate' event [link to event callback needed]
- *
- * {@link buttonInteractions} A map of @type {IButtonInteractionModel}s and their respective IDs
- * {@link selectMenuInteractions} A map of @type {IAnySelectMenuInteractionModel}s and their respective IDs
- * {@link commandInteractions} A list of @type {ICommandInteractionModel}s
  */
 export class InteractionHandler {
+  /**
+   * A map of @type {IButtonInteractionModel}s and their respective IDs
+   * @type {ITwoWayMap<string, IButtonInteractionModel>}
+   * @memberof InteractionHandler
+   * @public
+   */
   public buttonInteractions: ITwoWayMap<string, IButtonInteractionModel>;
+  /**
+   * A map of @type {IAnySelectMenuInteractionModel}s and their respective IDs
+   * @type {TwoWayMap<string, IAnySelectMenuInteractionModel>}
+   * @memberof InteractionHandler
+   */
   public selectMenuInteractions: TwoWayMap<string, IAnySelectMenuInteractionModel>;
+  /**
+   * A list of @type {ICommandInteractionModel}s
+   * @type {ICommandInteractionModel[]}
+   * @memberof InteractionHandler
+   */
   public commandInteractions: ICommandInteractionModel[];
 
   /**
@@ -123,6 +135,16 @@ export class InteractionHandler {
       }
       await rest.put(Routes.applicationGuildCommands(clientId, guild.id), { body: commands });
       Logger.info('Successfully registered application commands for guild', guild.name);
+    });
+  }
+
+  /**
+   * Activates the interactionCreate event for the given discordHandler
+   * @param discordHandler the discordHandler to activate the event for
+   */
+  public activateInteractionCreate(discordHandler: DiscordHandler) {
+    discordHandler.on('interactionCreate', async (interaction) => {
+      await this.handle(interaction);
     });
   }
 

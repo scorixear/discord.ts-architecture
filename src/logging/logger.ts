@@ -1,12 +1,12 @@
 import { WarningLevel } from './warninglevel';
 
 /**
- * Provides Logging commands
+ * Represents a logger that can log messages with different warning levels
  */
 export class Logger {
   /**
    * Logs the message with the given warning leven and arguments
-   * Exists process if warninglevel = {@link WarningLevel.CRIT} with error-code 1
+   * Exists process if warninglevel = @see WarningLevel.CRIT with error-code 1
    * @param message the message to log
    * @param warningLevel the warning level
    * @param args the arguments to add to the loggin (default console.log interpretation)
@@ -58,7 +58,7 @@ export class Logger {
   /**
    * Logs the message with the given warning leven and argments
    * Adds error message and stack-trace to console.error output
-   * Exists process if warningLevel = {@link CRIT}
+   * Exists process if warningLevel = @see WarningLevel.CRIT with error-code 1
    * @param message the message to log
    * @param error the error to print
    * @param warningLevel the warninglevel to show

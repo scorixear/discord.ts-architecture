@@ -2,8 +2,7 @@ import { StringSelectMenuInteraction } from 'discord.js';
 import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
 import { IStringSelectMenuInteractionModel } from '../abstractions/SelectMenuInterationModels/IStringSelectMenuInteractionModel';
 /**
- * Represents on @see StringSelectMenuInteraction
- * {@link id} the custom-id for this interaction (actual custom-id can be longer, only start is checked)
+ * Represents Implemenation for @see StringSelectMenuInteraction
  */
 export abstract class StringSelectMenuInteractionModel
   extends AnySelectMenuInteractionModel

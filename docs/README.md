@@ -1,9 +1,12 @@
+**discord.ts-architecture** • **Docs**
+
+***
+
 # discord.ts-architecture
 ![GitHub License](https://img.shields.io/github/license/scorixear/discord.ts-architecture)
 ![NPM Version](https://img.shields.io/npm/v/discord.ts-architecture)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/scorixear/discord.ts-architecture/node.yml)
 ![NPM Downloads](https://img.shields.io/npm/d18m/discord.ts-architecture)
-
 
 A Typescript Library for better Discord Bots.
 This library provides an OOP approach on top of the Discord.js library
@@ -125,3 +128,45 @@ But you get a lot of additional features with this.
 The inital setup for this is higher for very simple projects. I suggest creating a template for discord bot projects. Besides the shown setup there is nothing needed to do. Creating additional commands and button interactions all follow the same architectural structure.
 This creates better readability, maintainability and also a more robust behaviour.
 Additionally it is recommended to still catch any exception and missed rejection for an application.
+
+## API Index
+
+### Enumerations
+
+- [WarningLevel](enumerations/WarningLevel.md)
+
+### Classes
+
+- [AnySelectMenuInteractionModel](classes/AnySelectMenuInteractionModel.md)
+- [AutocompleteInteractionModel](classes/AutocompleteInteractionModel.md)
+- [ButtonInteractionModel](classes/ButtonInteractionModel.md)
+- [ChannelSelectMenuInteractionModel](classes/ChannelSelectMenuInteractionModel.md)
+- [CommandInteractionModel](classes/CommandInteractionModel.md)
+- [DiscordHandler](classes/DiscordHandler.md)
+- [InteractionHandler](classes/InteractionHandler.md)
+- [Logger](classes/Logger.md)
+- [MentionableSelectMenuInteractionModel](classes/MentionableSelectMenuInteractionModel.md)
+- [MessageHandler](classes/MessageHandler.md)
+- [RoleSelectMenuInteractionModel](classes/RoleSelectMenuInteractionModel.md)
+- [StringSelectMenuInteractionModel](classes/StringSelectMenuInteractionModel.md)
+- [TwoWayMap](classes/TwoWayMap.md)
+- [UserSelectMenuInteractionModel](classes/UserSelectMenuInteractionModel.md)
+
+### Interfaces
+
+- [IAnySelectMenuInteractionModel](interfaces/IAnySelectMenuInteractionModel.md)
+- [IAutocompleteInteractionModel](interfaces/IAutocompleteInteractionModel.md)
+- [IButtonInteractionModel](interfaces/IButtonInteractionModel.md)
+- [IChannelSelectMenuInteractionModel](interfaces/IChannelSelectMenuInteractionModel.md)
+- [ICommandInteractionModel](interfaces/ICommandInteractionModel.md)
+- [IMentionableSelectMenuInteractionModel](interfaces/IMentionableSelectMenuInteractionModel.md)
+- [IRoleSelectMenuInteractionModel](interfaces/IRoleSelectMenuInteractionModel.md)
+- [IStringSelectMenuInteractionModel](interfaces/IStringSelectMenuInteractionModel.md)
+- [ITwoWayMap](interfaces/ITwoWayMap.md)
+- [IUserSelectMenuInteractionModel](interfaces/IUserSelectMenuInteractionModel.md)
+
+## References
+
+### SelectMenuInteractionModel
+
+Renames and re-exports [StringSelectMenuInteractionModel](classes/StringSelectMenuInteractionModel.md)
