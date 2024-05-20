@@ -16,7 +16,7 @@
     "update-docs:commit": "cd discord.ts-architecture.wiki && git add . && git commit -m \"Update docs\" && git push && cd ..",
     "update-docs": "npm-run-all update-docs:clean update-docs:copy update-docs:commit",
     "docs": "npm-run-all gen-docs update-docs",
-    "build": "npm-run-all clean lint tsc docs",
+    "build": "npm-run-all clean lint tsc",
     "publish-patch": "npm version patch && git push && git push origin --tags && npm publish",
     "publish-minor": "npm version minor && git push && git push origin --tags && npm publish",
     "publish-major": "npm version major && git push && git push origin --tags && npm publish"
