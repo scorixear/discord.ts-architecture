@@ -10,10 +10,14 @@ import {
 } from 'discord.js';
 
 /**
- * Provides methods for interaction with the discord.js @type {Client}
- * and exposes this {@link client} for custom usage.
+ * Provides methods for interaction with the discord.js @type {Client} object
  */
 export class DiscordHandler {
+  /**
+   * The client object
+   * @type {Client}
+   * @public
+   */
   public client: Client;
 
   /**

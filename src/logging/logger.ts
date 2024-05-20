@@ -1,28 +1,19 @@
-/**
- * Provides warning levels.
- * {@link CRIT} shuts down the process with error-code 1
- */
-export enum WARNINGLEVEL {
-  INFO = 'INFO',
-  WARN = 'WARNING',
-  ERROR = 'ERROR',
-  CRIT = 'CRITICAL'
-}
+import { WarningLevel } from './warninglevel';
 
 /**
- * Provides Logging commands
+ * Represents a logger that can log messages with different warning levels
  */
 export class Logger {
   /**
    * Logs the message with the given warning leven and arguments
-   * Exists process if warninglevel = {@link WARNINGLEVEL.CRIT} with error-code 1
+   * Exists process if warninglevel = @see WarningLevel.CRIT with error-code 1
    * @param message the message to log
    * @param warningLevel the warning level
    * @param args the arguments to add to the loggin (default console.log interpretation)
    */
-  public static log(message: string, warningLevel: WARNINGLEVEL, ...args: any[]) {
+  public static log(message: string, warningLevel: WarningLevel, ...args: any[]) {
     console.log(`[${warningLevel}] ${message}`, ...args);
-    if (warningLevel === WARNINGLEVEL.CRIT) {
+    if (warningLevel === WarningLevel.CRIT) {
       process.exit(1);
     }
   }
@@ -33,7 +24,7 @@ export class Logger {
    * @param args the arguments to add to the logging (default console.log interpretation)
    */
   public static info(message: string, ...args: any[]) {
-    this.log(message, WARNINGLEVEL.INFO, ...args);
+    this.log(message, WarningLevel.INFO, ...args);
   }
 
   /**
@@ -42,7 +33,7 @@ export class Logger {
    * @param args the arguments to add to the logging (default console.log interpretation)
    */
   public static warn(message: string, ...args: any[]) {
-    this.log(message, WARNINGLEVEL.WARN, ...args);
+    this.log(message, WarningLevel.WARN, ...args);
   }
 
   /**
@@ -51,7 +42,7 @@ export class Logger {
    * @param args the arguments to add to the logging (default console.log interpretation)
    */
   public static error(message: string, ...args: any[]) {
-    this.log(message, WARNINGLEVEL.ERROR, ...args);
+    this.log(message, WarningLevel.ERROR, ...args);
   }
 
   /**
@@ -61,19 +52,19 @@ export class Logger {
    * @param args the arguments to add to the logging (default console.log interpretation)
    */
   public static crit(message: string, ...args: any[]) {
-    this.log(message, WARNINGLEVEL.CRIT, ...args);
+    this.log(message, WarningLevel.CRIT, ...args);
   }
 
   /**
    * Logs the message with the given warning leven and argments
    * Adds error message and stack-trace to console.error output
-   * Exists process if warningLevel = {@link CRIT}
+   * Exists process if warningLevel = @see WarningLevel.CRIT with error-code 1
    * @param message the message to log
    * @param error the error to print
    * @param warningLevel the warninglevel to show
    * @param args the arguments to add to the logging (default console.log interpretation)
    */
-  public static exception(message: string, error: unknown, warningLevel: WARNINGLEVEL, ...args: any[]) {
+  public static exception(message: string, error: unknown, warningLevel: WarningLevel, ...args: any[]) {
     if (error instanceof Error) {
       console.error(error.message);
       if (error.stack) {

@@ -14,7 +14,6 @@ export class TestButtonInteractionModel extends ButtonInteractionModel {
 
   public handleCalled: number = 0;
   public handleCalledWith: any[] = [];
-  public callSuperHandle: boolean = false;
 
   public override async handle(interaction: ButtonInteraction): Promise<void> {
     if (this.throwErrorOnHandle) {
@@ -22,9 +21,6 @@ export class TestButtonInteractionModel extends ButtonInteractionModel {
     }
     this.handleCalled++;
     this.handleCalledWith.push(interaction);
-    if (this.callSuperHandle) {
-      await super.handle(interaction);
-    }
   }
 
   public clearAllMocks(): void {
