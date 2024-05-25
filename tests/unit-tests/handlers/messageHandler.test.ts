@@ -792,6 +792,30 @@ describe('MessageHandler', () => {
       expect(richText.setURL).toHaveBeenCalledWith(url);
       expect(msg.channel.send).toHaveBeenCalled();
     });
+    it('should not include components if not provided', async () => {
+      let channelSendObject: any;
+      jest.spyOn(msg.channel, 'send').mockImplementation((object) => {
+        channelSendObject = object;
+        return Promise.resolve();
+      });
+      await SuT.sendEmbedExplicit(
+        msg.guild as unknown as Guild,
+        msg.channel as unknown as TextBasedChannel,
+        msg.author as unknown as User,
+        'title',
+        [{ title: 'name', text: 'value', inline: true }],
+        0x555,
+        'description',
+        'thumbnail',
+        'image',
+        'url',
+        ['file'],
+        undefined
+      );
+      expect(msg.channel.send).toHaveBeenCalled();
+      expect(channelSendObject).toBeDefined();
+      expect(channelSendObject?.components).toBeUndefined();
+    });
   });
 
   describe('getEmbedInteraction', () => {

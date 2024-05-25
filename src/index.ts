@@ -14,10 +14,8 @@ import { MentionableSelectMenuInteractionModel } from './model/SelectMenuInterac
 import { RoleSelectMenuInteractionModel } from './model/SelectMenuInteractionModels/RoleSelectMenuInteractionModel';
 import { StringSelectMenuInteractionModel } from './model/SelectMenuInteractionModels/StringSelectMenuInteractionModel';
 import { UserSelectMenuInteractionModel } from './model/SelectMenuInteractionModels/UserSelectMenuInteractionModel';
-import { TwoWayMap } from './model/TwoWayMap';
 import { IButtonInteractionModel } from './model/abstractions/IButtonInteractionModel';
 import { ICommandInteractionModel } from './model/abstractions/ICommandInteractionModel';
-import { ITwoWayMap } from './model/abstractions/ITwoWayMap';
 import { IAnySelectMenuInteractionModel } from './model/abstractions/SelectMenuInterationModels/IAnySelectMenuInteractionModel';
 import { IMentionableSelectMenuInteractionModel } from './model/abstractions/SelectMenuInterationModels/IMentionableSelectMenuInteractionModel';
 import { IRoleSelectMenuInteractionModel } from './model/abstractions/SelectMenuInterationModels/IRoleSelectMenuInteractionModel';
@@ -39,8 +37,7 @@ export {
   MentionableSelectMenuInteractionModel,
   RoleSelectMenuInteractionModel,
   StringSelectMenuInteractionModel,
-  UserSelectMenuInteractionModel,
-  TwoWayMap
+  UserSelectMenuInteractionModel
 };
 
 export {
@@ -57,6 +54,5 @@ export {
   IMentionableSelectMenuInteractionModel,
   IRoleSelectMenuInteractionModel,
   IStringSelectMenuInteractionModel,
-  IUserSelectMenuInteractionModel,
-  ITwoWayMap
+  IUserSelectMenuInteractionModel
 };

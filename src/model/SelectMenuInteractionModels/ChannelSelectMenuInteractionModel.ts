@@ -1,4 +1,4 @@
-import { ChannelSelectMenuInteraction } from 'discord.js';
+import { ChannelSelectMenuInteraction, Interaction } from 'discord.js';
 import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
 import { IChannelSelectMenuInteractionModel } from '../abstractions/SelectMenuInterationModels/IChannelSelectMenuInteractionModel';
 /**
@@ -16,6 +16,16 @@ export abstract class ChannelSelectMenuInteractionModel
    */
   constructor(id: string, deferReply = 2000, deferReplyEphemeral = true) {
     super(id, deferReply, deferReplyEphemeral);
+  }
+
+  /**
+   * Checks if the given interaction can be handled by this select menu model
+   * meaning if the id is the same and the interaction is a @see ChannelSelectMenuInteraction
+   * @param requestedId the id of the interaction
+   * @param interaction the interaction to check
+   */
+  public override canHandle(requestedId: string, interaction: Interaction): boolean {
+    return this.id === requestedId && interaction.isChannelSelectMenu();
   }
 
   /**

@@ -1,35 +1,15 @@
-import { AnySelectMenuInteraction } from 'discord.js';
+import { AnySelectMenuInteraction, Interaction } from 'discord.js';
 import { Logger } from '../../logging/logger';
 import { WarningLevel } from '../../logging/warninglevel';
 import { IAnySelectMenuInteractionModel } from '../abstractions/SelectMenuInterationModels/IAnySelectMenuInteractionModel';
+import { BaseInteractionModel } from '../BaseInteractionModel';
 /**
  * Represents Implemenation for @see AnySelectMenuInteraction
  */
-export abstract class AnySelectMenuInteractionModel implements IAnySelectMenuInteractionModel {
-  /**
-   * The custom-id for this interaction (actual custom-id can be longer, only start is checked)
-   * @type {string}
-   * @memberof AnySelectMenuInteractionModel
-   * @public
-   */
-  public id: string;
-  /**
-   * The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply
-   * @type {number}
-   * @memberof AnySelectMenuInteractionModel
-   * @public
-   * @readonly
-   */
-  public readonly deferReply?: number;
-  /**
-   * If true, will defer reply as ephemeral, making the reply ephemeral aswell
-   * @type {boolean}
-   * @memberof AnySelectMenuInteractionModel
-   * @public
-   * @readonly
-   */
-  public readonly deferReplyEphemeral?: boolean;
-
+export abstract class AnySelectMenuInteractionModel
+  extends BaseInteractionModel
+  implements IAnySelectMenuInteractionModel
+{
   /**
    * Default constructor
    * @param id the custom-id for this interaction (actual custom-id can be longer, check is done wiht startsWith())
@@ -37,22 +17,30 @@ export abstract class AnySelectMenuInteractionModel implements IAnySelectMenuInt
    * @param deferReplyEphemeral If true, will defer reply as ephemeral, making the reply ephemeral aswell
    */
   constructor(id: string, deferReply = 2000, deferReplyEphemeral = true) {
-    this.id = id;
-    this.deferReply = deferReply;
-    this.deferReplyEphemeral = deferReplyEphemeral;
+    super(id, deferReply, deferReplyEphemeral);
+  }
+
+  /**
+   * Checks if the given interaction can be handled by this select menu model
+   * meaning if the id is the same and the interaction is a @see AnySelectMenuInteraction
+   * @param requestedId the id of the interaction
+   * @param interaction the interaction to check
+   */
+  public override canHandle(requestedId: string, interaction: Interaction): boolean {
+    return this.id === requestedId && interaction.isAnySelectMenu();
   }
 
   /**
    * Called when @see AnySelectMenuInteraction was received
    * @param interaction the interaction received
    */
-  public abstract handle(interaction: AnySelectMenuInteraction): Promise<void>;
+  public abstract override handle(interaction: AnySelectMenuInteraction): Promise<void>;
 
   /**
    * Calls a deferred reply if the interaction was not replied to / deferred in the given {@link deferReply} timeframe
    * @param interaction the interaction to activate deferred reply for
    */
-  public activateDeferredReply(interaction: AnySelectMenuInteraction) {
+  public override activateDeferredReply(interaction: AnySelectMenuInteraction) {
     if (this.deferReply) {
       setTimeout(async () => {
         try {

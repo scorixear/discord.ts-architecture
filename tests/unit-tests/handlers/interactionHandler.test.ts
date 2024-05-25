@@ -8,7 +8,6 @@ import { Logger } from '../../../src/logging/logger';
 import { InteractionHelper } from '../../helpers/InteractionHelper';
 
 import { InteractionHandler } from '../../../src/handlers/interactionHandler';
-import { TwoWayMap } from '../../../src/model/TwoWayMap';
 import { TestCommandInteractionModel } from '../../helpers/TestCommandInteractionModel';
 import { TestMentionableSelectMenuInteractionModel } from '../../helpers/SelectMenuInteractionModels/TestMentionableSelectMenuInteractionModel';
 import { TestRoleSelectMenuInteractionModel } from '../../helpers/SelectMenuInteractionModels/TestRoleSelectMenuInteractionModel';
@@ -98,8 +97,8 @@ jest.mock('discord-api-types/v10', () => ({
 describe('InteractionHandler', () => {
   let SuT: InteractionHandler;
   let commandInteractions: CommandInteractionModel[];
-  let selectMenuInteractions: Map<string, AnySelectMenuInteractionModel>;
-  let buttonInteractions: Map<string, ButtonInteractionModel>;
+  let selectMenuInteractions: AnySelectMenuInteractionModel[];
+  let buttonInteractions: ButtonInteractionModel[];
   const afterConstruct = jest.fn();
   let discordHandler: DiscordHandler;
   beforeEach(() => {
@@ -111,33 +110,28 @@ describe('InteractionHandler', () => {
       new TestAutocompleteInteractionModel('autocomplete1')
     ];
 
-    selectMenuInteractions = new Map<string, AnySelectMenuInteractionModel>([
-      ['selectMenu2', new TestStringSelectMenuInteractionModel('selectMenu2')],
-      ['selectMenu3', new TestChannelSelectMenuInteractionModel('selectMenu3')],
-      ['selectMenu4', new TestMentionableSelectMenuInteractionModel('selectMenu4')],
-      ['selectMenu5', new TestRoleSelectMenuInteractionModel('selectMenu5')],
-      ['selectMenu6', new TestUserSelectMenuInteractionModel('selectMenu6')],
-      ['selectMenu7', new TestAnySelectMenuInteractionModel('selectMenu7')]
-    ]);
+    selectMenuInteractions = [
+      new TestStringSelectMenuInteractionModel('selectMenu2'),
+      new TestChannelSelectMenuInteractionModel('selectMenu3'),
+      new TestMentionableSelectMenuInteractionModel('selectMenu4'),
+      new TestRoleSelectMenuInteractionModel('selectMenu5'),
+      new TestUserSelectMenuInteractionModel('selectMenu6'),
+      new TestAnySelectMenuInteractionModel('selectMenu7')
+    ];
 
-    buttonInteractions = new Map<string, ButtonInteractionModel>([
-      ['button1', new TestButtonInteractionModel('button1')],
-      ['button2', new TestButtonInteractionModel('button2')],
-      ['button3', new TestButtonInteractionModel('button3')]
-    ]);
-    SuT = new InteractionHandler(
-      commandInteractions,
-      new TwoWayMap(buttonInteractions),
-      new TwoWayMap(selectMenuInteractions),
-      afterConstruct
-    );
+    buttonInteractions = [
+      new TestButtonInteractionModel('button1'),
+      new TestButtonInteractionModel('button2'),
+      new TestButtonInteractionModel('button3')
+    ];
+    SuT = new InteractionHandler(commandInteractions, buttonInteractions, selectMenuInteractions, afterConstruct);
   });
 
   describe('constructor', () => {
     it('should create a new instance of the InteractionHandler', () => {
       expect(SuT.commandInteractions).toBe(commandInteractions);
-      expect((SuT.selectMenuInteractions as any).map).toBe(selectMenuInteractions);
-      expect((SuT.buttonInteractions as any).map).toBe(buttonInteractions);
+      expect(SuT.selectMenuInteractions).toBe(selectMenuInteractions);
+      expect(SuT.buttonInteractions).toBe(buttonInteractions);
       expect(afterConstruct).toHaveBeenCalledWith(commandInteractions);
     });
   });
@@ -233,7 +227,7 @@ describe('InteractionHandler', () => {
         isButton: true,
         customId: 'button1'
       });
-      const buttonHandler = buttonInteractions.get('button1') as TestButtonInteractionModel;
+      const buttonHandler = buttonInteractions.find((model) => model.id == 'button1') as TestButtonInteractionModel;
       buttonHandler.throwErrorOnHandle = true;
       await SuT.handle(mockButtonInteraction as unknown as ButtonInteraction);
       expect(Logger.exception).toHaveBeenCalled();
@@ -254,12 +248,12 @@ describe('InteractionHandler', () => {
         customId: 'button1'
       });
       await SuT.handle(mockButtonInteraction as unknown as ButtonInteraction);
-      buttonInteractions.forEach((v, k) => {
-        if (k === 'button1') {
-          expect((v as TestButtonInteractionModel).handleCalled).toBe(1);
-          expect((v as TestButtonInteractionModel).handleCalledWith[0]).toBe(mockButtonInteraction);
+      buttonInteractions.forEach((model) => {
+        if (model.id === 'button1') {
+          expect((model as TestButtonInteractionModel).handleCalled).toBe(1);
+          expect((model as TestButtonInteractionModel).handleCalledWith[0]).toBe(mockButtonInteraction);
         } else {
-          expect((v as TestButtonInteractionModel).handleCalled).toBe(0);
+          expect((model as TestButtonInteractionModel).handleCalled).toBe(0);
         }
       });
     });
@@ -283,7 +277,8 @@ describe('InteractionHandler', () => {
     it('should call handle of matching autocomplete interaction', async () => {
       const mockCommandInteraction = InteractionHelper.getInteraction({
         type: InteractionType.ApplicationCommandAutocomplete,
-        commandName: 'autocomplete1'
+        commandName: 'autocomplete1',
+        isAutocomplete: true
       });
       await SuT.handle(mockCommandInteraction as unknown as AutocompleteInteraction);
       commandInteractions.forEach((v) => {
@@ -304,12 +299,12 @@ describe('InteractionHandler', () => {
         customId: 'selectMenu2'
       });
       await SuT.handle(mockSelectMenuInteraction as unknown as SelectMenuInteraction);
-      selectMenuInteractions.forEach((v, k) => {
-        if (k === 'selectMenu2') {
-          expect((v as TestStringSelectMenuInteractionModel).handleCalled).toBe(1);
-          expect((v as TestStringSelectMenuInteractionModel).handleCalledWith[0]).toBe(mockSelectMenuInteraction);
+      selectMenuInteractions.forEach((model) => {
+        if (model.id === 'selectMenu2') {
+          expect((model as TestStringSelectMenuInteractionModel).handleCalled).toBe(1);
+          expect((model as TestStringSelectMenuInteractionModel).handleCalledWith[0]).toBe(mockSelectMenuInteraction);
         } else {
-          expect((v as any).handleCalled).toBe(0);
+          expect((model as any).handleCalled).toBe(0);
         }
       });
     });
@@ -322,12 +317,12 @@ describe('InteractionHandler', () => {
         customId: 'selectMenu2'
       });
       await SuT.handle(mockSelectMenuInteraction as unknown as StringSelectMenuInteraction);
-      selectMenuInteractions.forEach((v, k) => {
-        if (k === 'selectMenu2') {
-          expect((v as TestStringSelectMenuInteractionModel).handleCalled).toBe(1);
-          expect((v as TestStringSelectMenuInteractionModel).handleCalledWith[0]).toBe(mockSelectMenuInteraction);
+      selectMenuInteractions.forEach((model) => {
+        if (model.id === 'selectMenu2') {
+          expect((model as TestStringSelectMenuInteractionModel).handleCalled).toBe(1);
+          expect((model as TestStringSelectMenuInteractionModel).handleCalledWith[0]).toBe(mockSelectMenuInteraction);
         } else {
-          expect((v as any).handleCalled).toBe(0);
+          expect((model as any).handleCalled).toBe(0);
         }
       });
     });
@@ -339,12 +334,12 @@ describe('InteractionHandler', () => {
         customId: 'selectMenu3'
       });
       await SuT.handle(mockSelectMenuInteraction as unknown as ChannelSelectMenuInteraction);
-      selectMenuInteractions.forEach((v, k) => {
-        if (k === 'selectMenu3') {
-          expect((v as TestChannelSelectMenuInteractionModel).handleCalled).toBe(1);
-          expect((v as TestChannelSelectMenuInteractionModel).handleCalledWith[0]).toBe(mockSelectMenuInteraction);
+      selectMenuInteractions.forEach((model) => {
+        if (model.id === 'selectMenu3') {
+          expect((model as TestChannelSelectMenuInteractionModel).handleCalled).toBe(1);
+          expect((model as TestChannelSelectMenuInteractionModel).handleCalledWith[0]).toBe(mockSelectMenuInteraction);
         } else {
-          expect((v as any).handleCalled).toBe(0);
+          expect((model as any).handleCalled).toBe(0);
         }
       });
     });
@@ -356,12 +351,14 @@ describe('InteractionHandler', () => {
         customId: 'selectMenu4'
       });
       await SuT.handle(mockSelectMenuInteraction as unknown as MentionableSelectMenuInteraction);
-      selectMenuInteractions.forEach((v, k) => {
-        if (k === 'selectMenu4') {
-          expect((v as TestMentionableSelectMenuInteractionModel).handleCalled).toBe(1);
-          expect((v as TestMentionableSelectMenuInteractionModel).handleCalledWith[0]).toBe(mockSelectMenuInteraction);
+      selectMenuInteractions.forEach((model) => {
+        if (model.id === 'selectMenu4') {
+          expect((model as TestMentionableSelectMenuInteractionModel).handleCalled).toBe(1);
+          expect((model as TestMentionableSelectMenuInteractionModel).handleCalledWith[0]).toBe(
+            mockSelectMenuInteraction
+          );
         } else {
-          expect((v as any).handleCalled).toBe(0);
+          expect((model as any).handleCalled).toBe(0);
         }
       });
     });
@@ -373,12 +370,12 @@ describe('InteractionHandler', () => {
         customId: 'selectMenu5'
       });
       await SuT.handle(mockSelectMenuInteraction as unknown as RoleSelectMenuInteraction);
-      selectMenuInteractions.forEach((v, k) => {
-        if (k === 'selectMenu5') {
-          expect((v as TestRoleSelectMenuInteractionModel).handleCalled).toBe(1);
-          expect((v as TestRoleSelectMenuInteractionModel).handleCalledWith[0]).toBe(mockSelectMenuInteraction);
+      selectMenuInteractions.forEach((model) => {
+        if (model.id === 'selectMenu5') {
+          expect((model as TestRoleSelectMenuInteractionModel).handleCalled).toBe(1);
+          expect((model as TestRoleSelectMenuInteractionModel).handleCalledWith[0]).toBe(mockSelectMenuInteraction);
         } else {
-          expect((v as any).handleCalled).toBe(0);
+          expect((model as any).handleCalled).toBe(0);
         }
       });
     });
@@ -390,12 +387,12 @@ describe('InteractionHandler', () => {
         customId: 'selectMenu6'
       });
       await SuT.handle(mockSelectMenuInteraction as unknown as UserSelectMenuInteraction);
-      selectMenuInteractions.forEach((v, k) => {
-        if (k === 'selectMenu6') {
-          expect((v as TestUserSelectMenuInteractionModel).handleCalled).toBe(1);
-          expect((v as TestUserSelectMenuInteractionModel).handleCalledWith[0]).toBe(mockSelectMenuInteraction);
+      selectMenuInteractions.forEach((model) => {
+        if (model.id === 'selectMenu6') {
+          expect((model as TestUserSelectMenuInteractionModel).handleCalled).toBe(1);
+          expect((model as TestUserSelectMenuInteractionModel).handleCalledWith[0]).toBe(mockSelectMenuInteraction);
         } else {
-          expect((v as any).handleCalled).toBe(0);
+          expect((model as any).handleCalled).toBe(0);
         }
       });
     });
@@ -406,14 +403,21 @@ describe('InteractionHandler', () => {
         customId: 'selectMenu7'
       });
       await SuT.handle(mockSelectMenuInteraction as unknown as AnySelectMenuInteraction);
-      selectMenuInteractions.forEach((v, k) => {
-        if (k === 'selectMenu7') {
-          expect((v as TestAnySelectMenuInteractionModel).handleCalled).toBe(1);
-          expect((v as TestAnySelectMenuInteractionModel).handleCalledWith[0]).toBe(mockSelectMenuInteraction);
+      selectMenuInteractions.forEach((model) => {
+        if (model.id === 'selectMenu7') {
+          expect((model as TestAnySelectMenuInteractionModel).handleCalled).toBe(1);
+          expect((model as TestAnySelectMenuInteractionModel).handleCalledWith[0]).toBe(mockSelectMenuInteraction);
         } else {
-          expect((v as any).handleCalled).toBe(0);
+          expect((model as any).handleCalled).toBe(0);
         }
       });
+    });
+  });
+
+  describe('activateInteractionCreate', () => {
+    it('should call handle on interactionCreate', async () => {
+      await SuT.activateInteractionCreate(discordHandler);
+      expect(discordHandler.on).toHaveBeenCalledWith('interactionCreate', expect.any(Function));
     });
   });
 });

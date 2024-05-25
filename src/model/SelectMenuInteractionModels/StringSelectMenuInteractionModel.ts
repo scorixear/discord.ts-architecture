@@ -1,4 +1,4 @@
-import { StringSelectMenuInteraction } from 'discord.js';
+import { Interaction, StringSelectMenuInteraction } from 'discord.js';
 import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
 import { IStringSelectMenuInteractionModel } from '../abstractions/SelectMenuInterationModels/IStringSelectMenuInteractionModel';
 /**
@@ -16,6 +16,16 @@ export abstract class StringSelectMenuInteractionModel
    */
   constructor(id: string, deferReply = 2000, deferReplyEphemeral = true) {
     super(id, deferReply, deferReplyEphemeral);
+  }
+
+  /**
+   * Checks if the given interaction can be handled by this select menu model
+   * meaning if the id is the same and the interaction is a @see StringSelectMenuInteraction
+   * @param requestedId the id of the interaction
+   * @param interaction the interaction to check
+   */
+  public override canHandle(requestedId: string, interaction: Interaction): boolean {
+    return this.id === requestedId && (interaction.isStringSelectMenu() || interaction.isSelectMenu());
   }
 
   /**

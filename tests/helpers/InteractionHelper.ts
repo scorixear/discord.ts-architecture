@@ -12,7 +12,8 @@ export class InteractionHelper {
       isChannelSelectMenu: () => obj.isChannelSelectMenu == true,
       isMentionableSelectMenu: () => obj.isMentionableSelectMenu == true,
       isRoleSelectMenu: () => obj.isRoleSelectMenu == true,
-      isUserSelectMenu: () => obj.isUserSelectMenu == true
+      isUserSelectMenu: () => obj.isUserSelectMenu == true,
+      isAutocomplete: () => obj.isAutocomplete == true
     };
   }
 }

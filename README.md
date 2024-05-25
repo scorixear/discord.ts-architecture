@@ -5,126 +5,203 @@
 ![NPM Downloads](https://img.shields.io/npm/d18m/discord.ts-architecture)
 
 
-A Typescript Library for better Discord Bots.
-This library provides an OOP approach on top of the Discord.js library
-for Typescript projects. It does not "simplify" the approach advertised
-by the Discord.js Framework, but transform the crude approach to a stable
-architecture ready for bigger projects.
+A Typescript library for better Discord bots. 
+This library provides an OOP approach to the Discord.js library for Typescript projects. 
+It does not "simplify" the approach advertised by the framework, 
+but transforms the crude approach into a stable architecture ready for larger projects.
 
-This is however not a complete architecture and only covers handling Interactions, responding to Interactions and Discord Login, but provides in return extended abstract
-classes for all interaction types with built-in features such as automatic defer.
+This is not a complete architecture, and only covers interaction handling, interaction response, and Discord login, 
+but it does provide extended abstract classes for all interaction types with built-in features like automatic deferral.
+# Wiki
+See the [Wiki](https://github.com/scorixear/discord.ts-architecture/wiki) for a detailed documentation of the library.
+
+# Example Code
+See the [Example Code](https://github.com/scorixear/discord.ts-architecture/tree/main/example) for a complete example of a Discord bot using this library.
 
 ## Examples
-### Inital Setup
-Your Index.ts could look like this
+### Initial Setup
+Your `index.ts` could look like this
 ```ts
-import { DiscordHandler, InteractionHandler, TwoWayMap} from 'discord.ts-architecture'
-import { Partials, GatewayIntentBits } from 'discord.js'
-import { PingCommand, PingButton, PingSelectionMenu } from './model'
+import { InteractionHandler, DiscordHandler, Logger } from '../lib';
+import { Partials, GatewayIntentBits, Events } from 'discord.js';
+import PingCommand from './commands/PingCommand';
+import PingButton from './buttons/PingButton';
+import PingRoleSelectMenu from './selectMenus/PingRoleSelectMenu';
+import PingStringSelectMenu from './selectMenus/PingStringSelectMenu';
 
+// this should be in some sort of env file and not checked into any repository
+// you get this from the discord developer portal
+const DISCORD_TOKEN = 'YOUR_DISCORD_TOKEN';
+const DISCORD_CLIENT_ID = 'YOUR_DISCORD_CLIENT_ID';
+
+// we create a new instance of the DiscordHandler
 const discordHandler = new DiscordHandler(
+  // and pass the Client Partials
+  // this Partial for example allows to receive uncache messages
   [Partials.Message],
-  [GatewayIntentBits.GuildMembers]
+  // and the Gateway Intents
+  // we want to receive events from Guilds, GuildMessages and GuildMembers
+  [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers]
 );
+
+// lets create our commands
+const pingButton = new PingButton();
+const pingRoleSelectMenu = new PingRoleSelectMenu();
+const pingStringSelectMenu = new PingStringSelectMenu();
+const pingCommand = new PingCommand(pingButton, pingRoleSelectMenu, pingStringSelectMenu);
+
+// now it is time to create a new instance of the InteractionHandler
+// and pass the command, button and select menu interaction models we want to use
 const interactionHandler = new InteractionHandler(
-  [new PingCommand()],
-  new TwoWayMap(new Map([
-    ['ping-button', new PingButton()]
-  ])),
-  new TwoWayMap(new Map([
-    ['ping-menu', new PingSelectionMenu()]
-  ]))
+  [pingCommand],
+  [pingButton],
+  [pingRoleSelectMenu, pingStringSelectMenu]
 );
+
+// we activate the interactionCreate event for all interaction models
 interactionHandler.activateInteractionCreate(discordHandler);
 
-discordHandler.login(process.env.TOKEN).then(() => {
-  interactionHandler.init(
-    process.env.TOKEN,
-    process.env.CLIENTID,
-    discordHandler
-  );
-})
+// and listen for the ready event of the discord client
+discordHandler.once(Events.ClientReady, (readyClient) => {
+  Logger.info('Discord client is ready and logged in as ' + readyClient.user?.tag);
+});
+
+// now login to discord
+discordHandler.login(DISCORD_TOKEN).then(async () => {
+  Logger.info('Logged into Discord');
+  // after logging in, we can register the interactions with each guild
+  // this is done by calling the init method of the interactionHandler
+  await interactionHandler.init(DISCORD_TOKEN, DISCORD_CLIENT_ID, discordHandler);
+  Logger.info('Initialized interactions');
+});
+
 ```
-**Yes this is a lot**. But this is everything done. There is no more configuration needed. 
-- Your commands are already pushed to the Guilds
+**Yes, this is a lot.** But that's it. There is no further configuration required. 
+- Your commands are already pushed to the guilds.
 - Your interactions are already handled
-- Exceptions are catched and logged 
-- You have automatic reply deferring if the interaction takes too long
+- Exceptions caught and logged 
+- You have an automatic reply deferral if the interaction takes too long
 
 ### Creating custom commands
-A custom command is represented as a derrived class from CommandInteractionModel and could look like this (for a ping command).
+A custom command is represented as a class derived from the CommandInteractionModel, and might look like this (for a ping command).
 
 ```ts
-import { CommandInteractionModel, MessageHandler} from 'discord.ts-architecture'
-import { SlashCommandStringOption, ChatInputCommandInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import {
+  ChatInputCommandInteraction,
+  SlashCommandStringOption,
+  ButtonBuilder,
+  ButtonStyle,
+  StringSelectMenuBuilder,
+  StringSelectMenuOptionBuilder,
+  ActionRowBuilder,
+  RoleSelectMenuBuilder
+} from 'discord.js';
+import { CommandInteractionModel, MessageHandler } from '../../lib';
+import PingButton from '../buttons/PingButton';
+import PingRoleSelectMenu from '../selectMenus/PingRoleSelectMenu';
+import PingStringSelectMenu from '../selectMenus/PingStringSelectMenu';
 
-export class PingCommand extends CommandInteractionModel {
-  constructor() {
+// we extend the CommandInteractionModel to create a new command
+export default class PingCommand extends CommandInteractionModel {
+  private pingButton: PingButton;
+  private pingRoleSelectMenu: PingRoleSelectMenu;
+  private pingStringSelectMenu: PingStringSelectMenu;
+
+  // we add some other interaction models used in this command
+  public constructor(
+    pingButton: PingButton,
+    pingRoleSelectMenu: PingRoleSelectMenu,
+    pingStringSelectMenu: PingStringSelectMenu
+  ) {
+    // load the super constructor with all needed information
     super(
-      'ping' // this is the command
-      'Returns the ping of the bot', // the description shown in discord
-      'ping test:figure', // example usage, not used but accessible
-      'Moderation', // Group of Command, not used but accessible
-      'ping <test>', // usage definition, not used but accessible
+      'ping', // The command used in Discord
+      'Pings the bot', // The description of the command (not more then 120 characters)
       [
         new SlashCommandStringOption()
-          .setName('test')
-          .setDescription('A test option')
+          .setName('additional message')
+          .setDescription('An additional message to send with the ping')
           .setRequired(false)
-      ] // this represents the options a command has
-    )
+      ], // The SlashComandOptions used in this command
+      2000, // The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply
+      true, // If true, will defer reply as ephemeral, making the reply ephemeral aswell
+      ['admin'] // The roles that are allowed to use the command
+    );
+    this.pingButton = pingButton;
+    this.pingRoleSelectMenu = pingRoleSelectMenu;
+    this.pingStringSelectMenu = pingStringSelectMenu;
   }
 
-  override async handle(interaction: ChatInputCommandInteraction) {
-    activateDeferredReply(interaction); // this handles automatic deferring
-    const hasPermission = await checkPermissions(interaction); // this checks if the user has the permissions to execute the command
-    if (!hasPermission) {
+  // and override the handle method to implement the command
+  public override async handle(interaction: ChatInputCommandInteraction): Promise<void> {
+    // activate the deferred reply, so if this takes to long, the interaction will be deferred
+    this.activateDeferredReply(interaction);
+    // check if the user is allowed to use this command
+    const allowed = await this.checkPermissions(interaction);
+    // if not, we send an error message
+    if (allowed == false) {
+      // using the MessageHandler to send a reply an ephemeral error
+      await MessageHandler.replyError({
+        interaction: interaction, // the interaction to reply to
+        title: 'No permission', // the title of the reply
+        description: 'You are not allowed to use this command', // the description of the reply
+        color: 0xff0000, // the color of the reply, if not set, will be 0xff0000 by default
+        components: [
+          // and lets create some components
+          // first a button to retry the command
+          new ActionRowBuilder<ButtonBuilder>().addComponents([
+            new ButtonBuilder().setCustomId(this.pingButton.id).setLabel('Retry').setStyle(ButtonStyle.Danger)
+          ]),
+          // and a select menu to select an option
+          // lets try role select menu
+          new ActionRowBuilder<RoleSelectMenuBuilder>().addComponents([
+            new RoleSelectMenuBuilder().setCustomId(this.pingRoleSelectMenu.id).addDefaultRoles(['admin', 'user'])
+          ])
+        ]
+      });
       return;
     }
 
-    // direct access to discord.js interactions allows you
-    // to use every discord.js feature
-    const testoption = interaction.options.getString('test', false);
+    // the user is allowed
+    // so lets get the additional message from the command options
+    const additionalMessage = interaction.options.getString('additional message');
+    // if the additional message is set, we add it to the reply
+    const message = additionalMessage ? `Pong! ${additionalMessage}` : 'Pong!';
 
-    // this uses the MessageHandler to automatically reply an Embedded Message to a command.
-    // The Message Handler supports all options for Embedded Blocks
+    // and we send the reply, this is not ephemeral by default
     await MessageHandler.reply({
-      interaction,
-      title: 'Ping',
-      descripiton: `You pressed ping with option ${testoption}`,
-      ephemeral:true,
-      categories: [
-        {
-          title: 'Category',
-          text: 'Undefined text blocks are automatically converted to \u200b',
-          inline: false
-        }
-      ],
+      interaction: interaction, // the interaction to reply to
+      title: message, // the title of the reply
       components: [
-        new ActionRowBuilder<ButtonBuilder>() {
-          new ButtonBuilder()
-            .setCustomId('ping-button')
-            .setLabel('Ping')
-            .setStyle(ButtonStyle.Primary)
-        }
+        // and lets create the same components as above
+        new ActionRowBuilder<ButtonBuilder>().addComponents([
+          new ButtonBuilder().setCustomId(this.pingButton.id).setLabel('Ping!').setStyle(ButtonStyle.Danger)
+        ]),
+        // and try string select menus
+        new ActionRowBuilder<StringSelectMenuBuilder>().addComponents([
+          new StringSelectMenuBuilder()
+            .setCustomId(this.pingStringSelectMenu.id)
+            .addOptions([
+              new StringSelectMenuOptionBuilder().setLabel('Option 1').setValue('option1'),
+              new StringSelectMenuOptionBuilder().setLabel('Option 2').setValue('option2')
+            ])
+        ])
       ]
     });
   }
 }
+
 ```
 
-Again, this is a lot for a simple Ping command.
-But you get a lot of additional features with this.
-- You have a custom usage and groups that could be used in a help command
-- Your options are registered with the command as you specified
-- If your command is taking longer then 3 seconds, the interaction is deferred and then properly picked up by the MessageHandler
-- You InteractionHandle is exception catched preventing a bot shutdown
-- We didn't respond in this example with a text message, we responded with an Embed message that contains Categories and Buttons
+Again, this is a lot for a simple ping command.
+But it does give you a lot of extra functionality.
+- Your options are registered with the command as you specify them.
+- If your command takes longer than 2 seconds, the interaction is deferred and then properly handled by the MessageHandler.
+- Your InteractionHandle is exception catched, preventing the bot from shutting down.
+- In this example, we didn't respond with a text message, we responded with an embed message containing categories and buttons.
 
 ### Final Usage Advice
-The inital setup for this is higher for very simple projects. I suggest creating a template for discord bot projects. Besides the shown setup there is nothing needed to do. Creating additional commands and button interactions all follow the same architectural structure.
-This creates better readability, maintainability and also a more robust behaviour.
-Additionally it is recommended to still catch any exception and missed rejection for an application.
-
-# Wiki
-See the [Wiki](https://github.com/scorixear/discord.ts-architecture/wiki) for a detailed documentation of the library.
+The initial setup for this is higher for very simple projects. I suggest creating a template for Discord bot projects. 
+There is nothing else to do besides the setup shown. Creating additional commands and button interactions all follow the same architectural structure.
+This makes for better readability, maintainability, and more robust behaviour.
+In addition, it is recommended to still catch every exception and missed rejection for an application.
