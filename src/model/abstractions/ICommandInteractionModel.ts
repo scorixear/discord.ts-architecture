@@ -1,81 +1,51 @@
 import { ChatInputCommandInteraction, RoleResolvable, SlashCommandBuilder } from 'discord.js';
+import { IBaseInteractionModel } from './IBaseInteractionModel';
 
 /**
  * Represents one SlashCommand and should be implemented by custom implementation (overriding the handle method).
  * See @see CommandInteractionModel for a abstract base class
  */
-export interface ICommandInteractionModel {
+export interface ICommandInteractionModel extends IBaseInteractionModel {
   /**
    * The command used in Discord
    * @type {string}
    * @memberof ICommandInteractionModel
    * @public
+   * @readonly
    */
-  command: string;
+  readonly command: string;
   /**
    * The description of the command (not more then 120 characters)
    * @type {string}
    * @memberof ICommandInteractionModel
    * @public
+   * @readonly
    */
-  description: string;
-  /**
-   * An example how to use the command
-   * @type {string}
-   * @memberof ICommandInteractionModel
-   * @public
-   */
-  example: string;
-  /**
-   * The category of the command
-   * @type {string}
-   * @memberof ICommandInteractionModel
-   * @public
-   */
-  category: string;
-  /**
-   * The usage of the command
-   * @type {string}
-   * @memberof ICommandInteractionModel
-   * @public
-   */
-  usage: string;
+  readonly description: string;
   /**
    * The roles that are allowed to use the command
    * @type {RoleResolvable[]}
    * @memberof ICommandInteractionModel
    * @public
+   * @readonly
    */
-  allowedRoles?: RoleResolvable[];
+  readonly allowedRoles?: RoleResolvable[];
   /**
    * A Promise that should be resolved when the command is ready to be used
    * @type {Promise<any>}
    * @memberof ICommandInteractionModel
    * @public
+   * @readonly
    */
-  Ready?: Promise<any>;
+  readonly Ready?: Promise<any>;
   /**
    * The builder used for this command
    * @type {SlashCommandBuilder}
    * @memberof ICommandInteractionModel
    * @public
-   */
-  slashCommandBuilder: SlashCommandBuilder;
-
-  /**
-   * The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply
-   * @type {number}
-   * @public
    * @readonly
    */
-  readonly deferReply?: number;
-  /**
-   * If true, will defer reply as ephemeral, making the reply ephemeral aswell
-   * @type {boolean}
-   * @public
-   * @readonly
-   */
-  readonly deferReplyEphemeral?: boolean;
+  readonly slashCommandBuilder: SlashCommandBuilder;
 
   /**
    * Called when @see ChatInputCommandInteraction was received

@@ -1,4 +1,4 @@
-import { MentionableSelectMenuInteraction } from 'discord.js';
+import { Interaction, MentionableSelectMenuInteraction } from 'discord.js';
 import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
 import { IMentionableSelectMenuInteractionModel } from '../abstractions/SelectMenuInterationModels/IMentionableSelectMenuInteractionModel';
 /**
@@ -16,6 +16,16 @@ export abstract class MentionableSelectMenuInteractionModel
    */
   constructor(id: string, deferReply = 2000, deferReplyEphemeral = true) {
     super(id, deferReply, deferReplyEphemeral);
+  }
+
+  /**
+   * Checks if the given interaction can be handled by this select menu model
+   * meaning if the id is the same and the interaction is a @see MentionableSelectMenuInteraction
+   * @param requestedId the id of the interaction
+   * @param interaction the interaction to check
+   */
+  public override canHandle(requestedId: string, interaction: Interaction): boolean {
+    return this.id === requestedId && interaction.isMentionableSelectMenu();
   }
 
   /**

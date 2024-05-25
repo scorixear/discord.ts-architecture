@@ -14,7 +14,9 @@ const mockInteraction = {
       return new Promise((_, reject) => reject());
     }
     return new Promise((resolve) => resolve(0));
-  })
+  }),
+  isStringSelectMenu: jest.fn().mockReturnValue(true),
+  isSelectMenu: jest.fn().mockReturnValue(true)
 };
 
 const flushPromises = () => new Promise((resolve) => Promise.resolve().then(resolve));
@@ -28,6 +30,8 @@ describe('StringSelectMenuInteractionModel', () => {
     throwMockError = false;
     mockInteraction.replied = false;
     mockInteraction.deferred = false;
+    mockInteraction.isStringSelectMenu = jest.fn().mockReturnValue(true);
+    mockInteraction.isSelectMenu = jest.fn().mockReturnValue(true);
   });
 
   afterEach(() => {
@@ -78,6 +82,32 @@ describe('StringSelectMenuInteractionModel', () => {
       await flushPromises();
       expect(mockInteraction.deferReply).toHaveBeenCalledWith({ ephemeral: true });
       expect(Logger.exception).toHaveBeenCalled();
+    });
+  });
+
+  describe('canHandle', () => {
+    it('should return true if command is the same and interaction is a correct interaction', () => {
+      expect(SuT.canHandle(SuT.id, mockInteraction as any)).toBeTruthy();
+    });
+
+    it('should return false if command is not the same', () => {
+      expect(SuT.canHandle('notTest', mockInteraction as any)).toBeFalsy();
+    });
+
+    it('should return false if interaction is not a correct interaction', () => {
+      mockInteraction.isStringSelectMenu = jest.fn().mockReturnValue(false);
+      mockInteraction.isSelectMenu = jest.fn().mockReturnValue(false);
+      expect(SuT.canHandle(SuT.id, mockInteraction as any)).toBeFalsy();
+    });
+
+    it('should return true if interaction is only string select menu', () => {
+      mockInteraction.isSelectMenu = jest.fn().mockReturnValue(false);
+      expect(SuT.canHandle(SuT.id, mockInteraction as any)).toBeTruthy();
+    });
+
+    it('should return true if interaction is only select menu', () => {
+      mockInteraction.isStringSelectMenu = jest.fn().mockReturnValue(false);
+      expect(SuT.canHandle(SuT.id, mockInteraction as any)).toBeTruthy();
     });
   });
 });

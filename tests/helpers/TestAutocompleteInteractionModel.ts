@@ -14,27 +14,14 @@ export class TestAutocompleteInteractionModel extends AutocompleteInteractionMod
   constructor(
     name: string,
     description: string = '',
-    example: string = '',
-    category: string = '',
-    usage: string = '',
     options: any[] = [],
     deferReply: number | undefined = 2000,
     deferReplyEphemeral: boolean = false,
     allowedRoles?: RoleResolvable[]
   ) {
-    super(name, description, example, category, usage, options, deferReply, deferReplyEphemeral, allowedRoles);
+    super(name, description, options, deferReply, deferReplyEphemeral, allowedRoles);
     this.constructorCalled = true;
-    this.constructorCalledWith = [
-      name,
-      description,
-      example,
-      category,
-      usage,
-      options,
-      deferReply,
-      deferReplyEphemeral,
-      allowedRoles
-    ];
+    this.constructorCalledWith = [name, description, options, deferReply, deferReplyEphemeral, allowedRoles];
   }
 
   public handleCalled: number = 0;
