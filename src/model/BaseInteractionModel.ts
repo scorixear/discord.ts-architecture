@@ -1,6 +1,9 @@
 import { Interaction } from 'discord.js';
 import { IBaseInteractionModel } from './abstractions/IBaseInteractionModel';
 
+/**
+ * Represents a Base Interaction and should not be used as a base class for custom implementations.
+ */
 export abstract class BaseInteractionModel implements IBaseInteractionModel {
   /**
    * The custom-id for this interaction
