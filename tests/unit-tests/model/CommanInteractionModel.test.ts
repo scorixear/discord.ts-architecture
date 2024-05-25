@@ -90,7 +90,7 @@ describe('CommandInteractionModel', () => {
     jest.useFakeTimers();
     originalEnv = process.env;
     process.env = { ...originalEnv, OWNER_ID: '' };
-    SuT = new TestCommandInteractionModel('test', 'test', 'test', 'test', 'test', [], 1000, true, ['abc']);
+    SuT = new TestCommandInteractionModel('test', 'test', [], 1000, true, ['abc']);
     throwMockError = false;
     mockInteraction.replied = false;
     mockInteraction.deferred = false;
@@ -106,15 +106,12 @@ describe('CommandInteractionModel', () => {
       expect(SuT.constructorCalled).toBeTruthy();
       expect((SuT as any).command).toBe('test');
       expect((SuT as any).description).toBe('test');
-      expect((SuT as any).example).toBe('test');
-      expect((SuT as any).category).toBe('test');
-      expect((SuT as any).usage).toBe('test');
       expect((SuT as any).deferReply).toBe(1000);
       expect((SuT as any).deferReplyEphemeral).toBeTruthy();
       expect((SuT as any).allowedRoles).toEqual(['abc']);
     });
     it('should have called SlashComandOptions', () => {
-      SuT = new TestCommandInteractionModel('test', 'test', 'test', 'test', 'test', [
+      SuT = new TestCommandInteractionModel('test', 'test', [
         new SlashCommandChannelOption(),
         new SlashCommandStringOption(),
         new SlashCommandBooleanOption(),
@@ -145,13 +142,13 @@ describe('CommandInteractionModel', () => {
     });
 
     it('should throw error if invalid option provided', () => {
-      expect(() => new TestCommandInteractionModel('test', 'test', 'test', 'test', 'test', [new Error()])).toThrow();
+      expect(() => new TestCommandInteractionModel('test', 'test', [new Error()])).toThrow();
     });
   });
 
   describe('activateDeferredReply', () => {
     it('should not call if deferReply is undefined', async () => {
-      SuT = new TestCommandInteractionModel('test', 'test', 'test', 'test', 'test', [], undefined, true, ['abc']);
+      SuT = new TestCommandInteractionModel('test', 'test', [], undefined, true, ['abc']);
       await SuT.activateDeferredReply(mockInteraction as any);
       jest.advanceTimersByTime(1000);
       await flushPromises();
@@ -188,13 +185,13 @@ describe('CommandInteractionModel', () => {
   });
   describe('checkPermissions', () => {
     it('should not call fetch if allowedRoles is undefined', async () => {
-      SuT = new TestCommandInteractionModel('test', 'test', 'test', 'test', 'test', [], 1000, true, undefined);
+      SuT = new TestCommandInteractionModel('test', 'test', [], 1000, true, undefined);
       expect(await SuT.checkPermissions(mockInteraction as any)).toBeTruthy();
       expect(mockInteraction.guild.commands.fetch).not.toHaveBeenCalled();
     });
 
     it('should not call fetch if applicationCommand not found', async () => {
-      SuT = new TestCommandInteractionModel('notFound', 'test', 'test', 'test', 'test', [], 1000, true, ['abc']);
+      SuT = new TestCommandInteractionModel('notFound', 'test', [], 1000, true, ['abc']);
       expect(await SuT.checkPermissions(mockInteraction as any)).toBeTruthy();
       expect(mockInteraction.guild.commands.fetch).toHaveBeenCalled();
       expect(mockInteraction.member.fetch).not.toHaveBeenCalled();
@@ -218,7 +215,7 @@ describe('CommandInteractionModel', () => {
     });
 
     it('should throw if no role was found', async () => {
-      SuT = new TestCommandInteractionModel('test', 'test', 'test', 'test', 'test', [], 1000, true, ['def']);
+      SuT = new TestCommandInteractionModel('test', 'test', [], 1000, true, ['def']);
       expect(await SuT.checkPermissions(mockInteraction as any)).toBeFalsy();
     });
   });
