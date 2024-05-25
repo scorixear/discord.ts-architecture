@@ -1,5 +1,9 @@
 import { InteractionHandler, DiscordHandler, Logger } from '../lib';
 import { Partials, GatewayIntentBits, Events } from 'discord.js';
+import PingCommand from './commands/PingCommand';
+import PingButton from './buttons/PingButton';
+import PingRoleSelectMenu from './selectMenus/PingRoleSelectMenu';
+import PingStringSelectMenu from './selectMenus/PingStringSelectMenu';
 
 // this should be in some sort of env file and not checked into any repository
 // you get this from the discord developer portal
@@ -16,9 +20,19 @@ const discordHandler = new DiscordHandler(
   [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers]
 );
 
+// lets create our commands
+const pingButton = new PingButton();
+const pingRoleSelectMenu = new PingRoleSelectMenu();
+const pingStringSelectMenu = new PingStringSelectMenu();
+const pingCommand = new PingCommand(pingButton, pingRoleSelectMenu, pingStringSelectMenu);
+
 // now it is time to create a new instance of the InteractionHandler
 // and pass the command, button and select menu interaction models we want to use
-const interactionHandler = new InteractionHandler([], [], []);
+const interactionHandler = new InteractionHandler(
+  [pingCommand],
+  [pingButton],
+  [pingRoleSelectMenu, pingStringSelectMenu]
+);
 
 // we activate the interactionCreate event for all interaction models
 interactionHandler.activateInteractionCreate(discordHandler);
