@@ -413,4 +413,11 @@ describe('InteractionHandler', () => {
       });
     });
   });
+
+  describe('activateInteractionCreate', () => {
+    it('should call handle on interactionCreate', async () => {
+      await SuT.activateInteractionCreate(discordHandler);
+      expect(discordHandler.on).toHaveBeenCalledWith('interactionCreate', expect.any(Function));
+    });
+  });
 });

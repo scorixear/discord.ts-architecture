@@ -5,7 +5,7 @@ import { MessageHandler, StringSelectMenuInteractionModel } from '../../lib';
 // A StringSelectMenuInteraction is a select menu that allows the user to select strings
 export default class PingStringSelectMenu extends StringSelectMenuInteractionModel {
   public constructor() {
-    // we call the super constructor with the id of the select menu and the defer time
+    // we call the super constructor with the id of the select menu
     super('ping-string-select-menu', 2000, true);
   }
 

@@ -14,7 +14,8 @@ const mockInteraction = {
       return new Promise((_, reject) => reject());
     }
     return new Promise((resolve) => resolve(0));
-  })
+  }),
+  isAnySelectMenu: jest.fn().mockReturnValue(true)
 };
 
 const flushPromises = () => new Promise((resolve) => Promise.resolve().then(resolve));
@@ -28,6 +29,7 @@ describe('AnySelectMenuInteractionModel', () => {
     throwMockError = false;
     mockInteraction.replied = false;
     mockInteraction.deferred = false;
+    mockInteraction.isAnySelectMenu = jest.fn().mockReturnValue(true);
   });
 
   afterEach(() => {
@@ -78,6 +80,21 @@ describe('AnySelectMenuInteractionModel', () => {
       await flushPromises();
       expect(mockInteraction.deferReply).toHaveBeenCalledWith({ ephemeral: true });
       expect(Logger.exception).toHaveBeenCalled();
+    });
+  });
+
+  describe('canHandle', () => {
+    it('should return true if command is the same and interaction is a correct interaction', () => {
+      expect(SuT.canHandle(SuT.id, mockInteraction as any)).toBeTruthy();
+    });
+
+    it('should return false if command is not the same', () => {
+      expect(SuT.canHandle('notTest', mockInteraction as any)).toBeFalsy();
+    });
+
+    it('should return false if interaction is not a correct interaction', () => {
+      mockInteraction.isAnySelectMenu = jest.fn().mockReturnValue(false);
+      expect(SuT.canHandle(SuT.id, mockInteraction as any)).toBeFalsy();
     });
   });
 });

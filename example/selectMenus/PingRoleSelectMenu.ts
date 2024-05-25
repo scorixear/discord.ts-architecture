@@ -5,8 +5,8 @@ import { MessageHandler, RoleSelectMenuInteractionModel } from '../../lib';
 // A RoleSelectMenuInteraction is a select menu that allows the user to select roles
 export default class PingRoleSelectMenu extends RoleSelectMenuInteractionModel {
   public constructor() {
-    // we call the super constructor with the id of the select menu and the defer time
-    super('ping-role-select-menu', 2000, true);
+    // we call the super constructor with the id of the select menu
+    super('ping-role-select-menu');
   }
 
   // we override the handle method to implement the select menu interaction handling

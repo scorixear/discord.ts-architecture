@@ -4,8 +4,8 @@ import { ButtonInteractionModel, MessageHandler } from '../../lib';
 // This is a simple button interaction model that replies with a message when the button is clicked
 export default class PingButton extends ButtonInteractionModel {
   public constructor() {
-    // we call the super constructor with the id of the button and the defer time
-    super('ping-button', 2000, true);
+    // we call the super constructor with the id of the button
+    super('ping-button');
   }
 
   override async handle(interaction: ButtonInteraction): Promise<void> {

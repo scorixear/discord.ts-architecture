@@ -77,7 +77,8 @@ const mockInteraction = {
         }
       }
     })
-  }
+  },
+  isChatInputCommand: jest.fn().mockReturnValue(true)
 };
 
 const flushPromises = () => new Promise((resolve) => Promise.resolve().then(resolve));
@@ -94,6 +95,7 @@ describe('CommandInteractionModel', () => {
     throwMockError = false;
     mockInteraction.replied = false;
     mockInteraction.deferred = false;
+    mockInteraction.isChatInputCommand = jest.fn().mockReturnValue(true);
   });
 
   afterEach(() => {
@@ -217,6 +219,21 @@ describe('CommandInteractionModel', () => {
     it('should throw if no role was found', async () => {
       SuT = new TestCommandInteractionModel('test', 'test', [], 1000, true, ['def']);
       expect(await SuT.checkPermissions(mockInteraction as any)).toBeFalsy();
+    });
+  });
+
+  describe('canHandle', () => {
+    it('should return true if command is the same and interaction is a ChatInputCommandInteraction', () => {
+      expect(SuT.canHandle(SuT.command, mockInteraction as any)).toBeTruthy();
+    });
+
+    it('should return false if command is not the same', () => {
+      expect(SuT.canHandle('notTest', mockInteraction as any)).toBeFalsy();
+    });
+
+    it('should return false if interaction is not a ChatInputCommandInteraction', () => {
+      mockInteraction.isChatInputCommand = jest.fn().mockReturnValue(false);
+      expect(SuT.canHandle(SuT.command, mockInteraction as any)).toBeFalsy();
     });
   });
 });
