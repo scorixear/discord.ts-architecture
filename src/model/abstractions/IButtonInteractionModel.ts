@@ -1,4 +1,4 @@
-import { ButtonInteraction } from 'discord.js';
+import { ButtonBuilder, ButtonInteraction } from 'discord.js';
 import { IBaseInteractionModel } from './IBaseInteractionModel';
 
 /**
@@ -6,6 +6,15 @@ import { IBaseInteractionModel } from './IBaseInteractionModel';
  * See @see ButtonInteractionModel for a abstract base class
  */
 export interface IButtonInteractionModel extends IBaseInteractionModel {
+  /**
+   * The component that is used to create the button
+   * @type {ButtonBuilder}
+   * @memberof IButtonInteractionModel
+   * @public
+   * @readonly
+   */
+  readonly component: ButtonBuilder;
+
   /**
    * Called when @see ButtonInteraction was received
    * @param interaction the interaction received
