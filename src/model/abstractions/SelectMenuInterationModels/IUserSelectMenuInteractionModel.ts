@@ -1,4 +1,4 @@
-import { UserSelectMenuInteraction } from 'discord.js';
+import { UserSelectMenuBuilder, UserSelectMenuInteraction } from 'discord.js';
 import { IAnySelectMenuInteractionModel } from './IAnySelectMenuInteractionModel';
 
 /**
@@ -6,6 +6,11 @@ import { IAnySelectMenuInteractionModel } from './IAnySelectMenuInteractionModel
  * See @see UserSelectMenuInteractionModel for a abstract base class
  */
 export interface IUserSelectMenuInteractionModel extends IAnySelectMenuInteractionModel {
+  /**
+   * The component that is used to create the select menu
+   */
+  readonly component: UserSelectMenuBuilder;
+
   /**
    * Called when @see UserSelectMenuInteraction was received
    * @param interaction the interaction received

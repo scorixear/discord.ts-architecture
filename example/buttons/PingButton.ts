@@ -1,4 +1,4 @@
-import { ButtonInteraction } from 'discord.js';
+import { ButtonInteraction, ButtonStyle } from 'discord.js';
 import { ButtonInteractionModel, MessageHandler } from '../../lib';
 
 // This is a simple button interaction model that replies with a message when the button is clicked
@@ -6,6 +6,8 @@ export default class PingButton extends ButtonInteractionModel {
   public constructor() {
     // we call the super constructor with the id of the button
     super('ping-button');
+    // and update the component with the label and style
+    this.component.setLabel('Ping').setStyle(ButtonStyle.Primary);
   }
 
   override async handle(interaction: ButtonInteraction): Promise<void> {

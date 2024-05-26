@@ -1,4 +1,4 @@
-import { StringSelectMenuInteraction } from 'discord.js';
+import { StringSelectMenuBuilder, StringSelectMenuInteraction } from 'discord.js';
 import { IAnySelectMenuInteractionModel } from './IAnySelectMenuInteractionModel';
 
 /**
@@ -6,6 +6,10 @@ import { IAnySelectMenuInteractionModel } from './IAnySelectMenuInteractionModel
  * See @see StringSelectMenuInteractionModel for a abstract base class
  */
 export interface IStringSelectMenuInteractionModel extends IAnySelectMenuInteractionModel {
+  /**
+   * The component that is used to create the select menu
+   */
+  readonly component: StringSelectMenuBuilder;
   /**
    * Called when @see StringSelectMenuInteraction was received
    * @param interaction the interaction received

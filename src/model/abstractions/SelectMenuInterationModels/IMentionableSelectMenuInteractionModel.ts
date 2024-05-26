@@ -1,4 +1,4 @@
-import { MentionableSelectMenuInteraction } from 'discord.js';
+import { MentionableSelectMenuBuilder, MentionableSelectMenuInteraction } from 'discord.js';
 import { IAnySelectMenuInteractionModel } from './IAnySelectMenuInteractionModel';
 
 /**
@@ -6,6 +6,11 @@ import { IAnySelectMenuInteractionModel } from './IAnySelectMenuInteractionModel
  * See @see MentionableSelectMenuInteractionModel for a abstract base class
  */
 export interface IMentionableSelectMenuInteractionModel extends IAnySelectMenuInteractionModel {
+  /**
+   * The component that is used to create the select menu
+   */
+  readonly component: MentionableSelectMenuBuilder;
+
   /**
    * Called when @see MentionableSelectMenuInteraction was received
    * @param interaction the interaction received

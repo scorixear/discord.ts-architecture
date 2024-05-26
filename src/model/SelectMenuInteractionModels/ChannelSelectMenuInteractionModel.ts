@@ -1,4 +1,4 @@
-import { ChannelSelectMenuInteraction, Interaction } from 'discord.js';
+import { ChannelSelectMenuBuilder, ChannelSelectMenuInteraction, Interaction } from 'discord.js';
 import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
 import { IChannelSelectMenuInteractionModel } from '../abstractions/SelectMenuInterationModels/IChannelSelectMenuInteractionModel';
 /**
@@ -9,6 +9,11 @@ export abstract class ChannelSelectMenuInteractionModel
   implements IChannelSelectMenuInteractionModel
 {
   /**
+   * The component that is used to create the select menu
+   */
+  public readonly component: ChannelSelectMenuBuilder;
+
+  /**
    * Default constructor
    * @param id the custom-id for this interaction (actual custom-id can be longer, check is done wiht startsWith())
    * @param deferReply The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply
@@ -16,6 +21,7 @@ export abstract class ChannelSelectMenuInteractionModel
    */
   constructor(id: string, deferReply = 2000, deferReplyEphemeral = true) {
     super(id, deferReply, deferReplyEphemeral);
+    this.component = new ChannelSelectMenuBuilder().setCustomId(id);
   }
 
   /**

@@ -5,6 +5,7 @@ import { IAnySelectMenuInteractionModel } from '../abstractions/SelectMenuIntera
 import { BaseInteractionModel } from '../BaseInteractionModel';
 /**
  * Represents Implemenation for @see AnySelectMenuInteraction
+ * Do not use this class directly as a base class but rather use any extended classes such as @see StringSelectMenuInteractionModel or @see MentionableSelectMenuInteractionModel
  */
 export abstract class AnySelectMenuInteractionModel
   extends BaseInteractionModel
