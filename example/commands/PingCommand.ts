@@ -4,7 +4,6 @@ import {
   ButtonBuilder,
   ButtonStyle,
   StringSelectMenuBuilder,
-  StringSelectMenuOptionBuilder,
   ActionRowBuilder,
   RoleSelectMenuBuilder
 } from 'discord.js';
@@ -61,14 +60,11 @@ export default class PingCommand extends CommandInteractionModel {
         components: [
           // and lets create some components
           // first a button to retry the command
-          new ActionRowBuilder<ButtonBuilder>().addComponents([
-            new ButtonBuilder().setCustomId(this.pingButton.id).setLabel('Retry').setStyle(ButtonStyle.Danger)
-          ]),
+          // we use the component of the pingButton and set the style to danger
+          new ActionRowBuilder<ButtonBuilder>().addComponents([this.pingButton.component.setStyle(ButtonStyle.Danger)]),
           // and a select menu to select an option
           // lets try role select menu
-          new ActionRowBuilder<RoleSelectMenuBuilder>().addComponents([
-            new RoleSelectMenuBuilder().setCustomId(this.pingRoleSelectMenu.id).addDefaultRoles(['admin', 'user'])
-          ])
+          new ActionRowBuilder<RoleSelectMenuBuilder>().addComponents([this.pingRoleSelectMenu.component])
         ]
       });
       return;
@@ -86,18 +82,9 @@ export default class PingCommand extends CommandInteractionModel {
       title: message, // the title of the reply
       components: [
         // and lets create the same components as above
-        new ActionRowBuilder<ButtonBuilder>().addComponents([
-          new ButtonBuilder().setCustomId(this.pingButton.id).setLabel('Ping!').setStyle(ButtonStyle.Danger)
-        ]),
+        new ActionRowBuilder<ButtonBuilder>().addComponents([this.pingButton.component]),
         // and try string select menus
-        new ActionRowBuilder<StringSelectMenuBuilder>().addComponents([
-          new StringSelectMenuBuilder()
-            .setCustomId(this.pingStringSelectMenu.id)
-            .addOptions([
-              new StringSelectMenuOptionBuilder().setLabel('Option 1').setValue('option1'),
-              new StringSelectMenuOptionBuilder().setLabel('Option 2').setValue('option2')
-            ])
-        ])
+        new ActionRowBuilder<StringSelectMenuBuilder>().addComponents([this.pingStringSelectMenu.component])
       ]
     });
   }

@@ -7,6 +7,8 @@ export default class PingRoleSelectMenu extends RoleSelectMenuInteractionModel {
   public constructor() {
     // we call the super constructor with the id of the select menu
     super('ping-role-select-menu');
+    // and update the component with the roles that can be selected
+    this.component.addDefaultRoles('admin', 'moderator', 'user');
   }
 
   // we override the handle method to implement the select menu interaction handling
