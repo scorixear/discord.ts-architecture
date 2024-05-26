@@ -1,4 +1,4 @@
-import { RoleSelectMenuInteraction } from 'discord.js';
+import { RoleSelectMenuBuilder, RoleSelectMenuInteraction } from 'discord.js';
 import { IAnySelectMenuInteractionModel } from './IAnySelectMenuInteractionModel';
 
 /**
@@ -6,6 +6,11 @@ import { IAnySelectMenuInteractionModel } from './IAnySelectMenuInteractionModel
  * See @see RoleSelectMenuInteractionModel for a abstract base class
  */
 export interface IRoleSelectMenuInteractionModel extends IAnySelectMenuInteractionModel {
+  /**
+   * The component that is used to create the select menu
+   */
+  readonly component: RoleSelectMenuBuilder;
+
   /**
    * Called when @see RoleSelectMenuInteraction was received
    * @param interaction the interaction received

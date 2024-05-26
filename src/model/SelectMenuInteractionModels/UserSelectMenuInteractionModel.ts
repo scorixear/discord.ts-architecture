@@ -1,4 +1,4 @@
-import { Interaction, UserSelectMenuInteraction } from 'discord.js';
+import { Interaction, UserSelectMenuBuilder, UserSelectMenuInteraction } from 'discord.js';
 import { AnySelectMenuInteractionModel } from './AnySelectMenuInteractionModel';
 import { IUserSelectMenuInteractionModel } from '../abstractions/SelectMenuInterationModels/IUserSelectMenuInteractionModel';
 /**
@@ -9,6 +9,11 @@ export abstract class UserSelectMenuInteractionModel
   implements IUserSelectMenuInteractionModel
 {
   /**
+   * The component that is used to create the select menu
+   */
+  public readonly component: UserSelectMenuBuilder;
+
+  /**
    * Default constructor
    * @param id the custom-id for this interaction (actual custom-id can be longer, check is done wiht startsWith())
    * @param deferReply The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply
@@ -16,6 +21,7 @@ export abstract class UserSelectMenuInteractionModel
    */
   constructor(id: string, deferReply = 2000, deferReplyEphemeral = true) {
     super(id, deferReply, deferReplyEphemeral);
+    this.component = new UserSelectMenuBuilder().setCustomId(id);
   }
 
   /**

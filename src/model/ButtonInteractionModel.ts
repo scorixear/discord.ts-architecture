@@ -1,4 +1,4 @@
-import { ButtonInteraction, Interaction } from 'discord.js';
+import { ButtonBuilder, ButtonInteraction, Interaction } from 'discord.js';
 import { Logger } from '../logging/logger';
 import { WarningLevel } from '../logging/warninglevel';
 import { IButtonInteractionModel } from './abstractions/IButtonInteractionModel';
@@ -9,6 +9,14 @@ import { BaseInteractionModel } from './BaseInteractionModel';
  */
 export abstract class ButtonInteractionModel extends BaseInteractionModel implements IButtonInteractionModel {
   /**
+   * The button builder used to create buttons for this interaction
+   * @type {ButtonBuilder}
+   * @public
+   * @readonly
+   */
+  public readonly component: ButtonBuilder;
+
+  /**
    * Default constructor
    * @param id the custom-id for this interaction (actual custom-id can be longer, check is done wiht startsWith())
    * @param deferReply The amount of milliseconds to defer the reply if no reply was already made. If undefined, does not defer reply
@@ -16,6 +24,7 @@ export abstract class ButtonInteractionModel extends BaseInteractionModel implem
    */
   constructor(id: string, deferReply: number | undefined = 2000, deferReplyEphemeral = true) {
     super(id, deferReply, deferReplyEphemeral);
+    this.component = new ButtonBuilder().setCustomId(id);
   }
 
   /**
