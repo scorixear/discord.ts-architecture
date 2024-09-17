@@ -238,7 +238,11 @@ export class MessageHandler {
         >[]
       | undefined
   ) {
-    channel.sendTyping();
+    if (channel.isSendable()) {
+      channel.sendTyping();
+    } else {
+      throw new Error('Channel is not sendable');
+    }
     const richText: EmbedBuilder = new EmbedBuilder();
     if (title) {
       richText.setTitle(title);
