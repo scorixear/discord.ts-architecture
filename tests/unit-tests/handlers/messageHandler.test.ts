@@ -45,6 +45,7 @@ describe('MessageHandler', () => {
       }
     },
     channel: {
+      isSendable: () => true,
       sendTyping: jest.fn(),
       send: jest.fn()
     },
