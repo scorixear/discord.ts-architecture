@@ -46,7 +46,7 @@ describe('MessageHandler', () => {
     },
     channel: {
       isSendable: () => true,
-      sendTyping: jest.fn(),
+      sendTyping: jest.fn().mockImplementation(() => Promise.resolve()),
       send: jest.fn()
     },
     author: jest.fn()

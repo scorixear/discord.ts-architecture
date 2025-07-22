@@ -3,11 +3,9 @@ import {
   Guild,
   GatewayIntentBits,
   Partials,
-  Awaitable,
   GuildResolvable,
   UserResolvable,
-  ClientEvents
-} from 'discord.js';
+  ClientEvents} from 'discord.js';
 
 /**
  * Provides methods for interaction with the discord.js @type {Client} object
@@ -82,7 +80,8 @@ export class DiscordHandler {
    * @param callback called when the event occurs
    * @returns the client this event is listening on
    */
-  public on(event: string, callback: (...args: any[]) => Awaitable<void>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public on(event: string, callback: (...args: any[]) => void) {
     return this.client.on(event, callback);
   }
 
@@ -92,7 +91,8 @@ export class DiscordHandler {
    * @param callback called when the event occurs
    * @returns the client this event is listening on
    */
-  public once(event: keyof ClientEvents, callback: (...args: any[]) => Awaitable<void>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public once(event: keyof ClientEvents, callback: (...args: any[]) => void) {
     return this.client.once(event, callback);
   }
 

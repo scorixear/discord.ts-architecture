@@ -239,7 +239,11 @@ export class MessageHandler {
       | undefined
   ) {
     if (channel.isSendable()) {
-      channel.sendTyping();
+      channel.sendTyping().then(() => {
+        // do nothing
+      }).catch(() => {
+        // do nothing
+      });
     } else {
       throw new Error('Channel is not sendable');
     }
@@ -251,7 +255,7 @@ export class MessageHandler {
     if (categories) {
       richText.addFields(
         categories.map((category) => {
-          return { name: category.title, value: category.text || '\u200b', inline: category.inline || false };
+          return { name: category.title, value: category.text ?? '\u200b', inline: category.inline ?? false };
         })
       );
     }
@@ -460,7 +464,7 @@ export class MessageHandler {
     if (categories) {
       richText.addFields(
         categories.map((category) => {
-          return { name: category.title, value: category.text || '\u200b', inline: category.inline || false };
+          return { name: category.title, value: category.text ?? '\u200b', inline: category.inline ?? false };
         })
       );
     }
@@ -496,7 +500,7 @@ export class MessageHandler {
     if (url) {
       richText.setURL(url.toString());
     }
-    const eph = ephemeral || false;
+    const eph = ephemeral ?? false;
 
     let returnValue: {
       embeds: EmbedBuilder[];
