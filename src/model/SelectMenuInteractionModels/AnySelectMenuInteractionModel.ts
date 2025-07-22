@@ -43,10 +43,13 @@ export abstract class AnySelectMenuInteractionModel
    */
   public override activateDeferredReply(interaction: AnySelectMenuInteraction) {
     if (this.deferReply) {
-      setTimeout(async () => {
+      setTimeout(() => {
         try {
           if (!interaction.replied && !interaction.deferred) {
-            await interaction.deferReply({ ephemeral: this.deferReplyEphemeral });
+            interaction.deferReply({ ephemeral: this.deferReplyEphemeral })
+              .catch((err) => {
+                Logger.exception('Error deferring reply', err, WarningLevel.ERROR);
+              });
           }
         } catch (err) {
           Logger.exception('Error deferring reply', err, WarningLevel.ERROR);

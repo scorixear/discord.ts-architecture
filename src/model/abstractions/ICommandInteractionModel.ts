@@ -37,6 +37,7 @@ export interface ICommandInteractionModel extends IBaseInteractionModel {
    * @public
    * @readonly
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly Ready?: Promise<any>;
   /**
    * The builder used for this command

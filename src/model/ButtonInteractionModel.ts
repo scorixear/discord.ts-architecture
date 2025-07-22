@@ -49,10 +49,13 @@ export abstract class ButtonInteractionModel extends BaseInteractionModel implem
    */
   public override activateDeferredReply(interaction: ButtonInteraction) {
     if (this.deferReply) {
-      setTimeout(async () => {
+      setTimeout(() => {
         try {
           if (!interaction.replied && !interaction.deferred) {
-            await interaction.deferReply({ ephemeral: this.deferReplyEphemeral });
+            interaction.deferReply({ ephemeral: this.deferReplyEphemeral })
+            .catch((err) => {
+              Logger.exception('Error deferring reply', err, WarningLevel.ERROR);
+            });
           }
         } catch (err) {
           Logger.exception('Error deferring reply', err, WarningLevel.ERROR);

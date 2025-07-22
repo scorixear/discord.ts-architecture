@@ -59,6 +59,7 @@ export abstract class CommandInteractionModel extends BaseInteractionModel imple
    * @public
    * @readonly
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public readonly Ready?: Promise<any>;
   /**
    * The builder used for this command
@@ -89,6 +90,7 @@ export abstract class CommandInteractionModel extends BaseInteractionModel imple
   constructor(
     command: string,
     description: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     options: any[],
     deferReply: number | undefined = 2000,
     deferReplyEphemeral = false,
@@ -150,10 +152,13 @@ export abstract class CommandInteractionModel extends BaseInteractionModel imple
    */
   public override activateDeferredReply(interaction: ChatInputCommandInteraction) {
     if (this.deferReply) {
-      setTimeout(async () => {
+      setTimeout(() => {
         try {
           if (!interaction.replied && !interaction.deferred) {
-            await interaction.deferReply({ ephemeral: this.deferReplyEphemeral });
+            interaction.deferReply({ ephemeral: this.deferReplyEphemeral })
+            .catch((err) => {
+              Logger.exception('Error deferring reply', err, WarningLevel.ERROR);
+            });
           }
         } catch (err) {
           Logger.exception('Error deferring reply', err, WarningLevel.ERROR);

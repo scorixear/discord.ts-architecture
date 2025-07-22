@@ -1,7 +1,5 @@
 import {
   AutocompleteInteraction,
-  ButtonInteraction,
-  ChatInputCommandInteraction,
   Guild,
   Interaction,
   AnySelectMenuInteraction
@@ -86,14 +84,19 @@ export class InteractionHandler {
     const commands = this.commandInteractions.map((command) => command.slashCommandBuilder.toJSON());
     const rest = new REST({ version: '10' }).setToken(discordToken);
 
-    discordHandler.getGuilds().forEach(async (guild: Guild) => {
-      if (commandGuildIds && commandGuildIds.indexOf(guild.id) === -1) {
+    discordHandler.getGuilds().forEach((guild: Guild) => {
+      if (commandGuildIds && !commandGuildIds.includes(guild.id)) {
         return;
-      } else if (notCommandGuildIds && notCommandGuildIds.indexOf(guild.id) !== -1) {
+      } else if (notCommandGuildIds?.includes(guild.id)) {
         return;
       }
-      await rest.put(Routes.applicationGuildCommands(clientId, guild.id), { body: commands });
-      Logger.info('Successfully registered application commands for guild', guild.name);
+      rest.put(Routes.applicationGuildCommands(clientId, guild.id), { body: commands })
+      .then(() => {
+        Logger.info('Successfully registered application commands for guild', guild.name);
+      })
+      .catch((error) => {
+        Logger.exception('Error while registering application commands for guild', error, WarningLevel.ERROR);
+      });
       /*const guildRoles = await global.discordHandler.getRolesOfGuild(guild);
       const guildCommands = await guild.commands.fetch();
       const signupRoles = guildRoles.filter(role => config.signupRoles.includes(role.name));
@@ -115,14 +118,19 @@ export class InteractionHandler {
       })*/
     });
 
-    discordHandler.on('guildCreate', async (guild) => {
-      if (commandGuildIds && commandGuildIds.indexOf(guild.id) === -1) {
+    discordHandler.on('guildCreate', (guild: Guild) => {
+      if (commandGuildIds && !commandGuildIds.includes(guild.id)) {
         return;
-      } else if (notCommandGuildIds && notCommandGuildIds.indexOf(guild.id) !== -1) {
+      } else if (notCommandGuildIds?.includes(guild.id)) {
         return;
       }
-      await rest.put(Routes.applicationGuildCommands(clientId, guild.id), { body: commands });
+      rest.put(Routes.applicationGuildCommands(clientId, guild.id), { body: commands })
+      .then(() => {
       Logger.info('Successfully registered application commands for guild', guild.name);
+      })
+      .catch((error) => {
+        Logger.exception('Error while registering application commands for guild', error, WarningLevel.ERROR);
+      });
     });
   }
 
@@ -131,8 +139,10 @@ export class InteractionHandler {
    * @param discordHandler the discordHandler to activate the event for
    */
   public activateInteractionCreate(discordHandler: DiscordHandler) {
-    discordHandler.on('interactionCreate', async (interaction) => {
-      await this.handle(interaction);
+    discordHandler.on('interactionCreate', (interaction: Interaction) => {
+      this.handle(interaction).catch((err) => {
+        Logger.exception('Error while handling interaction', err, WarningLevel.ERROR);
+      });
     });
   }
 
@@ -149,11 +159,11 @@ export class InteractionHandler {
       if (interaction.isButton()) {
         const handler = this.buttonInteractions.find((model) => model.canHandle(interaction.customId, interaction));
         if (handler) {
-          const buttonInteraction = interaction as ButtonInteraction;
+          const buttonInteraction = interaction;
           await handler.handle(buttonInteraction);
         }
       } else if (interaction.isChatInputCommand()) {
-        const commandInteraction = interaction as ChatInputCommandInteraction;
+        const commandInteraction = interaction;
         const handler = this.commandInteractions.find((model) =>
           model.canHandle(commandInteraction.commandName, commandInteraction)
         );
@@ -161,7 +171,7 @@ export class InteractionHandler {
           await handler.handle(commandInteraction);
         }
       } else if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
-        const commandInteraction: AutocompleteInteraction = interaction as AutocompleteInteraction;
+        const commandInteraction: AutocompleteInteraction = interaction;
         const handler = this.commandInteractions.find(
           (model) =>
             model.canHandle(commandInteraction.commandName, commandInteraction) &&
@@ -182,6 +192,7 @@ export class InteractionHandler {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private instanceOf<T>(object: any): object is T {
     return 'handle' in object;
   }

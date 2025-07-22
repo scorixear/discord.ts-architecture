@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.json",
+    "include": [
+        "src/**/*.ts",
+        "jest.config.mjs",
+        "eslint.config.mjs",
+        "tests/**/*.ts",
+        "tests/**/*.test.ts",
+        "tests/unit-tests/**/*.ts" // Add this line
+    ]
+}

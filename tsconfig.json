@@ -1,12 +1,35 @@
 {
-  "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
-    "declaration": true,
-    "outDir": "./lib",
-    "strict": true,
-    "skipLibCheck": true
+  "extends": "@tsconfig/node-lts/tsconfig.json",
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "jest.config.mjs",
+    "eslint.config.mjs",
+    "node_modules",
+    "lib"
+  ],
+  "typeAcquisition": {
+      "include": [
+          "jest"
+      ]
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/__tests__/*"]
+  "compilerOptions": {
+      "strict": true,
+      "module": "CommonJS",
+      "esModuleInterop": true,
+      "target": "ES6",
+      "declaration": true,
+      "noImplicitAny": true,
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "outDir": "./lib",
+      "forceConsistentCasingInFileNames": true,
+      "allowJs": true,
+      "types": ["@types/node", "@types/jest"],
+      "paths": {
+          "*": ["./node_modules/*"]
+      },
+      "skipLibCheck": true
+  }
 }
